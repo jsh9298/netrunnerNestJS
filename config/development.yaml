@@ -1,0 +1,12 @@
+db:
+  host: 'localhost'
+  username: 'root'
+  password: 'root'
+  synchronize: true
+jwt:
+  secret: 'Secret1234'
+AWS:
+  access_key: ''
+  secret_key: ''
+  region: 'us-east-1'
+  source: 'sender@example.com'
