@@ -11,16 +11,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmailService = void 0;
 const common_1 = require("@nestjs/common");
-const AWS = require("aws-sdk");
+const client_ses_1 = require("@aws-sdk/client-ses");
 const config = require("config");
 let EmailService = class EmailService {
     constructor() {
-        AWS.config.update({
-            accessKeyId: config.get('AWS.access_key'),
-            secretAccessKey: config.get('AWS.secret_key'),
+        this.sesClient = new client_ses_1.SESClient({
             region: config.get('AWS.region'),
+            credentials: {
+                accessKeyId: config.get('AWS.access_key'),
+                secretAccessKey: config.get('AWS.secret_key'),
+            },
         });
-        this.ses = new AWS.SES();
     }
     generateVerificationCode() {
         const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -29,9 +30,9 @@ let EmailService = class EmailService {
     async sendEmail(to, subject) {
         this.verificationCode = this.generateVerificationCode();
         const params = {
-            Source: config.get('AWS.source'),
+            Source: 'test@netrunner.life',
             Destination: {
-                ToAddresses: [to],
+                ToAddresses: ["jsh9298@naver.com"],
             },
             Message: {
                 Subject: {
@@ -45,18 +46,16 @@ let EmailService = class EmailService {
             },
         };
         try {
-            await this.ses.sendEmail(params).promise();
+            const command = new client_ses_1.SendEmailCommand(params);
+            await this.sesClient.send(command);
             console.log('이메일 전송 성공');
         }
         catch (err) {
             console.error('이메일 전송 실패', err);
         }
     }
-    checkverfication(verificationCode) {
-        if (verificationCode === this.verificationCode) {
-            return true;
-        }
-        return false;
+    checkVerification(verificationCode) {
+        return verificationCode == this.verificationCode;
     }
 };
 exports.EmailService = EmailService;

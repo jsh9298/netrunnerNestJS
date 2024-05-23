@@ -12,7 +12,8 @@ export class EmailController {
     }
     @Get('/check')
     checkverfication(@Body() code:string){
-        return this.emailService.checkverfication(code);
+        return this.emailService.checkVerification(code);
     }
+    
 
 }

@@ -23,7 +23,7 @@ let EmailController = class EmailController {
         return this.emailService.sendEmail(address, "NetRunner 이메일 인증");
     }
     checkverfication(code) {
-        return this.emailService.checkverfication(code);
+        return this.emailService.checkVerification(code);
     }
 };
 exports.EmailController = EmailController;
