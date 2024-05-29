@@ -15,15 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmailController = void 0;
 const common_1 = require("@nestjs/common");
 const email_service_1 = require("./email.service");
+const send_dto_1 = require("./dto/send.dto");
+const check_dto_1 = require("./dto/check.dto");
 let EmailController = class EmailController {
     constructor(emailService) {
         this.emailService = emailService;
     }
     sendEmail(address) {
-        return this.emailService.sendEmail(address, "NetRunner 이메일 인증");
+        const { email } = address;
+        return this.emailService.sendEmail(email, "NetRunner 이메일 인증");
     }
-    checkverfication(code) {
-        return this.emailService.checkVerification(code);
+    checkverfication(check) {
+        const { code, email } = check;
+        return this.emailService.checkVerification(code, email);
     }
 };
 exports.EmailController = EmailController;
@@ -31,14 +35,14 @@ __decorate([
     (0, common_1.Get)('/send'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [send_dto_1.sendDto]),
     __metadata("design:returntype", Promise)
 ], EmailController.prototype, "sendEmail", null);
 __decorate([
     (0, common_1.Get)('/check'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [check_dto_1.checkDto]),
     __metadata("design:returntype", void 0)
 ], EmailController.prototype, "checkverfication", null);
 exports.EmailController = EmailController = __decorate([

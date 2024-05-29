@@ -1,5 +1,7 @@
 import { Body, Controller, Get } from '@nestjs/common';
 import { EmailService } from './email.service';
+import { sendDto } from './dto/send.dto';
+import { checkDto } from './dto/check.dto';
 
 @Controller('email')
 export class EmailController {
@@ -7,12 +9,14 @@ export class EmailController {
         private emailService:EmailService,
     ){}
     @Get('/send')
-    sendEmail(@Body() address:string):Promise<void>{
-        return this.emailService.sendEmail(address,"NetRunner 이메일 인증");
+    sendEmail(@Body() address:sendDto):Promise<void>{
+        const {email} = address;
+        return this.emailService.sendEmail(email,"NetRunner 이메일 인증");
     }
     @Get('/check')
-    checkverfication(@Body() code:string){
-        return this.emailService.checkVerification(code);
+    checkverfication(@Body() check:checkDto){
+        const{code,email} = check;
+        return this.emailService.checkVerification(code,email);
     }
     
 

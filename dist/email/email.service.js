@@ -15,6 +15,11 @@ const client_ses_1 = require("@aws-sdk/client-ses");
 const config = require("config");
 let EmailService = class EmailService {
     constructor() {
+        this.emaildata = {
+            email: "",
+            code: ""
+        };
+        this.sourcemail = config.get('AWS.source');
         this.sesClient = new client_ses_1.SESClient({
             region: config.get('AWS.region'),
             credentials: {
@@ -28,11 +33,11 @@ let EmailService = class EmailService {
         return code;
     }
     async sendEmail(to, subject) {
-        this.verificationCode = this.generateVerificationCode();
+        const verificationCode = this.generateVerificationCode();
         const params = {
-            Source: 'test@netrunner.life',
+            Source: this.sourcemail,
             Destination: {
-                ToAddresses: ["jsh9298@naver.com"],
+                ToAddresses: [to],
             },
             Message: {
                 Subject: {
@@ -40,7 +45,7 @@ let EmailService = class EmailService {
                 },
                 Body: {
                     Html: {
-                        Data: `<h1>인증코드 테스트<h1><h3>인증번호 : ${this.verificationCode}</h3>`,
+                        Data: `<h1>인증코드 테스트<h1><h3>인증번호 : ${verificationCode}</h3>`,
                     },
                 },
             },
@@ -49,13 +54,14 @@ let EmailService = class EmailService {
             const command = new client_ses_1.SendEmailCommand(params);
             await this.sesClient.send(command);
             console.log('이메일 전송 성공');
+            this.emaildata = { email: to, code: verificationCode };
         }
         catch (err) {
             console.error('이메일 전송 실패', err);
         }
     }
-    checkVerification(verificationCode) {
-        return verificationCode == this.verificationCode;
+    checkVerification(verificationCode, addr) {
+        return verificationCode === this.emaildata.code && addr === this.emaildata.email;
     }
 };
 exports.EmailService = EmailService;

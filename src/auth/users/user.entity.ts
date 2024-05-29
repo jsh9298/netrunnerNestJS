@@ -19,7 +19,7 @@ export class User extends BaseEntity{
     @Column()
     score : number;  //점수
     @Column()
-    reword : number; //인게임재화
+    point : number; //인게임재화
     @Column()
     level : number; //레벨
     //@Column()
