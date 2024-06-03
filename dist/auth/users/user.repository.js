@@ -20,9 +20,9 @@ let UserRepository = class UserRepository extends typeorm_1.Repository {
         const savepoint = 0;
         const location = `/game/${userId}`;
         const score = 0;
-        const reword = 0;
+        const point = 0;
         const level = 0;
-        const user = this.create({ userId, username, password: hashedPassword, email, savepoint, location, score, reword, level });
+        const user = this.create({ userId, username, password: hashedPassword, email, savepoint, location, score, point, level });
         try {
             await this.save(user);
         }

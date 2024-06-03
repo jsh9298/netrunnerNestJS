@@ -46,9 +46,10 @@ export class AuthService {
         await this.userRepository.save(user);
     }
 
-    async getProfile(userId : string):Promise<User>{
-        const porfiles = await this.userRepository.findOne({where:{userId}});
-        return porfiles;
+    async getProfile(userId : string):Promise<Profile>{
+        let profile : Profile;
+        profile = await this.userRepository.findOne({where:{userId}})
+        return profile;
     }
     async ranking(){
 

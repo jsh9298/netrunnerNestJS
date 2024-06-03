@@ -33,7 +33,7 @@ export class AuthController {
         console.log('req',user);
     }
     @Post('/profile:id')
-    getProfile(@Param('id') id:string ):Promise<User>{
+    getProfile(@Param('id') id:string ):Promise<Profile>{
         console.log(this.authService.getProfile(id));
         return this.authService.getProfile(id);
     }

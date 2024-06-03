@@ -8,6 +8,6 @@ export declare class User extends BaseEntity {
     savepoint: number;
     location: string;
     score: number;
-    reword: number;
+    point: number;
     level: number;
 }

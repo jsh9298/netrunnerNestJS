@@ -21,17 +21,17 @@ export class UserRepository extends Repository<User>{
         const level =0;
         const user = this.create({userId,username,password:hashedPassword,email,savepoint,location,score,point,level});
 
-        // let orginFilepath = "";
-        // const userDirectory = path.join(__dirname,'users',userId);
-        // const originFile = path.basename(orginFilepath);//orginFilepath
-        // const userFile = `${userId}${originFile}`;
-        // const destinationPath = path.join(userDirectory,userFile);
+        let orginFilepath = "";
+        const userDirectory = path.join(__dirname,'users',userId);
+        const originFile = path.basename(orginFilepath);//orginFilepath
+        const userFile = `${userId}${originFile}`;
+        const destinationPath = path.join(userDirectory,userFile);
         try {
             await this.save(user);
-            // if(!fs.existsSync(userDirectory)){
-            //     fs.mkdirSync(userDirectory,{recursive:true});
-            // }
-            // fs.copyFileSync(orginFilepath,destinationPath);
+            if(!fs.existsSync(userDirectory)){
+                fs.mkdirSync(userDirectory,{recursive:true});
+            }
+            fs.copyFileSync(orginFilepath,destinationPath);
         } catch (error) {
             if(error.code === '1062'){
                 throw new ConflictException('Existing username');
