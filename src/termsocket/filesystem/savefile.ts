@@ -1,7 +1,9 @@
 import { FileSystem } from "./fileSystems";
 import * as fs from 'fs';
 import * as path from 'path';
+import { UserRepository } from "src/auth/users/user.repository";
 import * as xml2js from 'xml2js';
+import { Mission } from "./savefile.Dto";
 
 
 // const userXmlFilePath = path.join(userDirPath, 'user-info.xml');
@@ -19,33 +21,24 @@ import * as xml2js from 'xml2js';
 // }
 
 
-class XmlService {
-  private xmlFilePath = path.join(__dirname, 'user-info.xml');
-
-  async readAndModifyXml() {
+export class XmlService {
+  constructor(
+    private userRepository: UserRepository
+  ){}
+  dto:Mission;
+  async readXml(userId:string) {
     try {
-      const xmlData = await fs.promises.readFile(this.xmlFilePath, 'utf-8');
+      const locate = (await this.userRepository.findOne({where:{userId}})).location;
+      const xmlFilePath = path.join(locate,`${userId}sinario.xml`);
+      const xmlData = await fs.promises.readFile(xmlFilePath, 'utf-8');
       const parser = new xml2js.Parser();
-      const builder = new xml2js.Builder();
-
       // XML 파일 파싱
-      const result = await parser.parseStringPromise(xmlData);
+      this.dto = await parser.parseStringPromise(xmlData);
+    }catch(err){
 
-      // 데이터 수정 예제: 사용자의 나이 변경
-      result.user.age[0] = '35';
-
-      // 수정된 객체를 XML로 재변환
-      const updatedXml = builder.buildObject(result);
-
-      // XML 파일 저장
-      await fs.promises.writeFile(this.xmlFilePath, updatedXml);
-      console.log('XML 파일이 성공적으로 업데이트되었습니다.');
-
-    } catch (error) {
-      console.error('XML 파일 처리 중 오류 발생:', error);
     }
   }
+  getXml(){
+    return this.dto;
+  }
 }
-
-const xmlService = new XmlService();
-xmlService.readAndModifyXml();

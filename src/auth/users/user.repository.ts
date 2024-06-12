@@ -7,6 +7,7 @@ import { CustomRepository } from "src/typeorm-ex/typeorm-ex.decorator";
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { Profile } from "../dto/profile.dto";
 
 @CustomRepository(User)
 export class UserRepository extends Repository<User>{
@@ -16,13 +17,14 @@ export class UserRepository extends Repository<User>{
         const hashedPassword = await bcrypt.hash(password,salt);
         const savepoint = 0;
         const location =`/game/${userId}`;
-        const score =0;
-        const point =0;
-        const level =0;
+        const score = 0;
+        const point = 0;
+        const level = 0;
         const user = this.create({userId,username,password:hashedPassword,email,savepoint,location,score,point,level});
 
-        let orginFilepath = "";
-        const userDirectory = path.join(__dirname,'users',userId);
+
+        let orginFilepath = "/game/origin/sinario.xml";
+        const userDirectory = path.join("/game",userId);
         const originFile = path.basename(orginFilepath);//orginFilepath
         const userFile = `${userId}${originFile}`;
         const destinationPath = path.join(userDirectory,userFile);
@@ -33,11 +35,11 @@ export class UserRepository extends Repository<User>{
             }
             fs.copyFileSync(orginFilepath,destinationPath);
         } catch (error) {
-            if(error.code === '1062'){
-                throw new ConflictException('Existing username');
-            }else{
-                throw new InternalServerErrorException();
-            }
+            throw new InternalServerErrorException();
         }
+    }
+    async getProfile(userId:string):Promise<Profile>{
+        const {level,point} = await this.findOne({where:{userId}});
+        return {userId,level,point};
     }
 }  

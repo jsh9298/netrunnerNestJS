@@ -8,12 +8,15 @@ import { SignInDto } from './dto/signin.dto';
 import { changePass } from './dto/changePass.dto';
 import { User } from './users/user.entity';
 import { Profile } from './dto/profile.dto';
+import { Mission } from 'src/termsocket/filesystem/savefile.Dto';
+import { XmlService } from 'src/termsocket/filesystem/savefile';
 
 @Injectable()
 export class AuthService {
     constructor(
         private userRepository:UserRepository,
-        private jwtService:JwtService
+        private jwtService:JwtService,
+        private xmlservice:XmlService
     ){}
     async signUp(authCredentialsDto:AuthCredentialsDto):Promise<void>{
         try {
@@ -26,9 +29,13 @@ export class AuthService {
     async signin(signInDto:SignInDto):Promise<{accessToken:string}>{
         const {userId,password}=signInDto;
         const user = await this.userRepository.findOne({where:{userId}});
+        
         if(user&&(await bcrypt.compare(password,user.password))){
             const payload = { userId };
             const accessToken = await this.jwtService.sign(payload);
+            //xml로드 로직 추가
+            //로딩->  xml dto 초기화
+            this.xmlservice.readXml(userId);
             return {accessToken};
         }else{
             throw new UnauthorizedException('login failed');
@@ -46,10 +53,8 @@ export class AuthService {
         await this.userRepository.save(user);
     }
 
-    async getProfile(userId : string):Promise<Profile>{
-        let profile : Profile;
-        profile = await this.userRepository.findOne({where:{userId}})
-        return profile;
+    async getProfile(Id : string):Promise<{userId:string,level:number,point:number}>{
+        return this.userRepository.getProfile(Id);
     }
     async ranking(){
 

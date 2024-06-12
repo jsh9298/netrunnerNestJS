@@ -14,10 +14,12 @@ const common_1 = require("@nestjs/common");
 const user_repository_1 = require("./users/user.repository");
 const bcrypt = require("bcryptjs");
 const jwt_1 = require("@nestjs/jwt");
+const savefile_1 = require("../termsocket/filesystem/savefile");
 let AuthService = class AuthService {
-    constructor(userRepository, jwtService) {
+    constructor(userRepository, jwtService, xmlservice) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.xmlservice = xmlservice;
     }
     async signUp(authCredentialsDto) {
         try {
@@ -33,6 +35,7 @@ let AuthService = class AuthService {
         if (user && (await bcrypt.compare(password, user.password))) {
             const payload = { userId };
             const accessToken = await this.jwtService.sign(payload);
+            this.xmlservice.readXml(userId);
             return { accessToken };
         }
         else {
@@ -51,8 +54,9 @@ let AuthService = class AuthService {
         await this.userRepository.save(user);
     }
     async getProfile(userId) {
-        const porfiles = await this.userRepository.findOne({ where: { userId } });
-        return porfiles;
+        let profile;
+        profile = await this.userRepository.findOne({ where: { userId } });
+        return profile;
     }
     async ranking() {
     }
@@ -61,6 +65,7 @@ exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [user_repository_1.UserRepository,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        savefile_1.XmlService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

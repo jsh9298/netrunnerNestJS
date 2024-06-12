@@ -1,28 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.XmlService = void 0;
 const fs = require("fs");
 const path = require("path");
 const xml2js = require("xml2js");
 class XmlService {
-    constructor() {
-        this.xmlFilePath = path.join(__dirname, 'user-info.xml');
+    constructor(userRepository) {
+        this.userRepository = userRepository;
     }
-    async readAndModifyXml() {
+    async readXml(userId) {
         try {
-            const xmlData = await fs.promises.readFile(this.xmlFilePath, 'utf-8');
+            const locate = (await this.userRepository.findOne({ where: { userId } })).location;
+            const xmlFilePath = path.join(locate, `${userId}sinario.xml`);
+            const xmlData = await fs.promises.readFile(xmlFilePath, 'utf-8');
             const parser = new xml2js.Parser();
-            const builder = new xml2js.Builder();
-            const result = await parser.parseStringPromise(xmlData);
-            result.user.age[0] = '35';
-            const updatedXml = builder.buildObject(result);
-            await fs.promises.writeFile(this.xmlFilePath, updatedXml);
-            console.log('XML 파일이 성공적으로 업데이트되었습니다.');
+            this.dto = await parser.parseStringPromise(xmlData);
         }
-        catch (error) {
-            console.error('XML 파일 처리 중 오류 발생:', error);
+        catch (err) {
         }
+    }
+    getXml() {
+        return this.dto;
     }
 }
-const xmlService = new XmlService();
-xmlService.readAndModifyXml();
+exports.XmlService = XmlService;
 //# sourceMappingURL=savefile.js.map

@@ -11,7 +11,7 @@ fs.createFile("/home/user/file1.txt");
 fs.createFile("/home/user/file2.txt");
 fs.createDirectory("/home/user/documents");
 fs.createFile("/home/user/documents/document1.txt");
-
+//세이브 로드,로드된 세이브를 토대로 초기화,게임로직,로그아웃이나 브라우저 종료시 로직값 저장ㄴ
 //분석후 명령어들 결과 생성후 리턴 , 이 위치에 로케이션 getter setter 호출
 export class commends {
     currentIP: any;

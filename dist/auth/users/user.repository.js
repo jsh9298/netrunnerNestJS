@@ -12,6 +12,8 @@ const user_entity_1 = require("./user.entity");
 const common_1 = require("@nestjs/common");
 const bcrypt = require("bcryptjs");
 const typeorm_ex_decorator_1 = require("../../typeorm-ex/typeorm-ex.decorator");
+const fs = require("fs");
+const path = require("path");
 let UserRepository = class UserRepository extends typeorm_1.Repository {
     async createUser(authCredentialsDto) {
         const { userId, username, password, email } = authCredentialsDto;
@@ -23,16 +25,20 @@ let UserRepository = class UserRepository extends typeorm_1.Repository {
         const point = 0;
         const level = 0;
         const user = this.create({ userId, username, password: hashedPassword, email, savepoint, location, score, point, level });
+        let orginFilepath = "/game/origin/sinario.xml";
+        const userDirectory = path.join("/game", userId);
+        const originFile = path.basename(orginFilepath);
+        const userFile = `${userId}${originFile}`;
+        const destinationPath = path.join(userDirectory, userFile);
         try {
             await this.save(user);
+            if (!fs.existsSync(userDirectory)) {
+                fs.mkdirSync(userDirectory, { recursive: true });
+            }
+            fs.copyFileSync(orginFilepath, destinationPath);
         }
         catch (error) {
-            if (error.code === '1062') {
-                throw new common_1.ConflictException('Existing username');
-            }
-            else {
-                throw new common_1.InternalServerErrorException();
-            }
+            throw new common_1.InternalServerErrorException();
         }
     }
 };
