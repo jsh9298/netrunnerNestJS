@@ -35,7 +35,7 @@ export class AuthService {
             const accessToken = await this.jwtService.sign(payload);
             //xml로드 로직 추가
             //로딩->  xml dto 초기화
-            this.xmlservice.readXml(userId);
+            // tethis.xmlservice.readXml(userId);
             return {accessToken};
         }else{
             throw new UnauthorizedException('login failed');

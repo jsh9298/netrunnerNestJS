@@ -41,6 +41,10 @@ let UserRepository = class UserRepository extends typeorm_1.Repository {
             throw new common_1.InternalServerErrorException();
         }
     }
+    async getProfile(userId) {
+        const { level, point } = await this.findOne({ where: { userId } });
+        return { userId, level, point };
+    }
 };
 exports.UserRepository = UserRepository;
 exports.UserRepository = UserRepository = __decorate([

@@ -37,7 +37,6 @@ let AuthController = class AuthController {
         console.log('req', user);
     }
     getProfile(id) {
-        console.log(this.authService.getProfile(id));
         return this.authService.getProfile(id);
     }
 };

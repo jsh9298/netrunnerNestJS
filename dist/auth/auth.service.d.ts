@@ -3,7 +3,6 @@ import { AuthCredentialsDto } from './dto/auth-credential.dto';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/signin.dto';
 import { changePass } from './dto/changePass.dto';
-import { Profile } from './dto/profile.dto';
 import { XmlService } from 'src/termsocket/filesystem/savefile';
 export declare class AuthService {
     private userRepository;
@@ -15,6 +14,10 @@ export declare class AuthService {
         accessToken: string;
     }>;
     changePass(changepass: changePass): Promise<void>;
-    getProfile(userId: string): Promise<Profile>;
+    getProfile(Id: string): Promise<{
+        userId: string;
+        level: number;
+        point: number;
+    }>;
     ranking(): Promise<void>;
 }

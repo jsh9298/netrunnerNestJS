@@ -35,7 +35,6 @@ let AuthService = class AuthService {
         if (user && (await bcrypt.compare(password, user.password))) {
             const payload = { userId };
             const accessToken = await this.jwtService.sign(payload);
-            this.xmlservice.readXml(userId);
             return { accessToken };
         }
         else {
@@ -53,10 +52,8 @@ let AuthService = class AuthService {
         user.password = hashedPassword;
         await this.userRepository.save(user);
     }
-    async getProfile(userId) {
-        let profile;
-        profile = await this.userRepository.findOne({ where: { userId } });
-        return profile;
+    async getProfile(Id) {
+        return this.userRepository.getProfile(Id);
     }
     async ranking() {
     }
