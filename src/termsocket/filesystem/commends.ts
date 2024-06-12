@@ -1,5 +1,5 @@
 import { FileSystem } from "./fileSystems";
-import { defLocation } from "./defLocation";
+
 
 
 //JSON으로 날라오는 데이터 분석부분 만들어야함
@@ -19,9 +19,6 @@ export class commends {
     currentLocations: any;
     currentpath: any;
     constructor() {
-        // this.currentIP = defLocation.getIPaddress();
-        // this.currentLocations = defLocation.getFileSystems();
-        // this.currentFs = new FileSystem();
         this.currentpath = "/"
     }
     pwd() {

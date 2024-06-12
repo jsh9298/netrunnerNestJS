@@ -33,9 +33,10 @@ export class AuthService {
         if(user&&(await bcrypt.compare(password,user.password))){
             const payload = { userId };
             const accessToken = await this.jwtService.sign(payload);
-            //xml로드 로직 추가
-            //로딩->  xml dto 초기화
-            // tethis.xmlservice.readXml(userId);
+
+            const mission = this.xmlservice.readXml(userId);
+            console.log((await mission).missionID);
+            
             return {accessToken};
         }else{
             throw new UnauthorizedException('login failed');

@@ -32,7 +32,7 @@ export class AuthController {
     signout(@GetUser() user:User){
         console.log('req',user);
     }
-    @Post('/profile:id')
+    @Post('/:id')
     getProfile(@Param('id') id:string ):Promise<{userId:string,level:number,point:number}>{
         return this.authService.getProfile(id);   
    }

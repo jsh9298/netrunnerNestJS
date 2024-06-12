@@ -8,12 +8,11 @@ import { BoardsModule } from './boards/boards.module';
 import { EmailService } from './email/email.service';
 import { EmailModule } from './email/email.module';
 import { TermsocketGateway } from './termsocket/termsocket.gateway';
-import { XmlService } from './termsocket/filesystem/savefile';
 
 
 @Module({
   imports: [AuthModule,TypeOrmModule.forRoot(typeORMConfig), BoardsModule, EmailModule],
   controllers: [AppController],
-  providers: [AppService, EmailService, TermsocketGateway,XmlService],
+  providers: [AppService, EmailService, TermsocketGateway],
 })
 export class AppModule {}

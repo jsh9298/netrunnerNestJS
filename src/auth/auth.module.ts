@@ -8,6 +8,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 import * as config from 'config';
 import { TypeOrmExModule } from 'src/typeorm-ex/typeorm-ex.module';
+import { XmlService } from 'src/termsocket/filesystem/savefile';
 
 const jwtConfig = config.get('jwt');
 @Module({
@@ -22,7 +23,7 @@ const jwtConfig = config.get('jwt');
     ,TypeOrmExModule.forCustomRepository([UserRepository])
   ],
   controllers: [AuthController],
-  providers: [AuthService,JwtStrategy],
+  providers: [AuthService,JwtStrategy,XmlService],
   exports:[JwtStrategy,PassportModule]
 })
 export class AuthModule {}

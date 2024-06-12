@@ -6,39 +6,59 @@ import * as xml2js from 'xml2js';
 import { Mission } from "./savefile.Dto";
 
 
-// const userXmlFilePath = path.join(userDirPath, 'user-info.xml');
-// if (fs.existsSync(userXmlFilePath)) {
-//   const xmlData = fs.readFileSync(userXmlFilePath, 'utf-8');
-//   this.parseXml(xmlData);
-// }
-// private parseXml(xmlData: string): void {
-//     parseString(xmlData, (err, result) => {
-//       if (err) {
-//         throw new Error('Failed to parse XML');
-//       }
-//       console.log(result); // 파싱된 XML 데이터 처리
-//     });
-// }
-
-
 export class XmlService {
+  private dtoMap: Map<string, Mission> = new Map();
+
   constructor(
     private userRepository: UserRepository
-  ){}
-  dto:Mission;
-  async readXml(userId:string) {
+  ) {}
+
+  async readXml(userId: string): Promise<Mission | null> {
     try {
-      const locate = (await this.userRepository.findOne({where:{userId}})).location;
-      const xmlFilePath = path.join(locate,`${userId}sinario.xml`);
+      const user = await this.userRepository.findOne({ where: { userId } });
+      if (!user || !user.location) {
+        return null;
+      }
+
+      const xmlFilePath = path.join(user.location, `${userId}sinario.xml`);
       const xmlData = await fs.promises.readFile(xmlFilePath, 'utf-8');
       const parser = new xml2js.Parser();
-      // XML 파일 파싱
-      this.dto = await parser.parseStringPromise(xmlData);
-    }catch(err){
-
+      const dto = await parser.parseStringPromise(xmlData) as Mission;
+      this.dtoMap.set(userId, dto);
+      return dto;
+    } catch (err) {
+      return null;
     }
+
   }
-  getXml(){
-    return this.dto;
+  async saveXml(userId:string,mission:Mission) : Promise<void>{
+      if (!this.dtoMap.has(userId)) {
+        return;
+      }
+
+      try {
+        const user = await this.userRepository.findOne({ where: { userId } });
+        if (!user || !user.location) {
+          return;
+        }
+
+        const xmlFilePath = path.join(user.location, `${userId}sinario.xml`);
+        const builder = new xml2js.Builder();
+        const xmlData = builder.buildObject(this.dtoMap.get(userId)!);
+        await fs.promises.writeFile(xmlFilePath, xmlData);
+      } catch (err) {
+      }
+
+  }
+  updateXml(userId: string, mission: Mission): void {
+    this.dtoMap.set(userId, mission);
+  }
+
+  getXml(userId: string): Mission | null {
+    if (this.dtoMap.has(userId)) {
+      return this.dtoMap.get(userId)!;
+    }
+    return null;
+
   }
 }

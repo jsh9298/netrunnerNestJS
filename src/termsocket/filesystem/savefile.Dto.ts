@@ -26,7 +26,7 @@ class NodeFile {
     File_content: string | null;
 }
 
-class node {
+class Node {
     nodeId: string | null;
     nodeMAC: string | null;
     nodeIP: string | null;
@@ -46,6 +46,6 @@ export class Mission {
     scenario: string | null;
     type: string | null;
     correctAnswer: string | null;
-    node: node[];
+    nodes: Node[];
     reward: Reward;
 }

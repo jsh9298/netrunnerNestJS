@@ -40,6 +40,7 @@ export class UserRepository extends Repository<User>{
     }
     async getProfile(userId:string):Promise<Profile>{
         const {level,point} = await this.findOne({where:{userId}});
+        console.log(await this.findOne({where:{userId}}));
         return {userId,level,point};
     }
 }  
