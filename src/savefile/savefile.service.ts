@@ -5,7 +5,9 @@ import * as path from 'path';
 import { UserRepository } from "src/auth/users/user.repository";
 import * as xml2js from 'xml2js';
 import { Mission } from "./savefile.Dto";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class SaveFileService {
   private dtoMap: Map<string, Mission> = new Map();
 

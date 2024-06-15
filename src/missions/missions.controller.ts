@@ -3,7 +3,7 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/users/user.entity';
 import { MissionsService } from './missions.service';
 import { AuthGuard } from '@nestjs/passport';
-import { Mission } from 'src/termsocket/filesystem/savefile.Dto';
+import { Mission } from 'src/savefile/savefile.Dto';
 
 @Controller('missions')
 export class MissionsController {

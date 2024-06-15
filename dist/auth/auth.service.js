@@ -14,7 +14,7 @@ const common_1 = require("@nestjs/common");
 const user_repository_1 = require("./users/user.repository");
 const bcrypt = require("bcryptjs");
 const jwt_1 = require("@nestjs/jwt");
-const savefile_1 = require("../termsocket/filesystem/savefile");
+const savefile_service_1 = require("../savefile/savefile.service");
 let AuthService = class AuthService {
     constructor(userRepository, jwtService, xmlservice) {
         this.userRepository = userRepository;
@@ -35,6 +35,8 @@ let AuthService = class AuthService {
         if (user && (await bcrypt.compare(password, user.password))) {
             const payload = { userId };
             const accessToken = await this.jwtService.sign(payload);
+            await this.xmlservice.readXml(userId);
+            console.log("result:", await this.xmlservice.readXml(userId));
             return { accessToken };
         }
         else {
@@ -63,6 +65,6 @@ exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [user_repository_1.UserRepository,
         jwt_1.JwtService,
-        savefile_1.XmlService])
+        savefile_service_1.SaveFileService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map
