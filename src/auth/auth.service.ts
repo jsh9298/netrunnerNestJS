@@ -34,9 +34,9 @@ export class AuthService {
             const payload = { userId };
             const accessToken = await this.jwtService.sign(payload);
 
-            const mission = this.xmlservice.readXml(userId);
-            console.log((await mission).missionID);
-            
+            const mission = await this.xmlservice.readXml(userId);
+            console.log(mission.missionID);
+
             return {accessToken};
         }else{
             throw new UnauthorizedException('login failed');

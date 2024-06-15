@@ -8,10 +8,11 @@ import { BoardsModule } from './boards/boards.module';
 import { EmailService } from './email/email.service';
 import { EmailModule } from './email/email.module';
 import { TermsocketGateway } from './termsocket/termsocket.gateway';
+import { MissionsModule } from './missions/missions.module';
 
 
 @Module({
-  imports: [AuthModule,TypeOrmModule.forRoot(typeORMConfig), BoardsModule, EmailModule],
+  imports: [AuthModule,TypeOrmModule.forRoot(typeORMConfig), BoardsModule, EmailModule, MissionsModule],
   controllers: [AppController],
   providers: [AppService, EmailService, TermsocketGateway],
 })
