@@ -34,14 +34,13 @@ export class AuthService {
             const payload = { userId };
             const accessToken = await this.jwtService.sign(payload);
 
-            const mission = await this.xmlservice.readXml(userId);
-            console.log(mission.missionID);
-
+            await this.xmlservice.readXml(userId);
             return {accessToken};
         }else{
             throw new UnauthorizedException('login failed');
         }
     }
+
     async changePass(changepass:changePass):Promise<void>{
         const {email,password} = changepass;
         const user = await this.userRepository.findOne({where:{email}});

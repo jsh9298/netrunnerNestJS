@@ -56,7 +56,7 @@ export class XmlService {
 
   getXml(userId: string): Mission | null {
     if (this.dtoMap.has(userId)) {
-      return this.dtoMap.get(userId)!;
+      return this.dtoMap.get(userId);
     }
     return null;
 

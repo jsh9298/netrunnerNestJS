@@ -8,7 +8,8 @@ export class MissionsService {
     constructor(
         private xmlService:XmlService
     ){}
-    async getMissons(user:User,id:string):Promise<Mission>{
-        return this.xmlService.getXml(user.userId);
+    async getMissons(user:User,id:string):Promise<{missionID:number}>{
+        const missionID:number = this.xmlService.getXml(user.userId).missionID;
+        return {missionID};
     }
 }

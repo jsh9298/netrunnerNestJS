@@ -1,96 +1,70 @@
-// class TCP {
-//     servicePort: number | null;
-//     state: string | null;
-// }
+import { IsNotEmpty, IsNumber, IsArray, IsObject, IsString } from 'class-validator';
 
-// class UDP {
-//     servicePort: number | null;
-//     state: string | null;
-// }
-
-// class NodePort {
-//     TCP: TCP[];
-//     UDP: UDP[];
-// }
-
-// class NodeDirectorys {
-//     dirPath: string[];
-// }
-
-// class NodeProgram {
-//     programName: string[] | null;
-// }
-
-// class NodeFile {
-//     File_name: string | null;
-//     File_content: string | null;
-// }
-
-// class Node {
-//     nodeId: string | null;
-//     nodeMAC: string | null;
-//     nodeIP: string | null;
-//     nodePort: NodePort;
-//     nodeDirectorys: NodeDirectorys;
-//     nodeProgram: NodeProgram;
-//     nodeFile: NodeFile[];
-// }
-
-// class Reward {
-//     point: number | null;
-//     toolFile: string | null;
-// }
-
-// export class Mission {
-//     missionID: string | null;
-//     scenario: string | null;
-//     type: string | null;
-//     correctAnswer: string | null;
-//     nodes: Node[];
-//     reward: Reward;
-// }
-
-export class Mission {
-    missionID: number;
-    scenario: string;
-    type: number[];
-    correctAnswer: {
-      myNode: {
-        dirPath: string;
-        nodeFile: {
-          File_name: string;
-          File_content: string;
-        };
-      };
-    };
-    node: Node;
-    reward: {
-      point: number;
-      toolFile: string;
-    };
-  }
-  
-  class Node {
+export class Node {
+    @IsString()
     nodeID: string;
+  
+    @IsString()
     nodeMAC: string;
+  
+    @IsString()
     nodeIP: string;
+  
+    @IsObject()
     nodePort: {
       TCP: {
         servicePort: number;
         state: string;
       };
       UDP: {
-        servicePort: number;
+        servicePort:number;
         state: string;
       };
     };
+  
+    @IsArray()
+    @IsString({ each: true })
     nodeDirectorys: string[];
+  
+    @IsObject()
     nodeProgram: {
       programName: string;
     };
+  
+    @IsObject()
     nodeFile: {
       File_name: string;
       File_content: string;
     };
   }
   
+export class Mission {
+  @IsNumber()
+  missionID: number;
+
+  @IsString()
+  scenario: string;
+
+  @IsArray()
+  @IsNumber()
+  type: number[];
+
+  @IsObject()
+  correctAnswer: {
+    myNode: {
+      dirPath: string;
+      nodeFile: {
+        File_name: string;
+        File_content: string;
+      };
+    };
+  };
+
+  node: Node;
+
+  @IsObject()
+  reward: {
+    point: number;
+    toolFile: string;
+  };
+}

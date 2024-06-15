@@ -11,11 +11,11 @@ export class MissionsController {
         private missionsService:MissionsService,
     ){}
     @Get('/:missionid')
-    @UseGuards(AuthGuard('accessToken'))
+    @UseGuards(AuthGuard('jwt'))
     async getMisson(
         @Param('missionid') id:string,
         @GetUser() user:User,
-    ):Promise<Mission>{
+    ):Promise<{missionID:number}>{
         return await this.missionsService.getMissons(user,id);
     }
 }
