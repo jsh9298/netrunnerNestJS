@@ -4,18 +4,19 @@ import * as path from 'path';
 import { UserRepository } from "src/auth/users/user.repository";
 import * as xml2js from 'xml2js';
 import { Mission } from "./savefile.Dto";
+import { User } from "src/auth/users/user.entity";
 
 
 export class XmlService {
   private dtoMap: Map<string, Mission> = new Map();
 
   constructor(
-    private userRepository: UserRepository
+    private userRepository:UserRepository,
   ) {}
 
   async readXml(userId: string): Promise<Mission | null> {
     try {
-      const user = await this.userRepository.findOne({ where: { userId } });
+      const user:User = await this.userRepository.findOne({where:{userId}});
       if (!user || !user.location) {
         return null;
       }
@@ -27,6 +28,7 @@ export class XmlService {
       this.dtoMap.set(userId, dto);
       return dto;
     } catch (err) {
+      console.error(err);
       return null;
     }
 

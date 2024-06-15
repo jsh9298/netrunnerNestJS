@@ -9,7 +9,7 @@ export class MissionsService {
         private xmlService:XmlService
     ){}
     async getMissons(user:User,id:string):Promise<{missionID:number}>{
-        const missionID:number = this.xmlService.getXml(user.userId).missionID;
+        const missionID:number = await this.xmlService.getXml(user.userId).missionID;
         return {missionID};
     }
 }
