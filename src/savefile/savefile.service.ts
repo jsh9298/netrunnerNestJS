@@ -1,13 +1,12 @@
-import { FileSystem } from "./fileSystems";
+import { FileSystem } from "../termsocket/filesystem/fileSystems";
 import * as fs from 'fs';
 import * as path from 'path';
+
 import { UserRepository } from "src/auth/users/user.repository";
 import * as xml2js from 'xml2js';
 import { Mission } from "./savefile.Dto";
-import { User } from "src/auth/users/user.entity";
 
-
-export class XmlService {
+export class SaveFileService {
   private dtoMap: Map<string, Mission> = new Map();
 
   constructor(
@@ -16,7 +15,7 @@ export class XmlService {
 
   async readXml(userId: string): Promise<Mission | null> {
     try {
-      const user:User = await this.userRepository.findOne({where:{userId}});
+      const user = await this.userRepository.findOne({where:{userId}});
       if (!user || !user.location) {
         return null;
       }

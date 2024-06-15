@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MissionsController } from './missions.controller';
 import { MissionsService } from './missions.service';
-import { XmlService } from 'src/termsocket/filesystem/savefile';
+import { SaveFileService } from 'src/savefile/savefile.service';
 
 @Module({
   controllers: [MissionsController],
-  providers: [MissionsService,XmlService]
+  providers: [MissionsService,SaveFileService]
 })
 export class MissionsModule {}

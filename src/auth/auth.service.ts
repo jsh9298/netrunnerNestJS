@@ -8,15 +8,15 @@ import { SignInDto } from './dto/signin.dto';
 import { changePass } from './dto/changePass.dto';
 import { User } from './users/user.entity';
 import { Profile } from './dto/profile.dto';
-import { Mission } from 'src/termsocket/filesystem/savefile.Dto';
-import { XmlService } from 'src/termsocket/filesystem/savefile';
+import { Mission } from 'src/savefile/savefile.Dto';
+import { SaveFileService } from 'src/savefile/savefile.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private userRepository:UserRepository,
         private jwtService:JwtService,
-        private xmlservice:XmlService
+        private xmlservice:SaveFileService
     ){}
     async signUp(authCredentialsDto:AuthCredentialsDto):Promise<void>{
         try {
