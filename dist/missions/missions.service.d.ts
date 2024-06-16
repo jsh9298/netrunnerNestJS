@@ -4,6 +4,6 @@ export declare class MissionsService {
     private xmlService;
     constructor(xmlService: SaveFileService);
     getMissons(user: User, id: string): Promise<{
-        missionID: number;
+        missionId: number;
     }>;
 }

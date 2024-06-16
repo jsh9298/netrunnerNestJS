@@ -8,8 +8,10 @@ export class MissionsService {
     constructor(
         private xmlService:SaveFileService
     ){}
-    async getMissons(user:User,id:string):Promise<{missionID:number}>{
-        const missionID:number = await this.xmlService.getXml(user.userId).missionId;
-        return {missionID};
+    async getMissons(user:User,id:string):Promise<Mission>{
+        console.log(user.userId);
+        const missionId = await this.xmlService.getXml(user.userId);
+        console.log(missionId);
+       return missionId;
     }
 }

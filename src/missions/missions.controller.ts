@@ -15,7 +15,7 @@ export class MissionsController {
     async getMisson(
         @Param('missionid') id:string,
         @GetUser() user:User,
-    ):Promise<{missionID:number}>{
+    ):Promise<Mission>{
         return await this.missionsService.getMissons(user,id);
     }
 }

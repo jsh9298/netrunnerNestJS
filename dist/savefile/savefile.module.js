@@ -16,7 +16,7 @@ exports.SavefileModule = SavefileModule;
 exports.SavefileModule = SavefileModule = __decorate([
     (0, common_1.Module)({
         providers: [savefile_service_1.SaveFileService, user_repository_1.UserRepository],
-        exports: [savefile_service_1.SaveFileService, user_repository_1.UserRepository],
+        exports: [savefile_service_1.SaveFileService]
     })
 ], SavefileModule);
 //# sourceMappingURL=savefile.module.js.map

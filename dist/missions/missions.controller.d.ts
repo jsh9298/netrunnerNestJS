@@ -4,6 +4,6 @@ export declare class MissionsController {
     private missionsService;
     constructor(missionsService: MissionsService);
     getMisson(id: string, user: User): Promise<{
-        missionID: number;
+        missionId: number;
     }>;
 }

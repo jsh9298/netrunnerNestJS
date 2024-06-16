@@ -35,8 +35,10 @@ let AuthService = class AuthService {
         if (user && (await bcrypt.compare(password, user.password))) {
             const payload = { userId };
             const accessToken = await this.jwtService.sign(payload);
-            await this.xmlservice.readXml(userId);
-            console.log("result:", await this.xmlservice.readXml(userId));
+            const mission = await this.xmlservice.readXml(userId);
+            if (mission) {
+                this.xmlservice.updateXml(userId, mission);
+            }
             return { accessToken };
         }
         else {

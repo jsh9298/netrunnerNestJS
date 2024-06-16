@@ -17,8 +17,9 @@ let MissionsService = class MissionsService {
         this.xmlService = xmlService;
     }
     async getMissons(user, id) {
-        const missionID = await this.xmlService.getXml(user.userId).missionID;
-        return { missionID };
+        console.log(user.userId);
+        const missionId = await this.xmlService.getXml(user.userId).missionId;
+        return { missionId };
     }
 };
 exports.MissionsService = MissionsService;

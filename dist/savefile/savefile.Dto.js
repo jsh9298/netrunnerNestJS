@@ -9,15 +9,79 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Mission = exports.Node = void 0;
+exports.Mission = void 0;
 const class_validator_1 = require("class-validator");
-class Node {
+class MissionType {
 }
-exports.Node = Node;
+MissionType.SCANNING = 1;
+MissionType.DETECTED_SPECIFIED_PORT = 2;
+MissionType.EXECUTE_CODE = 3;
+MissionType.PROXY_FIREWALL = 4;
+MissionType.MONITORING = 5;
+MissionType.CODE_INJECTION = 6;
+MissionType.FILE_TRANSFER = 7;
+class NodeProgram {
+}
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], Node.prototype, "nodeID", void 0);
+], NodeProgram.prototype, "programName", void 0);
+class TCPPort {
+}
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], TCPPort.prototype, "servicePort", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], TCPPort.prototype, "state", void 0);
+class UDPPort {
+}
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], UDPPort.prototype, "servicePort", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UDPPort.prototype, "state", void 0);
+class Reward {
+}
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], Reward.prototype, "point", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], Reward.prototype, "toolFile", void 0);
+class NodePort {
+}
+__decorate([
+    (0, class_validator_1.ValidateNested)(),
+    __metadata("design:type", TCPPort)
+], NodePort.prototype, "tcp", void 0);
+__decorate([
+    (0, class_validator_1.ValidateNested)(),
+    __metadata("design:type", UDPPort)
+], NodePort.prototype, "udp", void 0);
+class NodeFile {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], NodeFile.prototype, "fileName", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], NodeFile.prototype, "fileContent", void 0);
+class Node {
+}
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], Node.prototype, "nodeId", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
@@ -27,44 +91,65 @@ __decorate([
     __metadata("design:type", String)
 ], Node.prototype, "nodeIP", void 0);
 __decorate([
-    (0, class_validator_1.IsObject)(),
-    __metadata("design:type", Object)
-], Node.prototype, "nodePort", void 0);
+    (0, class_validator_1.ValidateNested)(),
+    __metadata("design:type", NodePort)
+], Node.prototype, "nodePorts", void 0);
 __decorate([
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsString)({ each: true }),
     __metadata("design:type", Array)
-], Node.prototype, "nodeDirectorys", void 0);
+], Node.prototype, "nodeDirectories", void 0);
 __decorate([
-    (0, class_validator_1.IsObject)(),
-    __metadata("design:type", Object)
-], Node.prototype, "nodeProgram", void 0);
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    __metadata("design:type", Array)
+], Node.prototype, "nodePrograms", void 0);
 __decorate([
-    (0, class_validator_1.IsObject)(),
-    __metadata("design:type", Object)
-], Node.prototype, "nodeFile", void 0);
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    __metadata("design:type", Array)
+], Node.prototype, "nodeFiles", void 0);
+class MyNode {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], MyNode.prototype, "dirPath", void 0);
+__decorate([
+    (0, class_validator_1.ValidateNested)(),
+    __metadata("design:type", NodeFile)
+], MyNode.prototype, "nodeFile", void 0);
+class CorrectAnswer {
+}
+__decorate([
+    (0, class_validator_1.ValidateNested)(),
+    __metadata("design:type", MyNode)
+], CorrectAnswer.prototype, "myNode", void 0);
 class Mission {
 }
 exports.Mission = Mission;
 __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
-], Mission.prototype, "missionID", void 0);
+], Mission.prototype, "missionId", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
 ], Mission.prototype, "scenario", void 0);
 __decorate([
     (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsEnum)(MissionType, { each: true }),
     __metadata("design:type", Array)
 ], Mission.prototype, "type", void 0);
 __decorate([
-    (0, class_validator_1.IsObject)(),
-    __metadata("design:type", Object)
+    (0, class_validator_1.ValidateNested)(),
+    __metadata("design:type", CorrectAnswer)
 ], Mission.prototype, "correctAnswer", void 0);
 __decorate([
-    (0, class_validator_1.IsObject)(),
-    __metadata("design:type", Object)
+    (0, class_validator_1.ValidateNested)(),
+    __metadata("design:type", Node)
+], Mission.prototype, "node", void 0);
+__decorate([
+    (0, class_validator_1.ValidateNested)(),
+    __metadata("design:type", Reward)
 ], Mission.prototype, "reward", void 0);
 //# sourceMappingURL=savefile.Dto.js.map

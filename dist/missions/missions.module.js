@@ -11,13 +11,16 @@ const common_1 = require("@nestjs/common");
 const missions_controller_1 = require("./missions.controller");
 const missions_service_1 = require("./missions.service");
 const savefile_service_1 = require("../savefile/savefile.service");
+const savefile_module_1 = require("../savefile/savefile.module");
+const savefile_Dto_1 = require("../savefile/savefile.Dto");
 let MissionsModule = class MissionsModule {
 };
 exports.MissionsModule = MissionsModule;
 exports.MissionsModule = MissionsModule = __decorate([
     (0, common_1.Module)({
+        imports: [savefile_module_1.SavefileModule, savefile_Dto_1.Mission],
         controllers: [missions_controller_1.MissionsController],
-        providers: [missions_service_1.MissionsService, savefile_service_1.SaveFileService]
+        providers: [missions_service_1.MissionsService, savefile_service_1.SaveFileService, savefile_Dto_1.Mission]
     })
 ], MissionsModule);
 //# sourceMappingURL=missions.module.js.map

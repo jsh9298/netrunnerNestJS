@@ -16,9 +16,9 @@ const user_repository_1 = require("../auth/users/user.repository");
 const xml2js = require("xml2js");
 const common_1 = require("@nestjs/common");
 let SaveFileService = class SaveFileService {
-    constructor(userRepository) {
+    constructor(userRepository, missions = {}) {
         this.userRepository = userRepository;
-        this.dtoMap = new Map();
+        this.missions = missions;
     }
     async readXml(userId) {
         try {
@@ -29,19 +29,16 @@ let SaveFileService = class SaveFileService {
             const xmlFilePath = path.join(user.location, `${userId}sinario.xml`);
             const xmlData = await fs.promises.readFile(xmlFilePath, 'utf-8');
             const parser = new xml2js.Parser();
-            const dto = await parser.parseStringPromise(xmlData);
-            this.dtoMap.set(userId, dto);
-            return dto;
+            const mission = await parser.parseStringPromise(xmlData);
+            this.missions[userId] = mission;
+            return mission;
         }
         catch (err) {
             console.error(err);
             return null;
         }
     }
-    async saveXml(userId, mission) {
-        if (!this.dtoMap.has(userId)) {
-            return;
-        }
+    async saveXml(userId) {
         try {
             const user = await this.userRepository.findOne({ where: { userId } });
             if (!user || !user.location) {
@@ -49,25 +46,24 @@ let SaveFileService = class SaveFileService {
             }
             const xmlFilePath = path.join(user.location, `${userId}sinario.xml`);
             const builder = new xml2js.Builder();
-            const xmlData = builder.buildObject(this.dtoMap.get(userId));
+            const xmlData = builder.buildObject(this.missions[userId]);
             await fs.promises.writeFile(xmlFilePath, xmlData);
         }
         catch (err) {
+            console.error(err);
+            return;
         }
     }
     updateXml(userId, mission) {
-        this.dtoMap.set(userId, mission);
+        this.missions[userId] = mission;
     }
     getXml(userId) {
-        if (this.dtoMap.has(userId)) {
-            return this.dtoMap.get(userId);
-        }
-        return null;
+        return this.missions[userId];
     }
 };
 exports.SaveFileService = SaveFileService;
 exports.SaveFileService = SaveFileService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [user_repository_1.UserRepository])
+    __metadata("design:paramtypes", [user_repository_1.UserRepository, Object])
 ], SaveFileService);
 //# sourceMappingURL=savefile.service.js.map
