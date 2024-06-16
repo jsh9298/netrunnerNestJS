@@ -8,7 +8,7 @@ import { SignInDto } from './dto/signin.dto';
 import { changePass } from './dto/changePass.dto';
 import { User } from './users/user.entity';
 import { Profile } from './dto/profile.dto';
-import { Mission } from 'src/savefile/savefile.Dto';
+import { Missions } from 'src/savefile/savefile.Dto';
 import { SaveFileService } from 'src/savefile/savefile.service';
 
 @Injectable()

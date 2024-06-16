@@ -3,7 +3,7 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/users/user.entity';
 import { MissionsService } from './missions.service';
 import { AuthGuard } from '@nestjs/passport';
-import { Mission } from 'src/savefile/savefile.Dto';
+import { Missions} from 'src/savefile/savefile.Dto';
 
 @Controller('missions')
 export class MissionsController {
@@ -15,7 +15,7 @@ export class MissionsController {
     async getMisson(
         @Param('missionid') id:string,
         @GetUser() user:User,
-    ):Promise<Mission>{
+    ):Promise<Missions|{error:string}>{
         return await this.missionsService.getMissons(user,id);
     }
 }

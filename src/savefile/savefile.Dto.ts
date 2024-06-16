@@ -1,14 +1,5 @@
 import { IsArray, IsEnum, IsNumber, IsString, ValidateNested } from 'class-validator';
 
-class MissionType {
-  static readonly SCANNING = 1;
-  static readonly DETECTED_SPECIFIED_PORT = 2;
-  static readonly EXECUTE_CODE = 3;
-  static readonly PROXY_FIREWALL = 4;
-  static readonly MONITORING = 5;
-  static readonly CODE_INJECTION = 6;
-  static readonly FILE_TRANSFER = 7;
-}
 class NodeProgram {
   @IsString()
   programName: string;
@@ -89,7 +80,7 @@ class CorrectAnswer {
   myNode: MyNode;
 }
 
-export class Mission {
+class Mission {
   @IsNumber()
   missionId: number;
 
@@ -98,7 +89,6 @@ export class Mission {
   scenario: string[];
 
   @IsArray()
-  @IsEnum(MissionType, { each: true })
   type: number[];
 
   @ValidateNested()
@@ -109,4 +99,8 @@ export class Mission {
 
   @ValidateNested()
   reward: Reward;
+}
+export class Missions{
+  @ValidateNested()
+  mission:Mission[];
 }
