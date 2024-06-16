@@ -80,7 +80,7 @@ class CorrectAnswer {
   myNode: MyNode;
 }
 
-class Mission {
+export class Mission {
   @IsNumber()
   missionId: number;
 
@@ -99,8 +99,4 @@ class Mission {
 
   @ValidateNested()
   reward: Reward;
-}
-export class Missions{
-  @ValidateNested()
-  mission:Mission[];
 }

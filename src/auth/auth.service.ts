@@ -1,14 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './users/user.repository';
 import { AuthCredentialsDto } from './dto/auth-credential.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/signin.dto';
 import { changePass } from './dto/changePass.dto';
-import { User } from './users/user.entity';
-import { Profile } from './dto/profile.dto';
-import { Missions } from 'src/savefile/savefile.Dto';
 import { SaveFileService } from 'src/savefile/savefile.service';
 
 @Injectable()
