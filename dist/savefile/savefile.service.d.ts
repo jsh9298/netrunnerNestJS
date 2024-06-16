@@ -1,13 +1,17 @@
 import { UserRepository } from "src/auth/users/user.repository";
-import { Mission } from "./savefile.Dto";
+import { Mission } from './savefile.Dto';
 export declare class SaveFileService {
     private userRepository;
-    private missions;
-    constructor(userRepository: UserRepository, missions?: {
+    private _missionsCache;
+    get missionsCache(): {
+        [userId: string]: Mission;
+    };
+    set missionsCache(missions: {
         [userId: string]: Mission;
     });
-    readXml(userId: string): Promise<Mission | null>;
-    saveXml(userId: string): Promise<void>;
+    constructor(userRepository: UserRepository);
+    getXml(userId: string): Promise<Mission>;
+    readXml(userId: string): Promise<Mission>;
+    saveXml(userId: string, mission: Mission): Promise<void>;
     updateXml(userId: string, mission: Mission): void;
-    getXml(userId: string): Mission | null;
 }

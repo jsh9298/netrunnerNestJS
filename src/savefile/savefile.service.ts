@@ -20,28 +20,20 @@ export class SaveFileService {
     this._missionsCache = missions;
   }
 
-  constructor(
-    @InjectRepository(User)
-    private userRepository: UserRepository,
-  ) {}
-
-  async getXml(userId: string): Promise<Mission> {
+  async getXml(userId: string,location:string): Promise<Mission> {
     if (this.missionsCache[userId]) {
       return this.missionsCache[userId];
     }
 
-    const mission = await this.readXml(userId);
+    const mission = await this.readXml(userId,location);
     this.missionsCache[userId] = mission;
     return mission;
   }
 
-  async readXml(userId: string): Promise<Mission> {
+  async readXml(userId: string,location:string): Promise<Mission> {
     try {
-      const user = await this.userRepository.findOne({ where: { userId } });
-      if (!user || !user.location) {
-        return null;
-      }
-      const xmlFilePath = path.join(user.location, `${userId}sinario.xml`);
+     
+      const xmlFilePath = path.join(location, `${userId}sinario.xml`);
       const xmlData = await fs.promises.readFile(xmlFilePath, 'utf-8');
       const parser = new xml2js.Parser();
       return (await parser.parseStringPromise(xmlData)) as Mission;
@@ -51,13 +43,10 @@ export class SaveFileService {
     }
   }
 
-  async saveXml(userId: string, mission: Mission): Promise<void> {
+  async saveXml(userId: string,location:string, mission: Mission): Promise<void> {
     try {
-      const user = await this.userRepository.findOne({ where: { userId } });
-      if (!user || !user.location) {
-        return;
-      }
-      const xmlFilePath = path.join(user.location, `${userId}sinario.xml`);
+     
+      const xmlFilePath = path.join(location, `${userId}sinario.xml`);
       const builder = new xml2js.Builder();
       const xmlData = builder.buildObject(mission);
       await fs.promises.writeFile(xmlFilePath, xmlData);

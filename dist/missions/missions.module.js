@@ -12,15 +12,16 @@ const missions_controller_1 = require("./missions.controller");
 const missions_service_1 = require("./missions.service");
 const savefile_service_1 = require("../savefile/savefile.service");
 const savefile_module_1 = require("../savefile/savefile.module");
-const savefile_Dto_1 = require("../savefile/savefile.Dto");
+const user_repository_1 = require("../auth/users/user.repository");
+const auth_module_1 = require("../auth/auth.module");
 let MissionsModule = class MissionsModule {
 };
 exports.MissionsModule = MissionsModule;
 exports.MissionsModule = MissionsModule = __decorate([
     (0, common_1.Module)({
-        imports: [savefile_module_1.SavefileModule, savefile_Dto_1.Mission],
+        imports: [savefile_module_1.SavefileModule, auth_module_1.AuthModule],
         controllers: [missions_controller_1.MissionsController],
-        providers: [missions_service_1.MissionsService, savefile_service_1.SaveFileService, savefile_Dto_1.Mission]
+        providers: [missions_service_1.MissionsService, savefile_service_1.SaveFileService, user_repository_1.UserRepository]
     })
 ], MissionsModule);
 //# sourceMappingURL=missions.module.js.map

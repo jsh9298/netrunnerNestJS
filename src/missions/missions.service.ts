@@ -10,7 +10,7 @@ export class MissionsService {
     ){}
     async getMissons(user:User,id:string):Promise<Mission>{
         console.log(user.userId);
-        const missionId = await this.xmlService.getXml(user.userId);
+        const missionId = await this.xmlService.getXml(user.userId,user.location);
         console.log(missionId);
        return missionId;
     }

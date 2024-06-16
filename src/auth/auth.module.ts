@@ -9,6 +9,7 @@ import { JwtStrategy } from './jwt.strategy';
 import * as config from 'config';
 import { TypeOrmExModule } from 'src/typeorm-ex/typeorm-ex.module';
 import { SaveFileService } from 'src/savefile/savefile.service';
+import { SavefileModule } from 'src/savefile/savefile.module';
 
 const jwtConfig = config.get('jwt');
 @Module({
@@ -20,10 +21,10 @@ const jwtConfig = config.get('jwt');
         expiresIn: jwtConfig.expiresIn,
       }
     })
-    ,TypeOrmExModule.forCustomRepository([UserRepository])
+    ,TypeOrmExModule.forCustomRepository([UserRepository]),SavefileModule
   ],
   controllers: [AuthController],
   providers: [AuthService,JwtStrategy,SaveFileService],
-  exports:[JwtStrategy,PassportModule,UserRepository]
+  exports:[JwtStrategy,PassportModule]
 })
 export class AuthModule {}

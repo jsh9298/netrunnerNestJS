@@ -17,6 +17,7 @@ const jwt_strategy_1 = require("./jwt.strategy");
 const config = require("config");
 const typeorm_ex_module_1 = require("../typeorm-ex/typeorm-ex.module");
 const savefile_service_1 = require("../savefile/savefile.service");
+const savefile_module_1 = require("../savefile/savefile.module");
 const jwtConfig = config.get('jwt');
 let AuthModule = class AuthModule {
 };
@@ -31,7 +32,7 @@ exports.AuthModule = AuthModule = __decorate([
                     expiresIn: jwtConfig.expiresIn,
                 }
             }),
-            typeorm_ex_module_1.TypeOrmExModule.forCustomRepository([user_repository_1.UserRepository])
+            typeorm_ex_module_1.TypeOrmExModule.forCustomRepository([user_repository_1.UserRepository]), savefile_module_1.SavefileModule
         ],
         controllers: [auth_controller_1.AuthController],
         providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, savefile_service_1.SaveFileService],

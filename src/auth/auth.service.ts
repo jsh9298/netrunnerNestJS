@@ -34,7 +34,7 @@ export class AuthService {
             const payload = { userId };
             const accessToken = await this.jwtService.sign(payload);
 
-            const mission = await this.xmlservice.readXml(userId);
+            const mission = await this.xmlservice.readXml(userId,user.location);
             if (mission) {
               this.xmlservice.updateXml(userId, mission);
             }

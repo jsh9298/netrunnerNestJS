@@ -10,11 +10,14 @@ exports.SavefileModule = void 0;
 const common_1 = require("@nestjs/common");
 const savefile_service_1 = require("./savefile.service");
 const user_repository_1 = require("../auth/users/user.repository");
+const auth_module_1 = require("../auth/auth.module");
 let SavefileModule = class SavefileModule {
 };
 exports.SavefileModule = SavefileModule;
 exports.SavefileModule = SavefileModule = __decorate([
     (0, common_1.Module)({
+        imports: [(0, common_1.forwardRef)(() => auth_module_1.AuthModule),
+        ],
         providers: [savefile_service_1.SaveFileService, user_repository_1.UserRepository],
         exports: [savefile_service_1.SaveFileService]
     })
