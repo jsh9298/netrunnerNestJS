@@ -1,102 +1,71 @@
-import { IsArray, IsEnum, IsNumber, IsString, ValidateNested } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, ArrayNotEmpty, ArrayUnique } from 'class-validator';
 
-class NodeProgram {
+export class CorrectAnswerDTO {
   @IsString()
-  programName: string;
-}
-class TCPPort {
-  @IsNumber()
-  servicePort: number;
+  @IsNotEmpty()
+  dirPath: string;
 
   @IsString()
-  state: string;
-}
-
-class UDPPort {
-  @IsNumber()
-  servicePort: number;
+  @IsNotEmpty()
+  File_name: string;
 
   @IsString()
-  state: string;
+  @IsNotEmpty()
+  File_content: string;
 }
 
-class Reward {
+export class NodeDTO {
+  @IsString()
+  @IsNotEmpty()
+  nodeId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  nodeMAC: string;
+
+  @IsString()
+  @IsNotEmpty()
+  nodeIP: string;
+
+  @ArrayNotEmpty()
+  @ArrayUnique()
+  nodeDirectorys: string[];
+
+  @ArrayNotEmpty()
+  @ArrayUnique()
+  nodeProgram: string[];
+
+  @ArrayNotEmpty()
+  nodeFiles: {
+    File_name: string;
+    File_content: string;
+  }[];
+
+  nodePorts: {
+    TCP: number[];
+    UDP: number[];
+  };
+}
+
+export class RewardDTO {
   @IsNumber()
   point: number;
 
   @IsString()
+  @IsNotEmpty()
   toolFile: string;
 }
-class NodePort {
-  @ValidateNested()
-  tcp: TCPPort;
 
-  @ValidateNested()
-  udp: UDPPort;
-}
-
-class NodeFile {
+export class MissionDTO {
   @IsString()
-  fileName: string;
+  @IsNotEmpty()
+  scenario: string;
 
   @IsString()
-  fileContent: string;
-}
+  @IsNotEmpty()
+  type: string;
 
-
-class Node {
-  @IsNumber()
-  nodeId: number;
-
-  @IsString()
-  nodeMAC: string;
-
-  @IsString()
-  nodeIP: string;
-
-  @ValidateNested()
-  nodePorts: NodePort;
-
-  @IsArray()
-  @IsString({ each: true })
-  nodeDirectories: string[];
-
-  @ValidateNested({ each: true })
-  nodePrograms: NodeProgram[];
-
-  @ValidateNested({ each: true })
-  nodeFiles: NodeFile[];
-}
-
-class MyNode {
-  @IsString()
-  dirPath: string;
-
-  @ValidateNested()
-  nodeFile: NodeFile;
-}
-class CorrectAnswer {
-  @ValidateNested()
-  myNode: MyNode;
-}
-
-export class Mission {
-  @IsNumber()
-  missionId: number;
-
-  @IsArray()
-  @IsString({ each: true })
-  scenario: string[];
-
-  @IsArray()
-  type: number[];
-
-  @ValidateNested()
-  correctAnswer: CorrectAnswer;
-
-  @ValidateNested()
-  node: Node;
-
-  @ValidateNested()
-  reward: Reward;
+  correctAnswer: CorrectAnswerDTO;
+  node: NodeDTO;
+  reward: RewardDTO;
 }
