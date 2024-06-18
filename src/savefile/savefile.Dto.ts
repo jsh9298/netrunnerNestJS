@@ -1,10 +1,10 @@
 import { IsArray, IsEnum, IsNumber, IsString, ValidateNested } from 'class-validator';
 
-class NodeProgram {
+export class NodeProgram {
   @IsString()
   programName: string;
 }
-class TCPPort {
+export class TCPPort {
   @IsNumber()
   servicePort: number;
 
@@ -12,7 +12,7 @@ class TCPPort {
   state: string;
 }
 
-class UDPPort {
+export class UDPPort {
   @IsNumber()
   servicePort: number;
 
@@ -20,14 +20,14 @@ class UDPPort {
   state: string;
 }
 
-class Reward {
+export class Reward {
   @IsNumber()
   point: number;
 
   @IsString()
   toolFile: string;
 }
-class NodePort {
+export class NodePort {
   @ValidateNested()
   tcp: TCPPort;
 
@@ -35,7 +35,7 @@ class NodePort {
   udp: UDPPort;
 }
 
-class NodeFile {
+export class NodeFile {
   @IsString()
   fileName: string;
 
@@ -44,7 +44,7 @@ class NodeFile {
 }
 
 
-class Node {
+export class Node {
   @IsNumber()
   nodeId: number;
 
@@ -58,24 +58,23 @@ class Node {
   nodePorts: NodePort;
 
   @IsArray()
-  @IsString({ each: true })
   nodeDirectories: string[];
 
-  @ValidateNested({ each: true })
+  @ValidateNested()
   nodePrograms: NodeProgram[];
 
-  @ValidateNested({ each: true })
+  @ValidateNested()
   nodeFiles: NodeFile[];
 }
 
-class MyNode {
+export class MyNode {
   @IsString()
   dirPath: string;
 
   @ValidateNested()
   nodeFile: NodeFile;
 }
-class CorrectAnswer {
+export class CorrectAnswer {
   @ValidateNested()
   myNode: MyNode;
 }
@@ -85,7 +84,7 @@ export class Mission {
   missionId: number;
 
   @IsArray()
-  @IsString({ each: true })
+  @IsString()
   scenario: string[];
 
   @IsArray()

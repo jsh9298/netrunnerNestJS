@@ -32,7 +32,11 @@ export class SaveFileService {
       const xmlFilePath = path.join(location, `${userId}sinario.xml`);
       const xmlData = await fs.promises.readFile(xmlFilePath, 'utf-8');
       const parser = new xml2js.Parser();
-      return (await parser.parseStringPromise(xmlData)) as Mission;
+      const parsedXml = await parser.parseStringPromise(xmlData);
+      const mission = new Mission();
+
+      Object.assign(mission, parsedXml.mission);
+      return mission;
     } catch (err) {
       console.error(err);
       return null;

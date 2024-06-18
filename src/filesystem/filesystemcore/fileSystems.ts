@@ -214,23 +214,5 @@ class FileSystem {
         return pathfinder;
     }
 }
-// const fs = new FileSystem();
-// fs.createDirectory("/root");
-// fs.createDirectory("/tmp");
-// fs.createDirectory("/home/user")
-// fs.createFile("/home/user/file1.txt");
-// fs.createFile("/home/user/file2.txt");
-// fs.createDirectory("/home/user/documents");
-// fs.createFile("/home/user/documents/document1.txt");
-
-// console.log(fs.printFileSystem());
-
-// fs.deleteDirectory("/home/user");
-
-// console.log(fs.printFileSystem());
-
-// fs.createDirectory("/home/user");
-
-// console.log(fs.printFileSystem());
 
 export { FileSystem };

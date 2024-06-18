@@ -10,10 +10,13 @@ import { EmailModule } from './email/email.module';
 import { TermsocketGateway } from './termsocket/termsocket.gateway';
 import { MissionsModule } from './missions/missions.module';
 import { SavefileModule } from './savefile/savefile.module';
+import { FilesystemModule } from './filesystem/filesystem.module';
+import { commends } from './filesystem/commends';
+import { FilesystemService } from './filesystem/filesystem.service';
 
 @Module({
-  imports: [AuthModule,TypeOrmModule.forRoot(typeORMConfig), BoardsModule, EmailModule, MissionsModule, SavefileModule],
+  imports: [AuthModule,TypeOrmModule.forRoot(typeORMConfig), BoardsModule, EmailModule, MissionsModule, SavefileModule, FilesystemModule],
   controllers: [AppController],
-  providers: [AppService, EmailService, TermsocketGateway],
+  providers: [AppService, EmailService, TermsocketGateway,commends,FilesystemService],
 })
 export class AppModule {}

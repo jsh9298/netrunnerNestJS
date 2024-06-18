@@ -1,34 +1,46 @@
-import { FileSystem } from "./fileSystems";
+import { FileSystem } from "./filesystemcore/fileSystems";
 
 
 
-//JSON으로 날라오는 데이터 분석부분 만들어야함
-const fs = new FileSystem();
-fs.createDirectory("/root");
-fs.createDirectory("/tmp");
-fs.createDirectory("/home/user")
-fs.createFile("/home/user/file1.txt");
-fs.createFile("/home/user/file2.txt");
-fs.createDirectory("/home/user/documents");
-fs.createFile("/home/user/documents/document1.txt");
-//세이브 로드,로드된 세이브를 토대로 초기화,게임로직,로그아웃이나 브라우저 종료시 로직값 저장ㄴ
-//분석후 명령어들 결과 생성후 리턴 , 이 위치에 로케이션 getter setter 호출
+
 export class commends {
-    currentIP: any;
-    currentFs: any;
-    currentLocations: any;
-    currentpath: any;
-    constructor() {
-        this.currentpath = "/"
+     fs:FileSystem = null;
+     currentIP: string = "";
+     currentUser: string = "";
+     currentpath: string = "";
+     setFs(fileSystem:FileSystem,dirlist:string[],filelist:string[],User:string,Ip: string){
+        this.currentIP = Ip;
+        this.currentUser = User;
+        this.fs =fileSystem;
+        for (let index = 0; index < dirlist.length; index++) {
+            fileSystem.createDirectory(dirlist[index]);
+        }
+        for (let index = 0; index < filelist.length; index++) {
+            fileSystem.createFile (filelist[index]);
+        }
+        if(this.currentUser == 'root'){
+            this.currentpath = '/root';
+        }else if(this.currentUser === '/' ){
+            this.currentpath = '/';
+        }else{
+            this.currentpath = `/home/${this.currentUser}`;
+        }
+    }
+    prompt(){
+        return this.currentUser+"@"+this.currentIP;
     }
     pwd() {
-        return fs.getPathInfo(this.currentpath).absolutePath+"";
+        return this.fs.getPathInfo(this.currentpath).absolutePath+"";
     }
     cd(payload) {
-        console.log("1",this.currentpath);
         if (payload[1] === undefined) {
-            this.currentpath = "/";
-            console.log("2",this.currentpath);
+            if(this.currentUser == 'root'){
+                this.currentpath = '/root';
+            }else if(this.currentUser === '/' ){
+                this.currentpath = '/';
+            }else{
+                this.currentpath = `/home/${this.currentUser}`;
+            }
         } else if (payload[1] === '..') {
             if (this.currentpath == '/') {
                 this.currentpath = '/';
@@ -37,23 +49,14 @@ export class commends {
                 let temp = this.currentpath.substring(0, lastPath);
                 this.currentpath = temp;
             }
-            console.log("3",this.currentpath);
-        } else if (fs.isOverlap(payload[1], this.currentpath) == false) {
+        } else if (this.fs.isOverlap(payload[1], this.currentpath) == false) {
             if(this.currentpath === "/"){
                 this.currentpath += ("" + payload[1]);
             }else{
-            this.currentpath += ("/" + payload[1]);
+                this.currentpath += ("/" + payload[1]);
             }
-            // console.log("4-1",this.currentpath);
-            // let lastPath = this.currentpath.lastIndexOf("/");
-            // console.log("4-2",lastPath);
-            // let temp = this.currentpath.substring(0, lastPath);
-            // console.log("4-3",temp);
-            // this.currentpath = temp;
-            console.log("4",this.currentpath);
-        } else if (fs.findDirectory(payload[1]) == true) {
+        } else if (this.fs.findDirectory(payload[1]) == true) {
             this.currentpath = payload[1];
-            console.log("5",this.currentpath);
         } else {
             return "No such path found";
         }
@@ -61,10 +64,10 @@ export class commends {
     }
     ls(payload) {
         let result = '';
-        for (const key in fs.getPathInfo(this.currentpath).files) {
-            result += fs.getPathInfo(this.currentpath).files[key];
+        for (const key in this.fs.getPathInfo(this.currentpath).files) {
+            result += this.fs.getPathInfo(this.currentpath).files[key];
             if (payload[1] == "-al") {
-                result += "[" + fs.getPathInfo(this.currentpath).filestype[key] + "]";
+                result += "[" + this.fs.getPathInfo(this.currentpath).filestype[key] + "]";
             }
             result += " ";
         }
@@ -82,16 +85,16 @@ export class commends {
     rm(payload) {
         let temp = this.currentpath;
         if (payload[1] == "*") {
-            fs.deleteDirectory(this.currentpath);
-            fs.createDirectory(this.currentpath);
+            this.fs.deleteDirectory(this.currentpath);
+            this.fs.createDirectory(this.currentpath);
         }
-        if (fs.isOverlap(payload[1], this.currentpath) == false) {
-            for (const key in fs.getPathInfo(this.currentpath).files) {
-                if (fs.getPathInfo(this.currentpath).files[key] == payload[1]) {
-                    if (fs.getPathInfo(this.currentpath).filestype[key] == "file") {
-                        fs.deleteFile(temp += ("/" + payload[1]));
+        if (this.fs.isOverlap(payload[1], this.currentpath) == false) {
+            for (const key in this.fs.getPathInfo(this.currentpath).files) {
+                if (this.fs.getPathInfo(this.currentpath).files[key] == payload[1]) {
+                    if (this.fs.getPathInfo(this.currentpath).filestype[key] == "file") {
+                        this.fs.deleteFile(temp += ("/" + payload[1]));
                     } else {
-                        fs.deleteDirectory(temp += ("/" + payload[1]));
+                        this.fs.deleteDirectory(temp += ("/" + payload[1]));
                     }
                 }
             }
@@ -101,13 +104,13 @@ export class commends {
     mkdir(payload) {
         let temp = this.currentpath;
         temp += ("/"+payload[1]);
-        fs.createDirectory(temp);
+        this.fs.createDirectory(temp);
         return " ";
     }
     rmdir(payload) {
         let temp =  this.currentpath;
         temp += ("/" + payload[1]);
-        fs.deleteDirectory(temp);
+        this.fs.deleteDirectory(temp);
         return " ";
     }
 
@@ -120,6 +123,8 @@ export class commends {
     //scan
     //connect
     //disconnect
+
+    
 }
 
 //리턴값들을 JSON으로 재조립후 전송

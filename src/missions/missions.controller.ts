@@ -16,5 +16,15 @@ export class MissionsController {
         @GetUser() user: User,
     ): Promise<Mission | { error: string }> {
         return await this.missionsService.getMissons(user);
-    }    
+    }
+    @Get("points/:userId") 
+    getPoints(@Param('userId')id:string,@GetUser() user:User){
+        if(user.userId === id){
+            return user.point;
+        }
+    }
+    @Get("/tools")
+    getTools(){
+        return "plz wait updates 😢";
+    }
 }

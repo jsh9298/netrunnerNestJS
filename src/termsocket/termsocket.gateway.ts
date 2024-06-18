@@ -2,15 +2,18 @@ import { OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServe
 import { Server } from 'socket.io';
 import * as jwt from 'jsonwebtoken';
 import * as config from 'config';
-import { commends } from './filesystem/commends';
+import { commends } from '../filesystem/commends';
+import { FilesystemService } from 'src/filesystem/filesystem.service';
 
 @WebSocketGateway({
   cors: true, namespace: 'term'
 })
 export class TermsocketGateway implements OnGatewayConnection {
   com: any;
-  constructor() {
-    this.com = new commends();
+  constructor(
+    private fileSystemService:FilesystemService
+  ) {
+    this.com = fileSystemService.setC();
   }
   @WebSocketServer()
   server: Server;

@@ -6,13 +6,15 @@ import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/signin.dto';
 import { changePass } from './dto/changePass.dto';
 import { SaveFileService } from 'src/savefile/savefile.service';
+import { FilesystemService } from 'src/filesystem/filesystem.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private userRepository:UserRepository,
         private jwtService:JwtService,
-        private xmlservice:SaveFileService
+        private xmlservice:SaveFileService,
+        private filesystemService:FilesystemService
     ){}
     async signUp(authCredentialsDto:AuthCredentialsDto):Promise<void>{
         try {
@@ -34,7 +36,9 @@ export class AuthService {
             if (mission) {
               this.xmlservice.updateXml(userId, mission);
             }
-      
+
+            await this.filesystemService.initFs(userId,user.savepoint,user.location);
+
             return {accessToken};
         }else{
             throw new UnauthorizedException('login failed');
