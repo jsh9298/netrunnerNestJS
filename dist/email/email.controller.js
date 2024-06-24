@@ -32,14 +32,14 @@ let EmailController = class EmailController {
 };
 exports.EmailController = EmailController;
 __decorate([
-    (0, common_1.Get)('/send'),
+    (0, common_1.Post)('/send'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [send_dto_1.sendDto]),
     __metadata("design:returntype", Promise)
 ], EmailController.prototype, "sendEmail", null);
 __decorate([
-    (0, common_1.Get)('/check'),
+    (0, common_1.Post)('/check'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [check_dto_1.checkDto]),

@@ -14,7 +14,7 @@ const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const commends_1 = require("./filesystem/commends");
+const commends_1 = require("../filesystem/commends");
 let TermsocketGateway = class TermsocketGateway {
     constructor() {
         this.com = new commends_1.commends();
@@ -31,45 +31,53 @@ let TermsocketGateway = class TermsocketGateway {
             return;
         }
     }
-    handleMessage(client, payload) {
+    handleJoin(client, data) {
+        client.join(data.roomId);
+        console.log("join:", data);
+    }
+    handleMessage(client, data) {
         if (!client.user) {
             return;
         }
-        const response = payload.split(' ');
-        console.log(response);
+        const response = data.payload.split(' ');
+        console.log(data);
         switch (response[0]) {
             case 'pwd':
-                payload = this.com.pwd();
+                data.payload = this.com.pwd();
                 break;
             case 'cd':
-                payload = this.com.cd(response);
+                data.payload = this.com.cd(response);
                 break;
             case 'ls':
-                payload = this.com.ls(response);
+                data.payload = this.com.ls(response);
                 break;
             case 'help':
-                payload = this.com.help(response);
+                data.payload = this.com.help(response);
                 break;
             case 'cp':
-                payload = this.com.cp(response);
+                data.payload = this.com.cp(response);
                 break;
             case 'mv':
-                payload = this.com.mv(response);
+                data.payload = this.com.mv(response);
                 break;
             case 'rm':
-                payload = this.com.rm(response);
+                data.payload = this.com.rm(response);
                 break;
             case 'mkdir':
-                payload = this.com.mkdir(response);
+                data.payload = this.com.mkdir(response);
                 break;
             case 'rmdir':
-                payload = this.com.rmdir(response);
+                data.payload = this.com.rmdir(response);
                 break;
             default:
-                payload = "Unkown commends";
+                data.payload = "Unkown commends";
                 break;
         }
-        this.server.emit('message', payload);
+        this.server.to(data.roomId).emit('message', data.payload);
+    }
+    handleLeave(client, data) {
+        console.log("leave:", data);
+        client.leave(data.roomId);
     }
 };
 exports.TermsocketGateway = TermsocketGateway;
@@ -78,11 +86,23 @@ __decorate([
     __metadata("design:type", socket_io_1.Server)
 ], TermsocketGateway.prototype, "server", void 0);
 __decorate([
+    (0, websockets_1.SubscribeMessage)('join'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], TermsocketGateway.prototype, "handleJoin", null);
+__decorate([
     (0, websockets_1.SubscribeMessage)('message'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", String)
 ], TermsocketGateway.prototype, "handleMessage", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('leave'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], TermsocketGateway.prototype, "handleLeave", null);
 exports.TermsocketGateway = TermsocketGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: true, namespace: 'term'

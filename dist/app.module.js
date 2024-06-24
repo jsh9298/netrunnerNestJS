@@ -19,14 +19,17 @@ const email_module_1 = require("./email/email.module");
 const termsocket_gateway_1 = require("./termsocket/termsocket.gateway");
 const missions_module_1 = require("./missions/missions.module");
 const savefile_module_1 = require("./savefile/savefile.module");
+const filesystem_module_1 = require("./filesystem/filesystem.module");
+const commends_1 = require("./filesystem/commends");
+const filesystem_service_1 = require("./filesystem/filesystem.service");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule, typeorm_1.TypeOrmModule.forRoot(typeorm_config_1.typeORMConfig), boards_module_1.BoardsModule, email_module_1.EmailModule, missions_module_1.MissionsModule, savefile_module_1.SavefileModule],
+        imports: [auth_module_1.AuthModule, typeorm_1.TypeOrmModule.forRoot(typeorm_config_1.typeORMConfig), boards_module_1.BoardsModule, email_module_1.EmailModule, missions_module_1.MissionsModule, savefile_module_1.SavefileModule, filesystem_module_1.FilesystemModule],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService, email_service_1.EmailService, termsocket_gateway_1.TermsocketGateway],
+        providers: [app_service_1.AppService, email_service_1.EmailService, termsocket_gateway_1.TermsocketGateway, commends_1.commends, filesystem_service_1.FilesystemService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

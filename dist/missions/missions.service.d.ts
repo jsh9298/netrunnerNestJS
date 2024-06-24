@@ -4,5 +4,7 @@ import { Mission } from 'src/savefile/savefile.Dto';
 export declare class MissionsService {
     private xmlService;
     constructor(xmlService: SaveFileService);
-    getMissons(user: User, id: string): Promise<Mission>;
+    getMissons(user: User): Promise<Mission | {
+        error: string;
+    }>;
 }

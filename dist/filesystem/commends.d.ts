@@ -1,9 +1,11 @@
+import { FileSystem } from "./filesystemcore/fileSystems";
 export declare class commends {
-    currentIP: any;
-    currentFs: any;
-    currentLocations: any;
-    currentpath: any;
-    constructor();
+    fs: FileSystem;
+    currentIP: string;
+    currentUser: string;
+    currentpath: string;
+    setFs(fileSystem: FileSystem, dirlist: string[], filelist: string[], User: string, Ip: string): void;
+    prompt(): string;
     pwd(): string;
     cd(payload: any): "" | "No such path found";
     ls(payload: any): string;

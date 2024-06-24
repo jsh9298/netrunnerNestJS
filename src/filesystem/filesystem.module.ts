@@ -4,7 +4,7 @@ import { SaveFileService } from 'src/savefile/savefile.service';
 import { SavefileModule } from 'src/savefile/savefile.module';
 import { FilesystemController } from './filesystem.controller';
 import { commends } from './commends';
-import { TermsocketGateway } from 'src/termsocket/termsocket.gateway';
+
 
 @Module({
     imports:[SavefileModule],

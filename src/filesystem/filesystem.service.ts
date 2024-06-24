@@ -1,35 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import { SaveFileService } from 'src/savefile/savefile.service';
-import { Mission } from 'src/savefile/savefile.Dto';
 import { commends } from './commends';
 import { FileSystem } from './filesystemcore/fileSystems';
 import { User } from 'src/auth/users/user.entity';
 
 @Injectable()
 export class FilesystemService {
+    private filesystemMap: Map<string, commends> = new Map();
+    private fs:FileSystem;
+    private dirlist: string[];
+    private filelist: string[];
+    private currentUser: string;
+    private currentip: string;
     constructor(
         private saveFileService:SaveFileService,
-        private c:commends,
     ){}
     async initFs(userId:string,savepoint:number,location:string){
          let sf = await this.saveFileService.getXml(userId,location);
     }
-    setFileSystem(){
-        const fs = new FileSystem();
-        const dirlist = ["/root","/tmp","/home/user","/home/user/documents"];
-        const filelist = ["/home/user/documents/document1.txt","/home/user/file1.txt","/home/user/file2.txt"];
-        const currentUser = "/";
-        const currentip = "192.168.25.15";
-        this.c.setFs(fs,dirlist,filelist,currentUser,currentip);
+    setFileSystem(userId:string){
+        this.fs = new FileSystem();
+        this.dirlist = ["/root","/tmp","/home/user","/home/user/documents"];
+        this.filelist = ["/home/user/documents/document1.txt","/home/user/file1.txt","/home/user/file2.txt"];
+        this.currentUser = "/";
+        this.currentip = "192.168.25.15";
+        this.setC(userId);
     }
-    setC(){
-        this.setFileSystem();
-        return this.c;
+    
+
+    setC(userId: string):commends {
+        if (!this.filesystemMap.has(userId)) {
+            const c = new commends();
+            c.setFs(this.fs,this.dirlist,this.filelist,this.currentUser,this.currentip);
+            this.filesystemMap.set(userId, c);
+        }
+        return this.filesystemMap.get(userId);
+    }
+
+    getC(userId: string): commends {
+        return this.filesystemMap.get(userId);
     }
     getSys(user:User,id:number){
-        this.setFileSystem();
-        const files = this.c.ls('ls').split(' ');
-        const typelist = this.c.ls(['ls','-al']);
+        this.setFileSystem(user.userId);
+        const c = this.getC(user.userId);
+        const files = c.ls('ls').split(' ');
+        const typelist = c.ls(['ls','-al']);
         const regex = /\[(directory|file)\]/g;
         const result =  typelist.match(regex);
         const regex2 = /\[(.*?)\]/g;

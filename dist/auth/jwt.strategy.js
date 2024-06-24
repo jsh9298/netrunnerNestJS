@@ -22,7 +22,7 @@ const config = require("config");
 let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
     constructor(userRepository) {
         super({
-            secretOrKey: process.env.JWT_SECRET || config.get('jwt.secret'),
+            secretOrKey: config.get('jwt.secret'),
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken()
         });
         this.userRepository = userRepository;

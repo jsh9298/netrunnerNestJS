@@ -16,11 +16,13 @@ let MissionsService = class MissionsService {
     constructor(xmlService) {
         this.xmlService = xmlService;
     }
-    async getMissons(user, id) {
+    async getMissons(user) {
         console.log(user.userId);
-        const missionId = await this.xmlService.getXml(user.userId);
-        console.log(missionId);
-        return missionId;
+        const mission = await this.xmlService.getXml(user.userId, user.location);
+        ;
+        console.log(await this.xmlService.getXml(user.userId, user.location));
+        console.log(mission);
+        return mission;
     }
 };
 exports.MissionsService = MissionsService;

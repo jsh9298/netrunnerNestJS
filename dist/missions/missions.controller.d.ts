@@ -4,5 +4,9 @@ import { Mission } from 'src/savefile/savefile.Dto';
 export declare class MissionsController {
     private missionsService;
     constructor(missionsService: MissionsService);
-    getMisson(id: string, user: User): Promise<Mission>;
+    getMisson(user: User): Promise<Mission | {
+        error: string;
+    }>;
+    getPoints(id: string, user: User): number;
+    getTools(): string;
 }

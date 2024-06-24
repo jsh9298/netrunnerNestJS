@@ -1,8 +1,17 @@
-import { IsArray, IsEnum, IsNumber, IsString, ValidateNested } from 'class-validator';
-
+import { Type } from 'class-transformer';
+import { IsArray, IsInt, IsNotEmpty, IsNumber, IsString, ValidateNested } from 'class-validator';
 export class NodeProgram {
   @IsString()
   programName: string;
+}
+
+export class Reward {
+  @IsNumber()
+  point: number;
+
+  @IsArray()
+  @IsString({ each: true })
+  toolFile: string[];
 }
 export class TCPPort {
   @IsNumber()
@@ -20,21 +29,15 @@ export class UDPPort {
   state: string;
 }
 
-export class Reward {
-  @IsNumber()
-  point: number;
-
-  @IsString()
-  toolFile: string;
-}
 export class NodePort {
-  @ValidateNested()
-  tcp: TCPPort;
+  @ValidateNested({ each: true })
+  @Type(() => TCPPort)
+  tcp: TCPPort[];
 
-  @ValidateNested()
-  udp: UDPPort;
+  @ValidateNested({ each: true })
+  @Type(() => UDPPort)
+  udp: UDPPort[];
 }
-
 export class NodeFile {
   @IsString()
   fileName: string;
@@ -42,7 +45,6 @@ export class NodeFile {
   @IsString()
   fileContent: string;
 }
-
 
 export class Node {
   @IsNumber()
@@ -55,47 +57,67 @@ export class Node {
   nodeIP: string;
 
   @ValidateNested()
+  @Type(() => NodePort)
   nodePorts: NodePort;
 
   @IsArray()
+  @IsString({ each: true })
   nodeDirectories: string[];
 
-  @ValidateNested()
+  @ValidateNested({ each: true })
+  @Type(() => NodeProgram)
   nodePrograms: NodeProgram[];
 
-  @ValidateNested()
+  @ValidateNested({ each: true })
+  @Type(() => NodeFile)
   nodeFiles: NodeFile[];
 }
 
 export class MyNode {
-  @IsString()
-  dirPath: string;
+  @IsArray()
+  @IsString({ each: true })
+  dirPath: string[];
 
-  @ValidateNested()
-  nodeFile: NodeFile;
+  @ValidateNested({ each: true })
+  @Type(() => NodeFile)
+  nodeFile: NodeFile[];
 }
 export class CorrectAnswer {
   @ValidateNested()
+  @Type(() => MyNode)
   myNode: MyNode;
 }
-
 export class Mission {
   @IsNumber()
-  missionId: number;
+  missionID: number;
 
   @IsArray()
-  @IsString()
+  @IsNotEmpty({ each: true })
   scenario: string[];
 
   @IsArray()
+  @IsInt({ each: true })
   type: number[];
 
   @ValidateNested()
+  @Type(() => CorrectAnswer)
   correctAnswer: CorrectAnswer;
 
   @ValidateNested()
+  @Type(() => Node)
   node: Node;
 
   @ValidateNested()
+  @Type(() => Reward)
   reward: Reward;
 }
+
+
+
+
+
+
+
+
+
+

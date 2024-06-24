@@ -15,11 +15,13 @@ const user_repository_1 = require("./users/user.repository");
 const bcrypt = require("bcryptjs");
 const jwt_1 = require("@nestjs/jwt");
 const savefile_service_1 = require("../savefile/savefile.service");
+const filesystem_service_1 = require("../filesystem/filesystem.service");
 let AuthService = class AuthService {
-    constructor(userRepository, jwtService, xmlservice) {
+    constructor(userRepository, jwtService, xmlservice, filesystemService) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.xmlservice = xmlservice;
+        this.filesystemService = filesystemService;
     }
     async signUp(authCredentialsDto) {
         try {
@@ -35,10 +37,11 @@ let AuthService = class AuthService {
         if (user && (await bcrypt.compare(password, user.password))) {
             const payload = { userId };
             const accessToken = await this.jwtService.sign(payload);
-            const mission = await this.xmlservice.readXml(userId);
+            const mission = await this.xmlservice.readXml(userId, user.location);
             if (mission) {
                 this.xmlservice.updateXml(userId, mission);
             }
+            await this.filesystemService.initFs(userId, user.savepoint, user.location);
             return { accessToken };
         }
         else {
@@ -67,6 +70,7 @@ exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [user_repository_1.UserRepository,
         jwt_1.JwtService,
-        savefile_service_1.SaveFileService])
+        savefile_service_1.SaveFileService,
+        filesystem_service_1.FilesystemService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

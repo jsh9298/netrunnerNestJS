@@ -18,6 +18,9 @@ const config = require("config");
 const typeorm_ex_module_1 = require("../typeorm-ex/typeorm-ex.module");
 const savefile_service_1 = require("../savefile/savefile.service");
 const savefile_module_1 = require("../savefile/savefile.module");
+const filesystem_module_1 = require("../filesystem/filesystem.module");
+const filesystem_service_1 = require("../filesystem/filesystem.service");
+const commends_1 = require("../filesystem/commends");
 const jwtConfig = config.get('jwt');
 let AuthModule = class AuthModule {
 };
@@ -27,15 +30,15 @@ exports.AuthModule = AuthModule = __decorate([
         imports: [
             passport_1.PassportModule.register({ defaultStrategy: 'jwt' }),
             jwt_1.JwtModule.register({
-                secret: process.env.JWT_SECRET || jwtConfig.secret,
+                secret: jwtConfig.secret,
                 signOptions: {
                     expiresIn: jwtConfig.expiresIn,
                 }
             }),
-            typeorm_ex_module_1.TypeOrmExModule.forCustomRepository([user_repository_1.UserRepository]), savefile_module_1.SavefileModule
+            typeorm_ex_module_1.TypeOrmExModule.forCustomRepository([user_repository_1.UserRepository]), savefile_module_1.SavefileModule, filesystem_module_1.FilesystemModule
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, savefile_service_1.SaveFileService],
+        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, savefile_service_1.SaveFileService, filesystem_service_1.FilesystemService, commends_1.commends],
         exports: [jwt_strategy_1.JwtStrategy, passport_1.PassportModule]
     })
 ], AuthModule);

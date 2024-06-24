@@ -4,11 +4,13 @@ import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/signin.dto';
 import { changePass } from './dto/changePass.dto';
 import { SaveFileService } from 'src/savefile/savefile.service';
+import { FilesystemService } from 'src/filesystem/filesystem.service';
 export declare class AuthService {
     private userRepository;
     private jwtService;
     private xmlservice;
-    constructor(userRepository: UserRepository, jwtService: JwtService, xmlservice: SaveFileService);
+    private filesystemService;
+    constructor(userRepository: UserRepository, jwtService: JwtService, xmlservice: SaveFileService, filesystemService: FilesystemService);
     signUp(authCredentialsDto: AuthCredentialsDto): Promise<void>;
     signin(signInDto: SignInDto): Promise<{
         accessToken: string;

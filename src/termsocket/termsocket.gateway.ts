@@ -9,11 +9,10 @@ import { FilesystemService } from 'src/filesystem/filesystem.service';
   cors: true, namespace: 'term'
 })
 export class TermsocketGateway implements OnGatewayConnection {
-  com: any;
+  private commandMap: Map<string, commends> = new Map();
   constructor(
-    private fileSystemService:FilesystemService
+    private fileSystemService:FilesystemService,
   ) {
-    this.com = fileSystemService.setC();
   }
   @WebSocketServer()
   server: Server;
@@ -23,48 +22,59 @@ export class TermsocketGateway implements OnGatewayConnection {
       const token = client.handshake?.query?.token;
       const payload = jwt.verify(token, config.get('jwt.secret'));
       client.user = payload;
+      console.log("cl id:",client.user.userId);
+      
+      this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
+      
     } catch (error) {
       client.disconnect();
       console.log("실패")
       return;
     }
   }
+  @SubscribeMessage('join')
+  handleJoin(client: any, data: { roomId: string }) {
+    client.join(data.roomId);
+    console.log("join:",data);
+  }
 
   @SubscribeMessage('message')
-  handleMessage(client: any, payload: any): string {
+  handleMessage(client: any, data:{roomId:string,payload}): string {
     // payload = "return of server";
     if (!client.user) {
       return;
     }
-    const response = payload.split(' ');
-    console.log(response);
+    const com = this.commandMap.get(client.id);
+    console.log("com :",com);
+    const response = data.payload.split(' ');
+    console.log("data:",data);
     switch (response[0]) {
       case 'pwd':
-        payload = this.com.pwd();
+        data.payload = com.pwd();
         break;
       case 'cd':
-        payload = this.com.cd(response);
+        data.payload = com.cd(response);
         break;
       case 'ls':
-        payload = this.com.ls(response);
+        data.payload = com.ls(response);
         break;
       case 'help':
-        payload = this.com.help(response);
+        data.payload =com.help(response);
         break;
       case 'cp':
-        payload = this.com.cp(response);
+        data.payload =com.cp(response);
         break;
       case 'mv':
-        payload = this.com.mv(response);
+        data.payload = com.mv(response);
         break;
       case 'rm':
-        payload = this.com.rm(response);
+        data.payload = com.rm(response);
         break;
       case 'mkdir':
-        payload = this.com.mkdir(response);
+        data.payload = com.mkdir(response);
         break;
       case 'rmdir':
-        payload = this.com.rmdir(response);
+        data.payload = com.rmdir(response);
         break;
       // case 'cat':
       // payload = this.com.cat(payload);
@@ -103,9 +113,15 @@ export class TermsocketGateway implements OnGatewayConnection {
       //   payload = this.com.disconnect(payload);
       //     break;
       default:
-        payload = "Unkown commends";
+        data.payload = "Unkown commends";
         break;
     }
-    this.server.emit('message', payload);
+    this.server.to(data.roomId).emit('message',data.payload);
   }
+  @SubscribeMessage('leave')
+  handleLeave(client: any, data: { roomId: string }) {
+    console.log("leave:",data);
+    client.leave(data.roomId);
+  }
+
 }

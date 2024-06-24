@@ -13,10 +13,11 @@ import { SavefileModule } from './savefile/savefile.module';
 import { FilesystemModule } from './filesystem/filesystem.module';
 import { commends } from './filesystem/commends';
 import { FilesystemService } from './filesystem/filesystem.service';
+import { GuisocketGateway } from './guisocket/guisocket.gateway';
 
 @Module({
   imports: [AuthModule,TypeOrmModule.forRoot(typeORMConfig), BoardsModule, EmailModule, MissionsModule, SavefileModule, FilesystemModule],
   controllers: [AppController],
-  providers: [AppService, EmailService, TermsocketGateway,commends,FilesystemService],
+  providers: [AppService, EmailService, TermsocketGateway,commends,FilesystemService, GuisocketGateway],
 })
 export class AppModule {}

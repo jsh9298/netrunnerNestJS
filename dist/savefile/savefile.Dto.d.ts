@@ -1,27 +1,27 @@
-declare class NodeProgram {
+export declare class NodeProgram {
     programName: string;
 }
-declare class TCPPort {
-    servicePort: number;
-    state: string;
-}
-declare class UDPPort {
-    servicePort: number;
-    state: string;
-}
-declare class Reward {
+export declare class Reward {
     point: number;
-    toolFile: string;
+    toolFile: string[];
 }
-declare class NodePort {
-    tcp: TCPPort;
-    udp: UDPPort;
+export declare class TCPPort {
+    servicePort: number;
+    state: string;
 }
-declare class NodeFile {
+export declare class UDPPort {
+    servicePort: number;
+    state: string;
+}
+export declare class NodePort {
+    tcp: TCPPort[];
+    udp: UDPPort[];
+}
+export declare class NodeFile {
     fileName: string;
     fileContent: string;
 }
-declare class Node {
+export declare class Node {
     nodeId: number;
     nodeMAC: string;
     nodeIP: string;
@@ -30,19 +30,18 @@ declare class Node {
     nodePrograms: NodeProgram[];
     nodeFiles: NodeFile[];
 }
-declare class MyNode {
-    dirPath: string;
-    nodeFile: NodeFile;
+export declare class MyNode {
+    dirPath: string[];
+    nodeFile: NodeFile[];
 }
-declare class CorrectAnswer {
+export declare class CorrectAnswer {
     myNode: MyNode;
 }
 export declare class Mission {
-    missionId: number;
+    missionID: number;
     scenario: string[];
     type: number[];
     correctAnswer: CorrectAnswer;
     node: Node;
     reward: Reward;
 }
-export {};

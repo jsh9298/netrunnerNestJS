@@ -22,20 +22,41 @@ let MissionsController = class MissionsController {
     constructor(missionsService) {
         this.missionsService = missionsService;
     }
-    async getMisson(id, user) {
-        return await this.missionsService.getMissons(user, id);
+    async getMisson(user) {
+        return await this.missionsService.getMissons(user);
+    }
+    getPoints(id, user) {
+        if (user.userId === id) {
+            return user.point;
+        }
+    }
+    getTools() {
+        return "plz wait updates 😢";
     }
 };
 exports.MissionsController = MissionsController;
 __decorate([
-    (0, common_1.Get)('/:missionid'),
+    (0, common_1.Post)(),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
-    __param(0, (0, common_1.Param)('missionid')),
+    __param(0, (0, get_user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_entity_1.User]),
+    __metadata("design:returntype", Promise)
+], MissionsController.prototype, "getMisson", null);
+__decorate([
+    (0, common_1.Get)("points/:userId"),
+    __param(0, (0, common_1.Param)('userId')),
     __param(1, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, user_entity_1.User]),
-    __metadata("design:returntype", Promise)
-], MissionsController.prototype, "getMisson", null);
+    __metadata("design:returntype", void 0)
+], MissionsController.prototype, "getPoints", null);
+__decorate([
+    (0, common_1.Get)("/tools"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], MissionsController.prototype, "getTools", null);
 exports.MissionsController = MissionsController = __decorate([
     (0, common_1.Controller)('missions'),
     __metadata("design:paramtypes", [missions_service_1.MissionsService])

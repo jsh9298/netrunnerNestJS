@@ -127,12 +127,6 @@ export class commends {
     
 }
 
-//리턴값들을 JSON으로 재조립후 전송
-
-
-
-
-
 
 
 

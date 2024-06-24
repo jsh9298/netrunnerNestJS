@@ -5,5 +5,14 @@ export declare class TermsocketGateway implements OnGatewayConnection {
     constructor();
     server: Server;
     handleConnection(client: any, ...args: any[]): void;
-    handleMessage(client: any, payload: any): string;
+    handleJoin(client: any, data: {
+        roomId: string;
+    }): void;
+    handleMessage(client: any, data: {
+        roomId: string;
+        payload: any;
+    }): string;
+    handleLeave(client: any, data: {
+        roomId: string;
+    }): void;
 }
