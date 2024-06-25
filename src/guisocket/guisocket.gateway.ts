@@ -22,7 +22,8 @@ export class GuisocketGateway implements OnGatewayConnection {
       const token = client.handshake?.query?.token;
       const payload = jwt.verify(token, config.get('jwt.secret'));
       client.user = payload;
-      console.log("cl id:",client.user.userId);
+      console.log("cl gui id:",client.user.userId);
+      this.fileSystemService.setFileSystem(client.user.userId);
       this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
       
     } catch (error) {
@@ -34,10 +35,11 @@ export class GuisocketGateway implements OnGatewayConnection {
   @SubscribeMessage('join')
   handleJoin(client: any, data: { roomId: string }) {
     client.join(data.roomId);
+    console.log("join gui:",data);
   }
 
   @SubscribeMessage('message')
-  handleMessage(client: any, data:{roomId:string,payload}): string {
+  handleMessage(client: any, data:{roomId:string,payload:string}): string {
     // payload = "return of server";
     if (!client.user) {
       return;

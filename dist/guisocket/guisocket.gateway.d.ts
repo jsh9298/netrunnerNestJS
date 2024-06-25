@@ -1,7 +1,7 @@
 import { OnGatewayConnection } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { FilesystemService } from 'src/filesystem/filesystem.service';
-export declare class TermsocketGateway implements OnGatewayConnection {
+export declare class GuisocketGateway implements OnGatewayConnection {
     private fileSystemService;
     private commandMap;
     constructor(fileSystemService: FilesystemService);

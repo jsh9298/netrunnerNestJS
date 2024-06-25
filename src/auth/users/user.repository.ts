@@ -20,21 +20,21 @@ export class UserRepository extends Repository<User>{
         const score = 0;
         const point = 0;
         const level = 0;
-        const user = this.create({userId,username,password:hashedPassword,email,savepoint,location,score,point,level});
-
-
-        let orginFilepath = "/game/origin/sinario.xml";
-        const userDirectory = path.join("/game",userId);
-        const originFile = path.basename(orginFilepath);//orginFilepath
-        const userFile = `${userId}${originFile}`;
-        const destinationPath = path.join(userDirectory,userFile);
+        const tool = "";
+        const user = this.create({userId,username,password:hashedPassword,email,savepoint,location,score,point,level,tool});
         try {
-            await this.save(user);
+            let orginFilepath = "/game/origin/sinario.xml";
+            const userDirectory = path.join("/game",userId);
+            const originFile = path.basename(orginFilepath);//orginFilepath
+            const userFile = `${userId}${originFile}`;
+            const destinationPath = path.join(userDirectory,userFile);
             if(!fs.existsSync(userDirectory)){
                 fs.mkdirSync(userDirectory,{recursive:true});
             }
             fs.copyFileSync(orginFilepath,destinationPath);
+            await this.save(user);
         } catch (error) {
+            console.error(error);
             throw new InternalServerErrorException();
         }
     }

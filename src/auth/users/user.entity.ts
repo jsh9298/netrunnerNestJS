@@ -22,6 +22,6 @@ export class User extends BaseEntity{
     point : number; //인게임재화
     @Column()
     level : number; //레벨
-    //@Column()
-    // 상점아이템 구매여부체크
+    @Column()
+    tool : string;
 }

@@ -23,12 +23,12 @@ export class TermsocketGateway implements OnGatewayConnection {
       const payload = jwt.verify(token, config.get('jwt.secret'));
       client.user = payload;
       console.log("cl id:",client.user.userId);
-      
+      this.fileSystemService.setFileSystem(client.user.userId);
       this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
       
     } catch (error) {
       client.disconnect();
-      console.log("실패")
+      console.error("실패",error);
       return;
     }
   }
@@ -39,7 +39,7 @@ export class TermsocketGateway implements OnGatewayConnection {
   }
 
   @SubscribeMessage('message')
-  handleMessage(client: any, data:{roomId:string,payload}): string {
+  handleMessage(client: any, data:{roomId:string,payload:string}): string {
     // payload = "return of server";
     if (!client.user) {
       return;

@@ -30,8 +30,10 @@ let MissionsController = class MissionsController {
             return user.point;
         }
     }
-    getTools() {
-        return "plz wait updates 😢";
+    async getTools() {
+        return await this.missionsService.getTools();
+    }
+    checkIsclear(user, id) {
     }
 };
 exports.MissionsController = MissionsController;
@@ -44,7 +46,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MissionsController.prototype, "getMisson", null);
 __decorate([
-    (0, common_1.Get)("points/:userId"),
+    (0, common_1.Post)("points/:userId"),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __param(0, (0, common_1.Param)('userId')),
     __param(1, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
@@ -55,8 +58,17 @@ __decorate([
     (0, common_1.Get)("/tools"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], MissionsController.prototype, "getTools", null);
+__decorate([
+    (0, common_1.Post)("/check:id"),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    __param(0, (0, get_user_decorator_1.GetUser)()),
+    __param(1, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_entity_1.User, String]),
+    __metadata("design:returntype", void 0)
+], MissionsController.prototype, "checkIsclear", null);
 exports.MissionsController = MissionsController = __decorate([
     (0, common_1.Controller)('missions'),
     __metadata("design:paramtypes", [missions_service_1.MissionsService])

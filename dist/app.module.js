@@ -22,14 +22,20 @@ const savefile_module_1 = require("./savefile/savefile.module");
 const filesystem_module_1 = require("./filesystem/filesystem.module");
 const commends_1 = require("./filesystem/commends");
 const filesystem_service_1 = require("./filesystem/filesystem.service");
+const guisocket_gateway_1 = require("./guisocket/guisocket.gateway");
+const missions_service_1 = require("./missions/missions.service");
+const tool_repository_1 = require("./missions/tools/tool.repository");
+const typeorm_ex_module_1 = require("./typeorm-ex/typeorm-ex.module");
+const tool_entity_1 = require("./missions/tools/tool.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule, typeorm_1.TypeOrmModule.forRoot(typeorm_config_1.typeORMConfig), boards_module_1.BoardsModule, email_module_1.EmailModule, missions_module_1.MissionsModule, savefile_module_1.SavefileModule, filesystem_module_1.FilesystemModule],
+        imports: [auth_module_1.AuthModule, typeorm_1.TypeOrmModule.forRoot(typeorm_config_1.typeORMConfig), boards_module_1.BoardsModule, email_module_1.EmailModule, missions_module_1.MissionsModule, savefile_module_1.SavefileModule, filesystem_module_1.FilesystemModule, tool_repository_1.ToolsRepository, typeorm_1.TypeOrmModule.forFeature([tool_entity_1.Tool]), typeorm_ex_module_1.TypeOrmExModule.forCustomRepository([tool_repository_1.ToolsRepository])],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService, email_service_1.EmailService, termsocket_gateway_1.TermsocketGateway, commends_1.commends, filesystem_service_1.FilesystemService],
+        providers: [app_service_1.AppService, email_service_1.EmailService, termsocket_gateway_1.TermsocketGateway, commends_1.commends, filesystem_service_1.FilesystemService, guisocket_gateway_1.GuisocketGateway, missions_service_1.MissionsService, tool_repository_1.ToolsRepository],
+        exports: []
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

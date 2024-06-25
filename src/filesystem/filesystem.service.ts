@@ -43,7 +43,8 @@ export class FilesystemService {
     getSys(user:User,id:number){
         this.setFileSystem(user.userId);
         const c = this.getC(user.userId);
-        const files = c.ls('ls').split(' ');
+
+        const files = c.ls('ls').trim().split(' ');
         const typelist = c.ls(['ls','-al']);
         const regex = /\[(directory|file)\]/g;
         const result =  typelist.match(regex);

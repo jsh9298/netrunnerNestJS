@@ -10,4 +10,5 @@ export declare class User extends BaseEntity {
     score: number;
     point: number;
     level: number;
+    tool: string;
 }

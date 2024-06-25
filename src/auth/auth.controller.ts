@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credential.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -32,7 +32,7 @@ export class AuthController {
     signout(@GetUser() user:User){
         console.log('req',user);
     }
-    @Post('/:id')
+    @Get('/:id')
     getProfile(@Param('id') id:string ):Promise<{userId:string,level:number,point:number}>{
         return this.authService.getProfile(id);   
    }

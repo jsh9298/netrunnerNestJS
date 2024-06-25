@@ -15,27 +15,37 @@ const savefile_service_1 = require("../savefile/savefile.service");
 const commends_1 = require("./commends");
 const fileSystems_1 = require("./filesystemcore/fileSystems");
 let FilesystemService = class FilesystemService {
-    constructor(saveFileService, c) {
+    constructor(saveFileService) {
         this.saveFileService = saveFileService;
-        this.c = c;
+        this.filesystemMap = new Map();
     }
     async initFs(userId, savepoint, location) {
         let sf = await this.saveFileService.getXml(userId, location);
     }
-    setFileSystem(id) {
-        const fs = new fileSystems_1.FileSystem();
-        const dirlist = ["/root", "/tmp", "/home/user", "/home/user/documents"];
-        const filelist = ["/home/user/documents/document1.txt", "/home/user/file1.txt", "/home/user/file2.txt"];
-        const currentUser = "/";
-        const currentip = "192.168.25.15";
-        const nc = new commends_1.commends();
-        nc.setFs(fs, dirlist, filelist, currentUser, currentip);
-        this.c = nc;
+    setFileSystem(userId) {
+        this.fs = new fileSystems_1.FileSystem();
+        this.dirlist = ["/root", "/tmp", "/home/user", "/home/user/documents"];
+        this.filelist = ["/home/user/documents/document1.txt", "/home/user/file1.txt", "/home/user/file2.txt"];
+        this.currentUser = "/";
+        this.currentip = "192.168.25.15";
+        this.setC(userId);
+    }
+    setC(userId) {
+        if (!this.filesystemMap.has(userId)) {
+            const c = new commends_1.commends();
+            c.setFs(this.fs, this.dirlist, this.filelist, this.currentUser, this.currentip);
+            this.filesystemMap.set(userId, c);
+        }
+        return this.filesystemMap.get(userId);
+    }
+    getC(userId) {
+        return this.filesystemMap.get(userId);
     }
     getSys(user, id) {
         this.setFileSystem(user.userId);
-        const files = this.c.ls('ls').split(' ');
-        const typelist = this.c.ls(['ls', '-al']);
+        const c = this.getC(user.userId);
+        const files = c.ls('ls').trim().split(' ');
+        const typelist = c.ls(['ls', '-al']);
         const regex = /\[(directory|file)\]/g;
         const result = typelist.match(regex);
         const regex2 = /\[(.*?)\]/g;
@@ -46,7 +56,6 @@ let FilesystemService = class FilesystemService {
 exports.FilesystemService = FilesystemService;
 exports.FilesystemService = FilesystemService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [savefile_service_1.SaveFileService,
-        commends_1.commends])
+    __metadata("design:paramtypes", [savefile_service_1.SaveFileService])
 ], FilesystemService);
 //# sourceMappingURL=filesystem.service.js.map

@@ -9,13 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TermsocketGateway = void 0;
+exports.GuisocketGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const filesystem_service_1 = require("../filesystem/filesystem.service");
-let TermsocketGateway = class TermsocketGateway {
+let GuisocketGateway = class GuisocketGateway {
     constructor(fileSystemService) {
         this.fileSystemService = fileSystemService;
         this.commandMap = new Map();
@@ -25,19 +25,19 @@ let TermsocketGateway = class TermsocketGateway {
             const token = client.handshake?.query?.token;
             const payload = jwt.verify(token, config.get('jwt.secret'));
             client.user = payload;
-            console.log("cl id:", client.user.userId);
+            console.log("cl gui id:", client.user.userId);
             this.fileSystemService.setFileSystem(client.user.userId);
             this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
         }
         catch (error) {
             client.disconnect();
-            console.error("실패", error);
+            console.log("실패");
             return;
         }
     }
     handleJoin(client, data) {
         client.join(data.roomId);
-        console.log("join:", data);
+        console.log("join gui:", data);
     }
     handleMessage(client, data) {
         if (!client.user) {
@@ -86,33 +86,33 @@ let TermsocketGateway = class TermsocketGateway {
         client.leave(data.roomId);
     }
 };
-exports.TermsocketGateway = TermsocketGateway;
+exports.GuisocketGateway = GuisocketGateway;
 __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", socket_io_1.Server)
-], TermsocketGateway.prototype, "server", void 0);
+], GuisocketGateway.prototype, "server", void 0);
 __decorate([
     (0, websockets_1.SubscribeMessage)('join'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
-], TermsocketGateway.prototype, "handleJoin", null);
+], GuisocketGateway.prototype, "handleJoin", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('message'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", String)
-], TermsocketGateway.prototype, "handleMessage", null);
+], GuisocketGateway.prototype, "handleMessage", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('leave'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
-], TermsocketGateway.prototype, "handleLeave", null);
-exports.TermsocketGateway = TermsocketGateway = __decorate([
+], GuisocketGateway.prototype, "handleLeave", null);
+exports.GuisocketGateway = GuisocketGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
-        cors: true, namespace: 'term'
+        cors: true, namespace: 'gui'
     }),
     __metadata("design:paramtypes", [filesystem_service_1.FilesystemService])
-], TermsocketGateway);
-//# sourceMappingURL=termsocket.gateway.js.map
+], GuisocketGateway);
+//# sourceMappingURL=guisocket.gateway.js.map
