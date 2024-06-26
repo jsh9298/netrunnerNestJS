@@ -16,7 +16,9 @@ export class FilesystemService {
         private saveFileService:SaveFileService,
     ){}
     async initFs(userId:string,savepoint:number,location:string){
-         let sf = await this.saveFileService.getXml(userId,location);
+         const sf = await this.saveFileService.getXml(userId,location);
+         sf[savepoint].node.nodeDirectorys
+         sf[savepoint].type.length
     }
     setFileSystem(userId:string){
         this.fs = new FileSystem();
@@ -27,6 +29,15 @@ export class FilesystemService {
         this.setC(userId);
     }
     
+    rmC(userId:string):boolean{
+        if(!this.filesystemMap.has(userId)){
+            return false;
+        }
+        this.filesystemMap.get(userId).fs.stringFileSystem();
+        
+        this.filesystemMap.delete(userId);
+        return true;
+    }
 
     setC(userId: string):commends {
         if (!this.filesystemMap.has(userId)) {
@@ -41,9 +52,7 @@ export class FilesystemService {
         return this.filesystemMap.get(userId);
     }
     getSys(user:User,id:number){
-        this.setFileSystem(user.userId);
         const c = this.getC(user.userId);
-
         const files = c.ls('ls').trim().split(' ');
         const typelist = c.ls(['ls','-al']);
         const regex = /\[(directory|file)\]/g;

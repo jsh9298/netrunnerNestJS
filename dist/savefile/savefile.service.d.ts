@@ -1,14 +1,14 @@
-import { Mission } from './savefile.Dto';
+import { MissionDTO } from './savefile.Dto';
 export declare class SaveFileService {
     private _missionsCache;
     get missionsCache(): {
-        [userId: string]: Mission;
+        [userId: string]: MissionDTO[];
     };
     set missionsCache(missions: {
-        [userId: string]: Mission;
+        [userId: string]: MissionDTO[];
     });
-    getXml(userId: string, location: string): Promise<Mission>;
-    readXml(userId: string, location: string): Promise<Mission>;
-    saveXml(userId: string, location: string, mission: Mission): Promise<void>;
-    updateXml(userId: string, mission: Mission): void;
+    getXml(userId: string, location: string): Promise<MissionDTO[]>;
+    readXml(userId: string, location: string): Promise<MissionDTO[]>;
+    saveXml(userId: string, location: string, missions: MissionDTO[]): Promise<void>;
+    updateXml(userId: string, missions: MissionDTO[]): void;
 }

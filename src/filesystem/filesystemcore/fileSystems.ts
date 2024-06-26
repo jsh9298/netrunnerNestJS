@@ -132,6 +132,19 @@ class FileSystem {
             this._traverseFileSystem(child, indent + '  ');
         }
     }
+
+    stringFileSystem() {
+        this._traverseFileSystem_s(this.root, "");
+    }
+
+    _traverseFileSystem_s(node, path) {
+        console.log(`${path}`);
+        for (let child of node.children) {
+            let newPath = `${path}/${child.name}`;
+            this._traverseFileSystem_s(child, newPath);
+        }
+    }
+
     // 절대 경로, 상대 경로, 하위 디렉토리의 파일 및 디렉토리 목록을 반환하는 메서드
     getPathInfo(path) {
         const segments = path.split('/');

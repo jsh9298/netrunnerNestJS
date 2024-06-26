@@ -24,9 +24,8 @@ let MissionsService = class MissionsService {
         this.toolsRepository = toolsRepository;
     }
     async getMissons(user) {
-        ;
+        console.log(user.userId);
         const mission = await this.xmlService.getXml(user.userId, user.location);
-        ;
         return mission;
     }
     async getTools() {

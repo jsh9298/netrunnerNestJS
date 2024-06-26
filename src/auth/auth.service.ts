@@ -7,6 +7,7 @@ import { SignInDto } from './dto/signin.dto';
 import { changePass } from './dto/changePass.dto';
 import { SaveFileService } from 'src/savefile/savefile.service';
 import { FilesystemService } from 'src/filesystem/filesystem.service';
+import { User } from './users/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
         }
         
     }
-    async signin(signInDto:SignInDto):Promise<{accessToken:string}>{
+    async signin(signInDto:SignInDto):Promise<{accessToken:string,missionId:number}>{
         const {userId,password}=signInDto;
         const user = await this.userRepository.findOne({where:{userId}});
         
@@ -38,8 +39,8 @@ export class AuthService {
             }
 
             await this.filesystemService.initFs(userId,user.savepoint,user.location);
-
-            return {accessToken};
+            const missionId = user.savepoint;
+            return {accessToken,missionId};
         }else{
             throw new UnauthorizedException('login failed');
         }
@@ -62,5 +63,8 @@ export class AuthService {
     }
     async ranking(){
 
+    }
+    signOut(userid:string):boolean{
+        return this.filesystemService.rmC(userid);
     }
 }

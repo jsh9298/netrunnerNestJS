@@ -22,8 +22,9 @@ let MissionsController = class MissionsController {
     constructor(missionsService) {
         this.missionsService = missionsService;
     }
-    async getMisson(user) {
-        return await this.missionsService.getMissons(user);
+    async getMisson(id, user) {
+        const result = await this.missionsService.getMissons(user);
+        return result.at(id);
     }
     getPoints(id, user) {
         if (user.userId === id) {
@@ -38,11 +39,12 @@ let MissionsController = class MissionsController {
 };
 exports.MissionsController = MissionsController;
 __decorate([
-    (0, common_1.Post)(),
+    (0, common_1.Post)("/:id"),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
-    __param(0, (0, get_user_decorator_1.GetUser)()),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_entity_1.User]),
+    __metadata("design:paramtypes", [Number, user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], MissionsController.prototype, "getMisson", null);
 __decorate([

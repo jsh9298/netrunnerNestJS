@@ -26,40 +26,44 @@ let SaveFileService = class SaveFileService {
         if (this.missionsCache[userId]) {
             return this.missionsCache[userId];
         }
-        const mission = await this.readXml(userId, location);
-        this.missionsCache[userId] = mission;
-        return mission;
+        const missions = await this.readXml(userId, location);
+        this.missionsCache[userId] = missions;
+        return missions;
     }
     async readXml(userId, location) {
         try {
             const xmlFilePath = path.join(location, `${userId}sinario.xml`);
             const xmlData = await fs.promises.readFile(xmlFilePath, 'utf-8');
             const parser = new xml2js.Parser();
-            const parsedXml = await parser.parseStringPromise(xmlData);
-            const mission = new savefile_Dto_1.Mission();
-            Object.assign(mission, parsedXml.mission);
-            return mission;
+            const missionData = await parser.parseStringPromise(xmlData);
+            const missions = [];
+            for (const missionItem of missionData.missions.mission) {
+                const mission = new savefile_Dto_1.MissionDTO();
+                Object.assign(mission, missionItem);
+                missions.push(mission);
+            }
+            return missions;
         }
         catch (err) {
             console.error(err);
-            return null;
+            return [];
         }
     }
-    async saveXml(userId, location, mission) {
+    async saveXml(userId, location, missions) {
         try {
             const xmlFilePath = path.join(location, `${userId}sinario.xml`);
             const builder = new xml2js.Builder();
-            const xmlData = builder.buildObject(mission);
+            const xmlData = builder.buildObject({ missions: { mission: missions } });
             await fs.promises.writeFile(xmlFilePath, xmlData);
-            this.missionsCache[userId] = mission;
+            this.missionsCache[userId] = missions;
         }
         catch (err) {
             console.error(err);
             return;
         }
     }
-    updateXml(userId, mission) {
-        this.missionsCache[userId] = mission;
+    updateXml(userId, missions) {
+        this.missionsCache[userId] = missions;
     }
 };
 exports.SaveFileService = SaveFileService;

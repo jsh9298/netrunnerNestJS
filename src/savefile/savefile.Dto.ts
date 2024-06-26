@@ -1,123 +1,71 @@
-import { Type } from 'class-transformer';
-import { IsArray, IsInt, IsNotEmpty, IsNumber, IsString, ValidateNested } from 'class-validator';
-export class NodeProgram {
+import { IsString, IsNotEmpty, IsNumber, ArrayNotEmpty, ArrayUnique } from 'class-validator';
+
+export class CorrectAnswerDTO {
   @IsString()
-  programName: string;
-}
-
-export class Reward {
-  @IsNumber()
-  point: number;
-
-  @IsArray()
-  @IsString({ each: true })
-  toolFile: string[];
-}
-export class TCPPort {
-  @IsNumber()
-  servicePort: number;
+  @IsNotEmpty()
+  dirPath: string;
 
   @IsString()
-  state: string;
-}
-
-export class UDPPort {
-  @IsNumber()
-  servicePort: number;
+  @IsNotEmpty()
+  File_name: string;
 
   @IsString()
-  state: string;
+  @IsNotEmpty()
+  File_content: string;
 }
 
-export class NodePort {
-  @ValidateNested({ each: true })
-  @Type(() => TCPPort)
-  tcp: TCPPort[];
-
-  @ValidateNested({ each: true })
-  @Type(() => UDPPort)
-  udp: UDPPort[];
-}
-export class NodeFile {
+export class NodeDTO {
   @IsString()
-  fileName: string;
+  @IsNotEmpty()
+  nodeId: string;
 
   @IsString()
-  fileContent: string;
-}
-
-export class Node {
-  @IsNumber()
-  nodeId: number;
-
-  @IsString()
+  @IsNotEmpty()
   nodeMAC: string;
 
   @IsString()
+  @IsNotEmpty()
   nodeIP: string;
 
-  @ValidateNested()
-  @Type(() => NodePort)
-  nodePorts: NodePort;
+  @ArrayNotEmpty()
+  @ArrayUnique()
+  nodeDirectorys: string[];
 
-  @IsArray()
-  @IsString({ each: true })
-  nodeDirectories: string[];
+  @ArrayNotEmpty()
+  @ArrayUnique()
+  nodeProgram: string[];
 
-  @ValidateNested({ each: true })
-  @Type(() => NodeProgram)
-  nodePrograms: NodeProgram[];
+  @ArrayNotEmpty()
+  nodeFiles: {
+    File_name: string;
+    File_content: string;
+  }[];
 
-  @ValidateNested({ each: true })
-  @Type(() => NodeFile)
-  nodeFiles: NodeFile[];
+  nodePorts: {
+    TCP: number[];
+    UDP: number[];
+  };
 }
 
-export class MyNode {
-  @IsArray()
-  @IsString({ each: true })
-  dirPath: string[];
-
-  @ValidateNested({ each: true })
-  @Type(() => NodeFile)
-  nodeFile: NodeFile[];
-}
-export class CorrectAnswer {
-  @ValidateNested()
-  @Type(() => MyNode)
-  myNode: MyNode;
-}
-export class Mission {
+export class RewardDTO {
   @IsNumber()
-  missionID: number;
+  point: number;
 
-  @IsArray()
-  @IsNotEmpty({ each: true })
-  scenario: string[];
+  @IsString()
+  @IsNotEmpty()
+  toolFile: string;
+}
 
-  @IsArray()
-  @IsInt({ each: true })
+export class MissionDTO {
+  @IsString()
+  @IsNotEmpty()
+  scenario: string;
+
+  @IsNumber()
+  @IsNotEmpty()
   type: number[];
 
-  @ValidateNested()
-  @Type(() => CorrectAnswer)
-  correctAnswer: CorrectAnswer;
-
-  @ValidateNested()
-  @Type(() => Node)
-  node: Node;
-
-  @ValidateNested()
-  @Type(() => Reward)
-  reward: Reward;
+  correctAnswer: CorrectAnswerDTO;
+  node: NodeDTO;
+  reward: RewardDTO;
 }
-
-
-
-
-
-
-
-
-
-

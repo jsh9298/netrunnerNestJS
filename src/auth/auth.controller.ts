@@ -18,7 +18,7 @@ export class AuthController {
         return this.authService.signUp(authCredentialsDto);
     }
     @Post('/signin')
-    signIn(@Body(ValidationPipe)signInDto:SignInDto):Promise<{accessToken:string}>{
+    signIn(@Body(ValidationPipe)signInDto:SignInDto):Promise<{accessToken:string,missionId:number}>{
         return this.authService.signin(signInDto);
     }
     @Patch('/changepass')
@@ -28,9 +28,9 @@ export class AuthController {
     }
     
     @Post('/signout')
-    // @UseGuards(AuthGuard())
-    signout(@GetUser() user:User){
-        console.log('req',user);
+    @UseGuards(AuthGuard('jwt'))
+    signout(@GetUser() user:User):boolean{
+        return this.authService.signOut(user.userId);
     }
     @Get('/:id')
     getProfile(@Param('id') id:string ):Promise<{userId:string,level:number,point:number}>{
