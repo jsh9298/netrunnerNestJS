@@ -133,14 +133,14 @@ class FileSystem {
         }
     }
 
-    result : string[];
+    result: string[];
     stringFileSystem() {
         this._traverseFileSystem_s(this.root, "");
         return this.result;
     }
 
     _traverseFileSystem_s(node, path) {
-        if(path != ""){
+        if (path != "") {
             this.result.push(path);
         }
         for (let child of node.children) {

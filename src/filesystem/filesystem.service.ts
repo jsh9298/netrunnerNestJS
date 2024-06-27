@@ -8,7 +8,6 @@ import { MissionsDTO } from 'src/savefile/savefile.Dto';
 @Injectable()
 export class FilesystemService {
     private filesystemMap: Map<string, commends> = new Map();
-    private fs: FileSystem;
     private dirlist: string[];
     private filelist: string[];
     private currentUser: string;
@@ -18,19 +17,19 @@ export class FilesystemService {
     ) { }
     async initFs(userId: string, savepoint: number, location: string) {
         const sf = await this.saveFileService.getXml(userId, location);
-        this.fs = new FileSystem();
-        this.dirlist = sf.usernode.userDirectorys;
-        let fsl: string[];
-        for (let index = 0; index < sf.usernode.userFile.length; index++) {
-            fsl.push(sf.usernode.userFile[index].userFile_name);
+        this.dirlist = sf.userNode[0].userDirectorys;
+        console.log(sf.userNode[0].userDirectorys.userDirPath);
+        let fsl: string[] = [];
+        console.log("sf.usernode :", sf.userNode[0]);
+        for (let index = 0; index < sf.userNode[0].userFile.length; index++) {
+            fsl.push(sf.userNode[0].userFile[index].userFile_name);
         }
         this.filelist = fsl;
         this.currentUser = "myNode";
-        this.currentip = sf.usernode.userIP;
+        this.currentip = sf.userNode[0].userIP;
         this.setC(userId, sf);
     }
     setFileSystem(userId: string) {
-        this.fs = new FileSystem();
         this.dirlist = ["/root", "/tmp", "/home/user", "/home/user/documents"];
         this.filelist = ["/home/user/documents/document1.txt", "/home/user/file1.txt", "/home/user/file2.txt"];
         this.currentUser = "/";
@@ -51,7 +50,7 @@ export class FilesystemService {
     setC(userId: string, missionsDTO: MissionsDTO): commends {
         if (!this.filesystemMap.has(userId)) {
             const c = new commends(userId, missionsDTO);
-            c.setFs(this.fs, this.dirlist, this.filelist, this.currentUser, this.currentip);
+            c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
             this.filesystemMap.set(userId, c);
         }
         return this.filesystemMap.get(userId);

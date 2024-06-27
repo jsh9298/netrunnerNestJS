@@ -3,7 +3,7 @@ import { FileSystem } from "./filesystemcore/fileSystems";
 
 
 export class commends {
-    fs: FileSystem = null;
+    fs: FileSystem = new FileSystem();
     currentIP: string = "";
     currentUser: string = "";
     currentpath: string = "";
@@ -15,15 +15,16 @@ export class commends {
         this.userLocation = `/game/${userId}`
         this.missionsDTO = missionsDTO;
     }
-    setFs(fileSystem: FileSystem, dirlist: string[], filelist: string[], User: string, Ip: string) {
+    setFs(dirlist: string[], filelist: string[], User: string, Ip: string) {
         this.currentIP = Ip;
         this.currentUser = User;
-        this.fs = fileSystem;
         for (let index = 0; index < dirlist.length; index++) {
-            fileSystem.createDirectory(dirlist[index]);
+            this.fs.createDirectory(dirlist[index].toString());
+            console.log("tlqkf:", dirlist[index].toString());
         }
+        console.log(this.fs);
         for (let index = 0; index < filelist.length; index++) {
-            fileSystem.createFile(filelist[index]);
+            this.fs.createFile(filelist[index].toString());
         }
         if (this.currentUser == 'root') {
             this.currentpath = '/root';

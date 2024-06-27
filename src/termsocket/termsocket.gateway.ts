@@ -11,7 +11,7 @@ import { FilesystemService } from 'src/filesystem/filesystem.service';
 export class TermsocketGateway implements OnGatewayConnection {
   private commandMap: Map<string, commends> = new Map();
   constructor(
-    private fileSystemService:FilesystemService,
+    private fileSystemService: FilesystemService,
   ) {
   }
   @WebSocketServer()
@@ -22,32 +22,32 @@ export class TermsocketGateway implements OnGatewayConnection {
       const token = client.handshake?.query?.token;
       const payload = jwt.verify(token, config.get('jwt.secret'));
       client.user = payload;
-      console.log("cl id:",client.user.userId);
+      console.log("cl id:", client.user.userId);
       this.fileSystemService.setFileSystem(client.user.userId);
-      this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
-      
+      this.commandMap.set(client.id, this.fileSystemService.getC(client.user.userId));
+
     } catch (error) {
       client.disconnect();
-      console.error("실패",error);
+      console.error("실패", error);
       return;
     }
   }
   @SubscribeMessage('join')
   handleJoin(client: any, data: { roomId: string }) {
     client.join(data.roomId);
-    console.log("join:",data);
+    console.log("join:", data);
   }
 
   @SubscribeMessage('message')
-  handleMessage(client: any, data:{roomId:string,payload:string}): string {
+  handleMessage(client: any, data: { roomId: string, payload: string }): string {
     // payload = "return of server";
     if (!client.user) {
       return;
     }
     const com = this.commandMap.get(client.id);
-    console.log("com :",com);
+    console.log("com :", com);
     const response = data.payload.split(' ');
-    console.log("data:",data);
+    console.log("data:", data);
     switch (response[0]) {
       case 'pwd':
         data.payload = com.pwd();
@@ -59,10 +59,10 @@ export class TermsocketGateway implements OnGatewayConnection {
         data.payload = com.ls(response);
         break;
       case 'help':
-        data.payload =com.help(response);
+        data.payload = com.help(response);
         break;
       case 'cp':
-        data.payload =com.cp(response);
+        data.payload = com.cp(response);
         break;
       case 'mv':
         data.payload = com.mv(response);
@@ -116,11 +116,11 @@ export class TermsocketGateway implements OnGatewayConnection {
         data.payload = "Unkown commends";
         break;
     }
-    this.server.to(data.roomId).emit('message',data.payload);
+    this.server.to(data.roomId).emit('message', data.payload);
   }
   @SubscribeMessage('leave')
   handleLeave(client: any, data: { roomId: string }) {
-    console.log("leave:",data);
+    console.log("leave:", data);
     client.leave(data.roomId);
   }
 

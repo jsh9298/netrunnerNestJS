@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as xml2js from 'xml2js';
-import { MissionsDTO, MissionDTO } from './savefile.Dto';
+import { MissionsDTO, MissionDTO, UserNodeDTO } from './savefile.Dto';
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
@@ -33,14 +33,17 @@ export class SaveFileService {
       const parser = new xml2js.Parser();
       const missionData = await parser.parseStringPromise(xmlData);
       const missions: MissionsDTO = new MissionsDTO();
-
+      const usernode: UserNodeDTO = new UserNodeDTO();
+      const mission: MissionDTO[] = [];
       // 각 미션 데이터를 MissionDTO 인스턴스로 변환
       for (const missionItem of missionData.missions.mission) {
-        const mission = new MissionDTO();
-        Object.assign(mission, missionItem);
-        missions.mission.push(mission);
+        const mission2 = new MissionDTO();
+        Object.assign(mission2, missionItem);
+        mission.push(mission2);
       }
-
+      Object.assign(usernode, missionData.missions.userNode);
+      missions.mission = mission;
+      missions.userNode = usernode;
       return missions;
     } catch (err) {
       console.error(err);
