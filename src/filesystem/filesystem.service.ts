@@ -3,46 +3,55 @@ import { SaveFileService } from 'src/savefile/savefile.service';
 import { commends } from './commends';
 import { FileSystem } from './filesystemcore/fileSystems';
 import { User } from 'src/auth/users/user.entity';
+import { MissionsDTO } from 'src/savefile/savefile.Dto';
 
 @Injectable()
 export class FilesystemService {
     private filesystemMap: Map<string, commends> = new Map();
-    private fs:FileSystem;
+    private fs: FileSystem;
     private dirlist: string[];
     private filelist: string[];
     private currentUser: string;
     private currentip: string;
     constructor(
-        private saveFileService:SaveFileService,
-    ){}
-    async initFs(userId:string,savepoint:number,location:string){
-         const sf = await this.saveFileService.getXml(userId,location);
-         sf[savepoint].node.nodeDirectorys
-         sf[savepoint].type.length
-    }
-    setFileSystem(userId:string){
+        private saveFileService: SaveFileService,
+    ) { }
+    async initFs(userId: string, savepoint: number, location: string) {
+        const sf = await this.saveFileService.getXml(userId, location);
         this.fs = new FileSystem();
-        this.dirlist = ["/root","/tmp","/home/user","/home/user/documents"];
-        this.filelist = ["/home/user/documents/document1.txt","/home/user/file1.txt","/home/user/file2.txt"];
+        this.dirlist = sf.usernode.userDirectorys;
+        let fsl: string[];
+        for (let index = 0; index < sf.usernode.userFile.length; index++) {
+            fsl.push(sf.usernode.userFile[index].userFile_name);
+        }
+        this.filelist = fsl;
+        this.currentUser = "myNode";
+        this.currentip = sf.usernode.userIP;
+        this.setC(userId, sf);
+    }
+    setFileSystem(userId: string) {
+        this.fs = new FileSystem();
+        this.dirlist = ["/root", "/tmp", "/home/user", "/home/user/documents"];
+        this.filelist = ["/home/user/documents/document1.txt", "/home/user/file1.txt", "/home/user/file2.txt"];
         this.currentUser = "/";
         this.currentip = "192.168.25.15";
-        this.setC(userId);
+        // this.setC(userId);
     }
-    
-    rmC(userId:string):boolean{
-        if(!this.filesystemMap.has(userId)){
+
+    rmC(userId: string): boolean {
+        if (!this.filesystemMap.has(userId)) {
             return false;
         }
         this.filesystemMap.get(userId).fs.stringFileSystem();
-        
+
         this.filesystemMap.delete(userId);
         return true;
     }
 
-    setC(userId: string):commends {
+    setC(userId: string, missionsDTO: MissionsDTO): commends {
         if (!this.filesystemMap.has(userId)) {
-            const c = new commends();
-            c.setFs(this.fs,this.dirlist,this.filelist,this.currentUser,this.currentip);
+            const c = new commends(userId, missionsDTO);
+            c.setFs(this.fs, this.dirlist, this.filelist, this.currentUser, this.currentip);
             this.filesystemMap.set(userId, c);
         }
         return this.filesystemMap.get(userId);
@@ -51,15 +60,15 @@ export class FilesystemService {
     getC(userId: string): commends {
         return this.filesystemMap.get(userId);
     }
-    getSys(user:User,id:number){
+    getSys(user: User, id: number) {
         const c = this.getC(user.userId);
         const files = c.ls('ls').trim().split(' ');
-        const typelist = c.ls(['ls','-al']);
+        const typelist = c.ls(['ls', '-al']);
         const regex = /\[(directory|file)\]/g;
-        const result =  typelist.match(regex);
+        const result = typelist.match(regex);
         const regex2 = /\[(.*?)\]/g;
         const filestype = result.map(item => item.replace(regex2, '$1'));
 
-        return {files,filestype};
+        return { files, filestype };
     }
 }

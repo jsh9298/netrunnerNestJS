@@ -57,7 +57,13 @@ export class AuthService {
         user.password = hashedPassword;
         await this.userRepository.save(user);
     }
-
+    async checkDuple(userId: string): Promise<boolean> {
+        if(await this.userRepository.findOne({where:{userId}})===null){
+            return true;
+        }else{
+            return false;
+        }
+    }
     async getProfile(Id : string):Promise<{userId:string,level:number,point:number}>{
         return this.userRepository.getProfile(Id);
     }

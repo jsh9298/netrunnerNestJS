@@ -1,44 +1,48 @@
+import { MissionsDTO } from "src/savefile/savefile.Dto";
 import { FileSystem } from "./filesystemcore/fileSystems";
 
 
-
-
 export class commends {
-     fs:FileSystem = null;
-     currentIP: string = "";
-     currentUser: string = "";
-     currentpath: string = "";
-     setFs(fileSystem:FileSystem,dirlist:string[],filelist:string[],User:string,Ip: string){
+    fs: FileSystem = null;
+    currentIP: string = "";
+    currentUser: string = "";
+    currentpath: string = "";
+    userId: string = "";
+    userLocation: string = "";
+    missionsDTO = null;
+    constructor(userId: string, missionsDTO: MissionsDTO) {
+        this.userId = userId;
+        this.userLocation = `/game/${userId}`
+        this.missionsDTO = missionsDTO;
+    }
+    setFs(fileSystem: FileSystem, dirlist: string[], filelist: string[], User: string, Ip: string) {
         this.currentIP = Ip;
         this.currentUser = User;
-        this.fs =fileSystem;
+        this.fs = fileSystem;
         for (let index = 0; index < dirlist.length; index++) {
             fileSystem.createDirectory(dirlist[index]);
         }
         for (let index = 0; index < filelist.length; index++) {
-            fileSystem.createFile (filelist[index]);
+            fileSystem.createFile(filelist[index]);
         }
-        if(this.currentUser == 'root'){
+        if (this.currentUser == 'root') {
             this.currentpath = '/root';
-        }else if(this.currentUser === '/' ){
+        } else if (this.currentUser === '/') {
             this.currentpath = '/';
-        }else{
+        } else {
             this.currentpath = `/home/${this.currentUser}`;
         }
     }
-    prompt(){
-        return this.currentUser+"@"+this.currentIP;
-    }
     pwd() {
-        return this.fs.getPathInfo(this.currentpath).absolutePath+"";
+        return this.fs.getPathInfo(this.currentpath).absolutePath + "";
     }
     cd(payload) {
         if (payload[1] === undefined) {
-            if(this.currentUser == 'root'){
+            if (this.currentUser == 'root') {
                 this.currentpath = '/root';
-            }else if(this.currentUser === '/' ){
+            } else if (this.currentUser === '/') {
                 this.currentpath = '/';
-            }else{
+            } else {
                 this.currentpath = `/home/${this.currentUser}`;
             }
         } else if (payload[1] === '..') {
@@ -50,9 +54,9 @@ export class commends {
                 this.currentpath = temp;
             }
         } else if (this.fs.isOverlap(payload[1], this.currentpath) == false) {
-            if(this.currentpath === "/"){
+            if (this.currentpath === "/") {
                 this.currentpath += ("" + payload[1]);
-            }else{
+            } else {
                 this.currentpath += ("/" + payload[1]);
             }
         } else if (this.fs.findDirectory(payload[1]) == true) {
@@ -77,9 +81,17 @@ export class commends {
         return "commends help";
     }
     cp(payload) {
+        this.fs.createFile(payload[2]);
         return " ";
     }
     mv(payload) {
+        if (this.fs.findDirectory(payload[2])) {
+            this.fs.createFile(payload[2] + '/' + payload[1]);
+        } else {
+            this.fs.createDirectory(payload[1]);
+            this.fs.createFile(payload[2] + '/' + payload[1]);
+        }
+        this.fs.deleteFile(payload[1]);
         return " ";
     }
     rm(payload) {
@@ -103,17 +115,21 @@ export class commends {
     }
     mkdir(payload) {
         let temp = this.currentpath;
-        temp += ("/"+payload[1]);
+        temp += ("/" + payload[1]);
         this.fs.createDirectory(temp);
         return " ";
     }
     rmdir(payload) {
-        let temp =  this.currentpath;
+        let temp = this.currentpath;
         temp += ("/" + payload[1]);
         this.fs.deleteDirectory(temp);
         return " ";
     }
 
+    cat(payload) {
+
+        return
+    }
     //ps
     //kill
     //nmap
@@ -124,7 +140,9 @@ export class commends {
     //connect
     //disconnect
 
-    
+    checkMission() {
+        return; //xmlDTO리턴
+    }
 }
 
 

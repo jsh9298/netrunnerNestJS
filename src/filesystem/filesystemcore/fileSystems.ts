@@ -133,12 +133,16 @@ class FileSystem {
         }
     }
 
+    result : string[];
     stringFileSystem() {
         this._traverseFileSystem_s(this.root, "");
+        return this.result;
     }
 
     _traverseFileSystem_s(node, path) {
-        console.log(`${path}`);
+        if(path != ""){
+            this.result.push(path);
+        }
         for (let child of node.children) {
             let newPath = `${path}/${child.name}`;
             this._traverseFileSystem_s(child, newPath);
@@ -226,6 +230,7 @@ class FileSystem {
         }
         return pathfinder;
     }
+
 }
 
 export { FileSystem };

@@ -26,6 +26,10 @@ export class AuthController {
     @Body()changepass:changePass):Promise<void>{
         return this.authService.changePass(changepass);
     }
+    @Get('/checkDuple/:id')
+    checkDuple(@Param('id') id:string):Promise<boolean>{
+        return this.authService.checkDuple(id);
+    }
     
     @Post('/signout')
     @UseGuards(AuthGuard('jwt'))

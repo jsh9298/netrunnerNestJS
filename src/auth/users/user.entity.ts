@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({name:'user'})
-export class User extends BaseEntity{
+@Entity({ name: 'user' })
+export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
     @Column({ unique: true })
@@ -13,15 +13,15 @@ export class User extends BaseEntity{
     @Column({ unique: true })
     email: string;
     @Column()
-    savepoint : number;   //xml에서의 미션ID
+    savepoint: number;   //xml에서의 미션ID
     @Column()
-    location : string; //xml의 저장위치, 유저아이디별 디렉토리경로
+    location: string; //xml의 저장위치, 유저아이디별 디렉토리경로
     @Column()
-    score : number;  //점수
+    score: number;  //점수
     @Column()
-    point : number; //인게임재화
+    point: number; //인게임재화
     @Column()
-    level : number; //레벨
+    level: number; //레벨
     @Column()
-    tool : string;
+    tool: string;
 }

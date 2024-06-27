@@ -23,8 +23,8 @@ export class GuisocketGateway implements OnGatewayConnection {
       const payload = jwt.verify(token, config.get('jwt.secret'));
       client.user = payload;
       console.log("cl gui id:",client.user.userId);
-      this.fileSystemService.setFileSystem(client.user.userId);
-      this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
+      // this.fileSystemService.setFileSystem(client.user.userId);
+      this.commandMap.set(client.id, this.fileSystemService.getC(client.user.userId));
       
     } catch (error) {
       client.disconnect();
