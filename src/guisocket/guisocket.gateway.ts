@@ -25,12 +25,12 @@ export class GuisocketGateway implements OnGatewayConnection {
       client.user = payload;
       console.log("cl gui id:", client.user.userId);
       // this.fileSystemService.setFileSystem(client.user.userId);
-      const sf = await this.saveFileService.getXml(client.user.userId, `/game/${client.user.userId}`);
-      this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId, sf));
+      this.fileSystemService.initFs(client.user.userId, 0, `/game/${client.user.userId}`);
+      this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
 
     } catch (error) {
       client.disconnect();
-      console.log("실패")
+      console.error("gui Error:", error);
       return;
     }
   }

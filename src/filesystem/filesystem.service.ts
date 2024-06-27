@@ -12,6 +12,7 @@ export class FilesystemService {
     private filelist: string[];
     private currentUser: string;
     private currentip: string;
+    private sf: MissionsDTO;
     constructor(
         private saveFileService: SaveFileService,
     ) { }
@@ -32,6 +33,8 @@ export class FilesystemService {
         this.filelist = fsl;
         this.currentUser = "myNode";
         this.currentip = sf.userNode[0].userIP;
+        this.sf = sf;
+        this.setC(userId);
     }
     setFileSystem(userId: string) {
         this.dirlist = ["/root", "/tmp", "/home/user", "/home/user/documents"];
@@ -51,9 +54,9 @@ export class FilesystemService {
         return true;
     }
 
-    setC(userId: string, missionsDTO: MissionsDTO): commends {
+    setC(userId: string): commends {
         if (!this.filesystemMap.has(userId)) {
-            const c = new commends(userId, missionsDTO);
+            const c = new commends(userId, this.sf);
             c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
             this.filesystemMap.set(userId, c);
         }
@@ -65,13 +68,14 @@ export class FilesystemService {
     }
     getSys(user: User, id: number) {
         const c = this.getC(user.userId);
-        const files = c.ls('ls').trim().split(' ');
-        const typelist = c.ls(['ls', '-al']);
-        const regex = /\[(directory|file)\]/g;
-        const result = typelist.match(regex);
-        const regex2 = /\[(.*?)\]/g;
-        const filestype = result.map(item => item.replace(regex2, '$1'));
-
-        return { files, filestype };
+        if (c) {
+            const files = c.ls('ls').trim().split(' ');
+            const typelist = c.ls(['ls', '-al']);
+            const regex = /\[(directory|file)\]/g;
+            const result = typelist.match(regex);
+            const regex2 = /\[(.*?)\]/g;
+            const filestype = result.map(item => item.replace(regex2, '$1'));
+            return { files, filestype };
+        }
     }
 }

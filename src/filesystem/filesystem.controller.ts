@@ -7,11 +7,11 @@ import { User } from 'src/auth/users/user.entity';
 @Controller('filesystem')
 export class FilesystemController {
     constructor(
-        private fileSystemService:FilesystemService
-    ){}
+        private fileSystemService: FilesystemService
+    ) { }
     @Post(":id")
     @UseGuards(AuthGuard('jwt'))
-    getSys(@GetUser() user:User,@Param('id',ParseIntPipe) id:number){
-        return this.fileSystemService.getSys(user,id);
+    getSys(@GetUser() user: User, @Param('id', ParseIntPipe) id: number) {
+        return this.fileSystemService.getSys(user, id);
     }
 }

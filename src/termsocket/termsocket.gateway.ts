@@ -14,23 +14,22 @@ export class TermsocketGateway implements OnGatewayConnection {
   constructor(
     private fileSystemService: FilesystemService,
   ) {
+
   }
   @WebSocketServer()
   server: Server;
 
-  async handleConnection(client: any, ...args: any[]) {
+  handleConnection(client: any, ...args: any[]) {
     try {
       const token = client.handshake?.query?.token;
       const payload = jwt.verify(token, config.get('jwt.secret'));
       client.user = payload;
-      console.log("cl id:", client.user.userId);
-      this.fileSystemService.setFileSystem(client.user.userId);
-      const sf = await this.saveFileService.getXml(client.user.userId, `/game/${client.user.userId}`);
-      this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId, sf));
+      this.fileSystemService.initFs(client.user.userId, 0, `/game/${client.user.userId}`);
+      this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
 
     } catch (error) {
       client.disconnect();
-      console.error("실패", error);
+      console.error("term error:", error);
       return;
     }
   }
