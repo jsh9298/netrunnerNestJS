@@ -9,6 +9,7 @@ import { FilesystemService } from 'src/filesystem/filesystem.service';
   cors: true, namespace: 'term'
 })
 export class TermsocketGateway implements OnGatewayConnection {
+  [x: string]: any;
   private commandMap: Map<string, commends> = new Map();
   constructor(
     private fileSystemService: FilesystemService,
@@ -17,14 +18,15 @@ export class TermsocketGateway implements OnGatewayConnection {
   @WebSocketServer()
   server: Server;
 
-  handleConnection(client: any, ...args: any[]) {
+  async handleConnection(client: any, ...args: any[]) {
     try {
       const token = client.handshake?.query?.token;
       const payload = jwt.verify(token, config.get('jwt.secret'));
       client.user = payload;
       console.log("cl id:", client.user.userId);
       this.fileSystemService.setFileSystem(client.user.userId);
-      this.commandMap.set(client.id, this.fileSystemService.getC(client.user.userId));
+      const sf = await this.saveFileService.getXml(client.user.userId, `/game/${client.user.userId}`);
+      this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId, sf));
 
     } catch (error) {
       client.disconnect();

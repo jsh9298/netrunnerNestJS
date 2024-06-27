@@ -17,17 +17,21 @@ export class FilesystemService {
     ) { }
     async initFs(userId: string, savepoint: number, location: string) {
         const sf = await this.saveFileService.getXml(userId, location);
-        this.dirlist = sf.userNode[0].userDirectorys;
-        console.log(sf.userNode[0].userDirectorys.userDirPath);
+
+        let dsl: string[] = [];
+        for (let index = 0; index < sf.userNode[0].userDirectorys.length; index++) {
+            dsl.push(sf.userNode[0].userDirectorys[index].userDirPath);
+        }
+        this.dirlist = dsl;
+        // this.dirlist = sf.userNode[0].userDirectorys;
         let fsl: string[] = [];
-        console.log("sf.usernode :", sf.userNode[0]);
+
         for (let index = 0; index < sf.userNode[0].userFile.length; index++) {
             fsl.push(sf.userNode[0].userFile[index].userFile_name);
         }
         this.filelist = fsl;
         this.currentUser = "myNode";
         this.currentip = sf.userNode[0].userIP;
-        this.setC(userId, sf);
     }
     setFileSystem(userId: string) {
         this.dirlist = ["/root", "/tmp", "/home/user", "/home/user/documents"];

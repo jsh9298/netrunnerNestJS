@@ -9,23 +9,25 @@ import { FilesystemService } from 'src/filesystem/filesystem.service';
   cors: true, namespace: 'gui'
 })
 export class GuisocketGateway implements OnGatewayConnection {
+  [x: string]: any;
   private commandMap: Map<string, commends> = new Map();
   constructor(
-    private fileSystemService:FilesystemService,
+    private fileSystemService: FilesystemService,
   ) {
   }
   @WebSocketServer()
   server: Server;
 
-  handleConnection(client: any, ...args: any[]) {
+  async handleConnection(client: any, ...args: any[]) {
     try {
       const token = client.handshake?.query?.token;
       const payload = jwt.verify(token, config.get('jwt.secret'));
       client.user = payload;
-      console.log("cl gui id:",client.user.userId);
+      console.log("cl gui id:", client.user.userId);
       // this.fileSystemService.setFileSystem(client.user.userId);
-      this.commandMap.set(client.id, this.fileSystemService.getC(client.user.userId));
-      
+      const sf = await this.saveFileService.getXml(client.user.userId, `/game/${client.user.userId}`);
+      this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId, sf));
+
     } catch (error) {
       client.disconnect();
       console.log("실패")
@@ -35,19 +37,19 @@ export class GuisocketGateway implements OnGatewayConnection {
   @SubscribeMessage('join')
   handleJoin(client: any, data: { roomId: string }) {
     client.join(data.roomId);
-    console.log("join gui:",data);
+    console.log("join gui:", data);
   }
 
   @SubscribeMessage('message')
-  handleMessage(client: any, data:{roomId:string,payload:string}): string {
+  handleMessage(client: any, data: { roomId: string, payload: string }): string {
     // payload = "return of server";
     if (!client.user) {
       return;
     }
     const com = this.commandMap.get(client.id);
-    console.log("com :",com);
+    console.log("com :", com);
     const response = data.payload.split(' ');
-    console.log("data:",data);
+    console.log("data:", data);
     switch (response[0]) {
       case 'pwd':
         data.payload = com.pwd();
@@ -59,10 +61,10 @@ export class GuisocketGateway implements OnGatewayConnection {
         data.payload = com.ls(response);
         break;
       case 'help':
-        data.payload =com.help(response);
+        data.payload = com.help(response);
         break;
       case 'cp':
-        data.payload =com.cp(response);
+        data.payload = com.cp(response);
         break;
       case 'mv':
         data.payload = com.mv(response);
@@ -80,11 +82,11 @@ export class GuisocketGateway implements OnGatewayConnection {
         data.payload = "Unkown commends";
         break;
     }
-    this.server.to(data.roomId).emit('message',data.payload);
+    this.server.to(data.roomId).emit('message', data.payload);
   }
   @SubscribeMessage('leave')
   handleLeave(client: any, data: { roomId: string }) {
-    console.log("leave:",data);
+    console.log("leave:", data);
     client.leave(data.roomId);
   }
 
