@@ -10,4 +10,5 @@ export declare class MissionsService {
     getMissons(user: User): Promise<MissionDTO[]>;
     getTools(): Promise<Tool[]>;
     setTool(): Promise<void>;
+    checkClear(user: User, id: number): Promise<boolean>;
 }

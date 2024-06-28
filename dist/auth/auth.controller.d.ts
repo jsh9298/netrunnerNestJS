@@ -9,9 +9,11 @@ export declare class AuthController {
     signUp(authCredentialsDto: AuthCredentialsDto): Promise<void>;
     signIn(signInDto: SignInDto): Promise<{
         accessToken: string;
+        missionId: number;
     }>;
     changepass(changepass: changePass): Promise<void>;
-    signout(user: User): void;
+    checkDuple(id: string): Promise<boolean>;
+    signout(user: User): boolean;
     getProfile(id: string): Promise<{
         userId: string;
         level: number;

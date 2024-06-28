@@ -3,6 +3,7 @@ import { Server } from 'socket.io';
 import { FilesystemService } from 'src/filesystem/filesystem.service';
 export declare class TermsocketGateway implements OnGatewayConnection {
     private fileSystemService;
+    [x: string]: any;
     private commandMap;
     constructor(fileSystemService: FilesystemService);
     server: Server;

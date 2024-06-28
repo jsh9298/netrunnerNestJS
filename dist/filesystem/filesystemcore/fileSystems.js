@@ -108,6 +108,19 @@ class FileSystem {
             this._traverseFileSystem(child, indent + '  ');
         }
     }
+    stringFileSystem() {
+        this._traverseFileSystem_s(this.root, "");
+        return this.result;
+    }
+    _traverseFileSystem_s(node, path) {
+        if (path != "") {
+            this.result.push(path);
+        }
+        for (let child of node.children) {
+            let newPath = `${path}/${child.name}`;
+            this._traverseFileSystem_s(child, newPath);
+        }
+    }
     getPathInfo(path) {
         const segments = path.split('/');
         let current = this.root;

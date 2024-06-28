@@ -14,12 +14,15 @@ export declare class AuthService {
     signUp(authCredentialsDto: AuthCredentialsDto): Promise<void>;
     signin(signInDto: SignInDto): Promise<{
         accessToken: string;
+        missionId: number;
     }>;
     changePass(changepass: changePass): Promise<void>;
+    checkDuple(userId: string): Promise<boolean>;
     getProfile(Id: string): Promise<{
         userId: string;
         level: number;
         point: number;
     }>;
     ranking(): Promise<void>;
+    signOut(userid: string): boolean;
 }

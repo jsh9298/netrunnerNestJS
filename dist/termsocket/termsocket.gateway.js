@@ -25,13 +25,12 @@ let TermsocketGateway = class TermsocketGateway {
             const token = client.handshake?.query?.token;
             const payload = jwt.verify(token, config.get('jwt.secret'));
             client.user = payload;
-            console.log("cl id:", client.user.userId);
-            this.fileSystemService.setFileSystem(client.user.userId);
+            this.fileSystemService.initFs(client.user.userId, 0, `/game/${client.user.userId}`);
             this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
         }
         catch (error) {
             client.disconnect();
-            console.error("실패", error);
+            console.error("term error:", error);
             return;
         }
     }
@@ -74,6 +73,9 @@ let TermsocketGateway = class TermsocketGateway {
                 break;
             case 'rmdir':
                 data.payload = com.rmdir(response);
+                break;
+            case 'cat':
+                data.payload = com.cat(response);
                 break;
             default:
                 data.payload = "Unkown commends";

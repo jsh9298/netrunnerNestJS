@@ -13,6 +13,7 @@ export class FilesystemService {
     private currentUser: string;
     private currentip: string;
     private sf: MissionsDTO;
+    private savepoint: number;
     constructor(
         private saveFileService: SaveFileService,
     ) { }
@@ -34,6 +35,7 @@ export class FilesystemService {
         this.currentUser = "myNode";
         this.currentip = sf.userNode[0].userIP;
         this.sf = sf;
+        this.savepoint = savepoint;
         this.setC(userId);
     }
     setFileSystem(userId: string) {
@@ -56,7 +58,7 @@ export class FilesystemService {
 
     setC(userId: string): commends {
         if (!this.filesystemMap.has(userId)) {
-            const c = new commends(userId, this.sf);
+            const c = new commends(userId, this.sf, this.savepoint);
             c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
             this.filesystemMap.set(userId, c);
         }
@@ -66,16 +68,15 @@ export class FilesystemService {
     getC(userId: string): commends {
         return this.filesystemMap.get(userId);
     }
-    getSys(user: User, id: number) {
-        const c = this.getC(user.userId);
-        if (c) {
-            const files = c.ls('ls').trim().split(' ');
-            const typelist = c.ls(['ls', '-al']);
-            const regex = /\[(directory|file)\]/g;
-            const result = typelist.match(regex);
-            const regex2 = /\[(.*?)\]/g;
-            const filestype = result.map(item => item.replace(regex2, '$1'));
-            return { files, filestype };
-        }
+    async getSys(user: User, id: number) {
+        await this.initFs(user.userId, id, `/game/${user.userId}`);
+        let c = this.getC(user.userId);
+        const files = c.ls('ls').trim().split(' ');
+        const typelist = c.ls(['ls', '-al']);
+        const regex = /\[(directory|file)\]/g;
+        const result = typelist.match(regex);
+        const regex2 = /\[(.*?)\]/g;
+        const filestype = result.map(item => item.replace(regex2, '$1'));
+        return { files, filestype };
     }
 }

@@ -4,18 +4,20 @@ import { User } from 'src/auth/users/user.entity';
 export declare class FilesystemService {
     private saveFileService;
     private filesystemMap;
-    private fs;
     private dirlist;
     private filelist;
     private currentUser;
     private currentip;
+    private sf;
+    private savepoint;
     constructor(saveFileService: SaveFileService);
     initFs(userId: string, savepoint: number, location: string): Promise<void>;
     setFileSystem(userId: string): void;
+    rmC(userId: string): boolean;
     setC(userId: string): commends;
     getC(userId: string): commends;
-    getSys(user: User, id: number): {
+    getSys(user: User, id: number): Promise<{
         files: string[];
         filestype: string[];
-    };
+    }>;
 }

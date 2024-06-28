@@ -77,9 +77,9 @@ export class TermsocketGateway implements OnGatewayConnection {
       case 'rmdir':
         data.payload = com.rmdir(response);
         break;
-      // case 'cat':
-      // payload = this.com.cat(payload);
-      // break;
+      case 'cat':
+        data.payload = com.cat(response);
+        break;
       // case 'touch': 
       // payload = this.com.touch(payload);
       //     break;

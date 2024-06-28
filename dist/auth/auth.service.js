@@ -42,7 +42,8 @@ let AuthService = class AuthService {
                 this.xmlservice.updateXml(userId, mission);
             }
             await this.filesystemService.initFs(userId, user.savepoint, user.location);
-            return { accessToken };
+            const missionId = user.savepoint;
+            return { accessToken, missionId };
         }
         else {
             throw new common_1.UnauthorizedException('login failed');
@@ -59,10 +60,21 @@ let AuthService = class AuthService {
         user.password = hashedPassword;
         await this.userRepository.save(user);
     }
+    async checkDuple(userId) {
+        if (await this.userRepository.findOne({ where: { userId } }) === null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     async getProfile(Id) {
         return this.userRepository.getProfile(Id);
     }
     async ranking() {
+    }
+    signOut(userid) {
+        return this.filesystemService.rmC(userid);
     }
 };
 exports.AuthService = AuthService;

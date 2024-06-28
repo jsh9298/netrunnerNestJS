@@ -20,18 +20,18 @@ let GuisocketGateway = class GuisocketGateway {
         this.fileSystemService = fileSystemService;
         this.commandMap = new Map();
     }
-    handleConnection(client, ...args) {
+    async handleConnection(client, ...args) {
         try {
             const token = client.handshake?.query?.token;
             const payload = jwt.verify(token, config.get('jwt.secret'));
             client.user = payload;
             console.log("cl gui id:", client.user.userId);
-            this.fileSystemService.setFileSystem(client.user.userId);
+            this.fileSystemService.initFs(client.user.userId, 0, `/game/${client.user.userId}`);
             this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
         }
         catch (error) {
             client.disconnect();
-            console.log("실패");
+            console.error("gui Error:", error);
             return;
         }
     }
@@ -74,6 +74,9 @@ let GuisocketGateway = class GuisocketGateway {
                 break;
             case 'rmdir':
                 data.payload = com.rmdir(response);
+                break;
+            case 'cat':
+                data.payload = com.cat(response);
                 break;
             default:
                 data.payload = "Unkown commends";

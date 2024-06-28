@@ -16,6 +16,7 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const auth_credential_dto_1 = require("./dto/auth-credential.dto");
+const passport_1 = require("@nestjs/passport");
 const get_user_decorator_1 = require("./get-user.decorator");
 const user_entity_1 = require("./users/user.entity");
 const signin_dto_1 = require("./dto/signin.dto");
@@ -33,8 +34,11 @@ let AuthController = class AuthController {
     changepass(changepass) {
         return this.authService.changePass(changepass);
     }
+    checkDuple(id) {
+        return this.authService.checkDuple(id);
+    }
     signout(user) {
-        console.log('req', user);
+        return this.authService.signOut(user.userId);
     }
     getProfile(id) {
         return this.authService.getProfile(id);
@@ -63,11 +67,19 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "changepass", null);
 __decorate([
+    (0, common_1.Get)('/checkDuple/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "checkDuple", null);
+__decorate([
     (0, common_1.Post)('/signout'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [user_entity_1.User]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Boolean)
 ], AuthController.prototype, "signout", null);
 __decorate([
     (0, common_1.Get)('/:id'),

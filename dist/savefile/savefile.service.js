@@ -36,17 +36,22 @@ let SaveFileService = class SaveFileService {
             const xmlData = await fs.promises.readFile(xmlFilePath, 'utf-8');
             const parser = new xml2js.Parser();
             const missionData = await parser.parseStringPromise(xmlData);
-            const missions = [];
+            const missions = new savefile_Dto_1.MissionsDTO();
+            const usernode = new savefile_Dto_1.UserNodeDTO();
+            const mission = [];
             for (const missionItem of missionData.missions.mission) {
-                const mission = new savefile_Dto_1.MissionDTO();
-                Object.assign(mission, missionItem);
-                missions.push(mission);
+                const mission2 = new savefile_Dto_1.MissionDTO();
+                Object.assign(mission2, missionItem);
+                mission.push(mission2);
             }
+            Object.assign(usernode, missionData.missions.userNode);
+            missions.mission = mission;
+            missions.userNode = usernode;
             return missions;
         }
         catch (err) {
             console.error(err);
-            return [];
+            return;
         }
     }
     async saveXml(userId, location, missions) {

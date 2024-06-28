@@ -210,8 +210,8 @@ export class NodeDTO {
   nodeIP: string;
   nodePort: NodePortDTO;
   nodeDirectorys: NodeDirectorysDTO;
-  nodeProgram: NodeProgramDTO[];
-  nodeFile: NodeFileDTO;
+  nodeProgram: NodeProgramDTO;
+  nodeFile: NodeFileDTO[];
 }
 
 export class NodeDirectorysDTO {

@@ -26,7 +26,7 @@ let MissionsService = class MissionsService {
     async getMissons(user) {
         console.log(user.userId);
         const mission = await this.xmlService.getXml(user.userId, user.location);
-        return mission;
+        return mission.mission;
     }
     async getTools() {
         try {
@@ -59,6 +59,15 @@ let MissionsService = class MissionsService {
             const tool = this.toolsRepository.create(element);
             await this.toolsRepository.save(tool);
         }
+    }
+    async checkClear(user, id) {
+        const userfile = await this.xmlService.getXml(user.userId, user.location);
+        let result = true;
+        if (result) {
+            this.xmlService.saveXml(user.userId, user.location, userfile);
+            user.save({ data: user.savepoint++ });
+        }
+        return result;
     }
 };
 exports.MissionsService = MissionsService;

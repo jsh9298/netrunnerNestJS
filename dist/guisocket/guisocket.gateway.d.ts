@@ -3,10 +3,11 @@ import { Server } from 'socket.io';
 import { FilesystemService } from 'src/filesystem/filesystem.service';
 export declare class GuisocketGateway implements OnGatewayConnection {
     private fileSystemService;
+    [x: string]: any;
     private commandMap;
     constructor(fileSystemService: FilesystemService);
     server: Server;
-    handleConnection(client: any, ...args: any[]): void;
+    handleConnection(client: any, ...args: any[]): Promise<void>;
     handleJoin(client: any, data: {
         roomId: string;
     }): void;

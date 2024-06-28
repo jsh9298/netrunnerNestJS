@@ -35,6 +35,7 @@ let MissionsController = class MissionsController {
         return await this.missionsService.getTools();
     }
     checkIsclear(user, id) {
+        return this.missionsService.checkClear(user, id);
     }
 };
 exports.MissionsController = MissionsController;
@@ -63,13 +64,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MissionsController.prototype, "getTools", null);
 __decorate([
-    (0, common_1.Post)("/check:id"),
+    (0, common_1.Post)("/check/:id"),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_entity_1.User, String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [user_entity_1.User, Number]),
+    __metadata("design:returntype", Promise)
 ], MissionsController.prototype, "checkIsclear", null);
 exports.MissionsController = MissionsController = __decorate([
     (0, common_1.Controller)('missions'),

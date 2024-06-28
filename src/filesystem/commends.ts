@@ -1,4 +1,4 @@
-import { MissionsDTO } from "src/savefile/savefile.Dto";
+import { FileContentDTO, MissionsDTO, NodeFileDTO, UserFileDTO } from "src/savefile/savefile.Dto";
 import { FileSystem } from "./filesystemcore/fileSystems";
 
 
@@ -10,19 +10,39 @@ export class commends {
     userId: string = "";
     userLocation: string = "";
     missionsDTO = null;
-    constructor(userId: string, missionsDTO: MissionsDTO) {
+    savepoint: number = 0;
+    isUserNode: boolean = true;
+    nodelist: Map<string, number> = new Map();
+    constructor(userId: string, missionsDTO: MissionsDTO, savepoint: number) {
         this.userId = userId;
         this.userLocation = `/game/${userId}`
         this.missionsDTO = missionsDTO;
+        this.savepoint = savepoint;
     }
     setFs(dirlist: string[], filelist: string[], User: string, Ip: string) {
         this.currentIP = Ip;
         this.currentUser = User;
+        this.fs.createDirectory("/bin");
+        this.fs.createDirectory("/boot");
+        this.fs.createDirectory("/dev");
+        this.fs.createDirectory("/etc");
+        this.fs.createDirectory("/home");
+        this.fs.createDirectory("/lib");
+        this.fs.createDirectory("/media");
+        this.fs.createDirectory("/mnt");
+        this.fs.createDirectory("/opt");
+        this.fs.createDirectory("/proc");
+        this.fs.createDirectory("/root");
+        this.fs.createDirectory("/run");
+        this.fs.createDirectory("/sbin");
+        this.fs.createDirectory("/srv");
+        this.fs.createDirectory("/sys");
+        this.fs.createDirectory("/tmp");
+        this.fs.createDirectory("/usr");
+        this.fs.createDirectory("/var");
         for (let index = 0; index < dirlist.length; index++) {
             this.fs.createDirectory(dirlist[index].toString());
-            console.log("tlqkf:", dirlist[index].toString());
         }
-        console.log(this.fs);
         for (let index = 0; index < filelist.length; index++) {
             this.fs.createFile(filelist[index].toString());
         }
@@ -34,6 +54,13 @@ export class commends {
             this.currentpath = `/home/${this.currentUser}`;
         }
     }
+
+    mkNodeList() {
+        for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node.length; index++) {
+            this.nodelist.set(this.missionsDTO.mission[this.savepoint].node[index].nodeIP, index);
+        }
+    }
+
     pwd() {
         return this.fs.getPathInfo(this.currentpath).absolutePath + "";
     }
@@ -128,12 +155,80 @@ export class commends {
     }
 
     cat(payload) {
-
-        return
+        let printFile = "can't find file";
+        console.log("result1:", printFile);
+        if (this.isUserNode) {
+            for (let index = 0; index < this.missionsDTO.userNode[0].userFile.length; index++) {
+                if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.userNode[0].userFile[index].userFile_name) {
+                    printFile = this.missionsDTO.userNode[0].userFile[index].userFile_content.toString().trim();
+                }
+            }
+        } else {
+            for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(this.currentIP)].nodeFile.length; index++) {
+                if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.mission[this.savepoint].node[0].nodeFile[index].File_name) {
+                    printFile = this.missionsDTO.mission[this.savepoint].node[0].nodeFile[index].File_content.toString().trim();
+                }
+            }
+        }
+        console.log("result2:", printFile.toString().trim());
+        console.log("result2type :", typeof printFile);
+        return printFile;
     }
-    //ps
-    //kill
-    //nmap
+    touch(payload) {
+        let temp = this.currentpath;
+        temp += ("/" + payload[1]);
+        this.fs.createFile(temp);
+        return " ";
+    }
+    vi(payload) {
+        if (this.fs.isOverlap(payload[1], this.currentpath)) {
+            return this.touch(payload[1]);
+        } else {
+            return this.cat(payload[1]);
+        }
+    }
+    //write 파일명 내용
+    write(payload, context) {
+        if (this.isUserNode) {
+            for (let index = 0; index < this.missionsDTO.userNode[0].userFile.length; index++) {
+                if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.userNode[0].userFile[index].userFile_name) {
+                    this.missionsDTO.userNode[0].userFile[index].userFile_content = { __cdata: context };
+                    break;
+                } else {
+                    const content: FileContentDTO = {
+                        __cdata: context
+                    };
+                    const file: UserFileDTO = {
+                        userFile_name: this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1],
+                        userFile_content: content
+                    }
+                    this.missionsDTO.userNode[0].userFile.push(file);
+                    break;
+                }
+            }
+        } else {
+            for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(this.currentIP)].nodeFile.length; index++) {
+                if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.mission[this.savepoint].node[0].nodeFile[index].File_name) {
+                    this.missionsDTO.mission[this.savepoint].node[0].nodeFile[index].File_content = { __cdata: context };;
+                    break;
+                } else {
+                    const content: FileContentDTO = {
+                        __cdata: context
+                    };
+                    const file: NodeFileDTO = {
+                        File_name: this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1],
+                        File_content: content
+                    }
+                    this.missionsDTO.mission[this.savepoint].node[0].nodeFile.push(file);
+                    break;
+                }
+            }
+        }
+        return "";
+    }
+    scan(payload) {
+
+    }
     //porthack
     //scp
     //sshcrack
@@ -142,7 +237,7 @@ export class commends {
     //disconnect
 
     checkMission() {
-        return; //xmlDTO리턴
+        return this.missionsDTO; //xmlDTO리턴
     }
 }
 

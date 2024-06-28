@@ -13,27 +13,47 @@ exports.FilesystemService = void 0;
 const common_1 = require("@nestjs/common");
 const savefile_service_1 = require("../savefile/savefile.service");
 const commends_1 = require("./commends");
-const fileSystems_1 = require("./filesystemcore/fileSystems");
 let FilesystemService = class FilesystemService {
     constructor(saveFileService) {
         this.saveFileService = saveFileService;
         this.filesystemMap = new Map();
     }
     async initFs(userId, savepoint, location) {
-        let sf = await this.saveFileService.getXml(userId, location);
+        const sf = await this.saveFileService.getXml(userId, location);
+        let dsl = [];
+        for (let index = 0; index < sf.userNode[0].userDirectorys.length; index++) {
+            dsl.push(sf.userNode[0].userDirectorys[index].userDirPath);
+        }
+        this.dirlist = dsl;
+        let fsl = [];
+        for (let index = 0; index < sf.userNode[0].userFile.length; index++) {
+            fsl.push(sf.userNode[0].userFile[index].userFile_name);
+        }
+        this.filelist = fsl;
+        this.currentUser = "myNode";
+        this.currentip = sf.userNode[0].userIP;
+        this.sf = sf;
+        this.savepoint = savepoint;
+        this.setC(userId);
     }
     setFileSystem(userId) {
-        this.fs = new fileSystems_1.FileSystem();
         this.dirlist = ["/root", "/tmp", "/home/user", "/home/user/documents"];
         this.filelist = ["/home/user/documents/document1.txt", "/home/user/file1.txt", "/home/user/file2.txt"];
         this.currentUser = "/";
         this.currentip = "192.168.25.15";
-        this.setC(userId);
+    }
+    rmC(userId) {
+        if (!this.filesystemMap.has(userId)) {
+            return false;
+        }
+        this.filesystemMap.get(userId).fs.stringFileSystem();
+        this.filesystemMap.delete(userId);
+        return true;
     }
     setC(userId) {
         if (!this.filesystemMap.has(userId)) {
-            const c = new commends_1.commends();
-            c.setFs(this.fs, this.dirlist, this.filelist, this.currentUser, this.currentip);
+            const c = new commends_1.commends(userId, this.sf, this.savepoint);
+            c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
             this.filesystemMap.set(userId, c);
         }
         return this.filesystemMap.get(userId);
@@ -41,9 +61,9 @@ let FilesystemService = class FilesystemService {
     getC(userId) {
         return this.filesystemMap.get(userId);
     }
-    getSys(user, id) {
-        this.setFileSystem(user.userId);
-        const c = this.getC(user.userId);
+    async getSys(user, id) {
+        await this.initFs(user.userId, id, `/game/${user.userId}`);
+        let c = this.getC(user.userId);
         const files = c.ls('ls').trim().split(' ');
         const typelist = c.ls(['ls', '-al']);
         const regex = /\[(directory|file)\]/g;

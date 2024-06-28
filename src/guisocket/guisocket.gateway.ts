@@ -39,7 +39,22 @@ export class GuisocketGateway implements OnGatewayConnection {
     client.join(data.roomId);
     console.log("join gui:", data);
   }
-
+  @SubscribeMessage('content')
+  handleContent(client: any, data: { roomId: string, payload: string, context: string }): void {
+    if (!client.user) {
+      return;
+    }
+    const com = this.commandMap.get(client.id);
+    console.log("com :", com);
+    const response = data.payload.split(' ');
+    console.log("data:", data);
+    switch (response[0]) {
+      case 'write':
+        data.payload = com.write(data.payload, data.context);
+        break;
+    }
+    this.server.to(data.roomId).emit('message', data.payload);
+  }
   @SubscribeMessage('message')
   handleMessage(client: any, data: { roomId: string, payload: string }): string {
     // payload = "return of server";
@@ -77,6 +92,9 @@ export class GuisocketGateway implements OnGatewayConnection {
         break;
       case 'rmdir':
         data.payload = com.rmdir(response);
+        break;
+      case 'cat':
+        data.payload = com.cat(response);
         break;
       default:
         data.payload = "Unkown commends";

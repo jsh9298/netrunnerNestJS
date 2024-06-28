@@ -1,89 +1,67 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MissionDTO = exports.RewardDTO = exports.NodeDTO = exports.CorrectAnswerDTO = void 0;
-const class_validator_1 = require("class-validator");
-class CorrectAnswerDTO {
+exports.UserProgramDTO = exports.UserServiceDTO = exports.UserDTO = exports.UserPortDTO = exports.UserFileDTO = exports.UserDirectorysDTO = exports.UserNodeDTO = exports.RewardDTO = exports.NodeProgramDTO = exports.ServiceDTO = exports.TCPDTO = exports.NodePortDTO = exports.NodeDirectorysDTO = exports.NodeDTO = exports.FileContentDTO = exports.NodeFileDTO = exports.MyNodeDTO = exports.CorrectAnswerDTO = exports.MissionDTO = exports.MissionsDTO = exports.Welcome5 = void 0;
+class Welcome5 {
 }
-exports.CorrectAnswerDTO = CorrectAnswerDTO;
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], CorrectAnswerDTO.prototype, "dirPath", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], CorrectAnswerDTO.prototype, "File_name", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], CorrectAnswerDTO.prototype, "File_content", void 0);
-class NodeDTO {
+exports.Welcome5 = Welcome5;
+class MissionsDTO {
 }
-exports.NodeDTO = NodeDTO;
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], NodeDTO.prototype, "nodeId", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], NodeDTO.prototype, "nodeMAC", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], NodeDTO.prototype, "nodeIP", void 0);
-__decorate([
-    (0, class_validator_1.ArrayNotEmpty)(),
-    (0, class_validator_1.ArrayUnique)(),
-    __metadata("design:type", Array)
-], NodeDTO.prototype, "nodeDirectorys", void 0);
-__decorate([
-    (0, class_validator_1.ArrayNotEmpty)(),
-    (0, class_validator_1.ArrayUnique)(),
-    __metadata("design:type", Array)
-], NodeDTO.prototype, "nodeProgram", void 0);
-__decorate([
-    (0, class_validator_1.ArrayNotEmpty)(),
-    __metadata("design:type", Array)
-], NodeDTO.prototype, "nodeFiles", void 0);
-class RewardDTO {
-}
-exports.RewardDTO = RewardDTO;
-__decorate([
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], RewardDTO.prototype, "point", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], RewardDTO.prototype, "toolFile", void 0);
+exports.MissionsDTO = MissionsDTO;
 class MissionDTO {
 }
 exports.MissionDTO = MissionDTO;
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], MissionDTO.prototype, "scenario", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], MissionDTO.prototype, "type", void 0);
+class CorrectAnswerDTO {
+}
+exports.CorrectAnswerDTO = CorrectAnswerDTO;
+class MyNodeDTO {
+}
+exports.MyNodeDTO = MyNodeDTO;
+class NodeFileDTO {
+}
+exports.NodeFileDTO = NodeFileDTO;
+class FileContentDTO {
+}
+exports.FileContentDTO = FileContentDTO;
+class NodeDTO {
+}
+exports.NodeDTO = NodeDTO;
+class NodeDirectorysDTO {
+}
+exports.NodeDirectorysDTO = NodeDirectorysDTO;
+class NodePortDTO {
+}
+exports.NodePortDTO = NodePortDTO;
+class TCPDTO {
+}
+exports.TCPDTO = TCPDTO;
+class ServiceDTO {
+}
+exports.ServiceDTO = ServiceDTO;
+class NodeProgramDTO {
+}
+exports.NodeProgramDTO = NodeProgramDTO;
+class RewardDTO {
+}
+exports.RewardDTO = RewardDTO;
+class UserNodeDTO {
+}
+exports.UserNodeDTO = UserNodeDTO;
+class UserDirectorysDTO {
+}
+exports.UserDirectorysDTO = UserDirectorysDTO;
+class UserFileDTO {
+}
+exports.UserFileDTO = UserFileDTO;
+class UserPortDTO {
+}
+exports.UserPortDTO = UserPortDTO;
+class UserDTO {
+}
+exports.UserDTO = UserDTO;
+class UserServiceDTO {
+}
+exports.UserServiceDTO = UserServiceDTO;
+class UserProgramDTO {
+}
+exports.UserProgramDTO = UserProgramDTO;
 //# sourceMappingURL=savefile.Dto.js.map
