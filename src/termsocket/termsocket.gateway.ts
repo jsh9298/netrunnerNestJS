@@ -80,12 +80,12 @@ export class TermsocketGateway implements OnGatewayConnection {
       case 'cat':
         data.payload = com.cat(response);
         break;
-      // case 'touch': 
-      // payload = this.com.touch(payload);
-      //     break;
-      // case 'vi':
-      //   payload = this.com.vi(payload);
-      //     break;
+      case 'touch':
+        data.payload = com.touch(response);
+        break;
+      case 'vi':
+        data.payload = com.vi(response);
+        break;
       // case 'ps':
       //   payload = this.com.ps(payload);
       //     break;

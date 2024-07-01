@@ -50,10 +50,10 @@ export class GuisocketGateway implements OnGatewayConnection {
     console.log("data:", data);
     switch (response[0]) {
       case 'write':
-        data.payload = com.write(data.payload, data.context);
+        data.payload = com.write(response, data.context.toString());
         break;
     }
-    this.server.to(data.roomId).emit('message', data.payload);
+    // this.server.to(data.roomId).emit('content', data.payload);
   }
   @SubscribeMessage('message')
   handleMessage(client: any, data: { roomId: string, payload: string }): string {
@@ -95,6 +95,12 @@ export class GuisocketGateway implements OnGatewayConnection {
         break;
       case 'cat':
         data.payload = com.cat(response);
+        break;
+      case 'vi':
+        data.payload = com.vi(response);
+        break;
+      case 'touch':
+        data.payload = com.touch(response);
         break;
       default:
         data.payload = "Unkown commends";

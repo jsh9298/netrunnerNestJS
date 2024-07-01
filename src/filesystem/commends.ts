@@ -170,7 +170,7 @@ export class commends {
                 }
             }
         }
-        console.log("result2:", printFile.toString().trim());
+        console.log("result2:", printFile);
         console.log("result2type :", typeof printFile);
         return printFile;
     }
@@ -181,26 +181,27 @@ export class commends {
         return " ";
     }
     vi(payload) {
+        console.log("vi test", payload);
         if (this.fs.isOverlap(payload[1], this.currentpath)) {
-            return this.touch(payload[1]);
+            const temp = `touch ${payload[1]}`.split(' ');
+            return this.touch(temp);
         } else {
-            return this.cat(payload[1]);
+            const temp = `cat ${payload[1]}`.split(' ');
+            return this.cat(temp);
         }
     }
     //write 파일명 내용
     write(payload, context) {
+        console.log("write test", payload, context);
         if (this.isUserNode) {
             for (let index = 0; index < this.missionsDTO.userNode[0].userFile.length; index++) {
                 if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.userNode[0].userFile[index].userFile_name) {
-                    this.missionsDTO.userNode[0].userFile[index].userFile_content = { __cdata: context };
+                    this.missionsDTO.userNode[0].userFile[index].userFile_content = context;
                     break;
                 } else {
-                    const content: FileContentDTO = {
-                        __cdata: context
-                    };
                     const file: UserFileDTO = {
                         userFile_name: this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1],
-                        userFile_content: content
+                        userFile_content: context
                     }
                     this.missionsDTO.userNode[0].userFile.push(file);
                     break;
@@ -209,15 +210,12 @@ export class commends {
         } else {
             for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(this.currentIP)].nodeFile.length; index++) {
                 if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.mission[this.savepoint].node[0].nodeFile[index].File_name) {
-                    this.missionsDTO.mission[this.savepoint].node[0].nodeFile[index].File_content = { __cdata: context };;
+                    this.missionsDTO.mission[this.savepoint].node[0].nodeFile[index].File_content = context;
                     break;
                 } else {
-                    const content: FileContentDTO = {
-                        __cdata: context
-                    };
                     const file: NodeFileDTO = {
                         File_name: this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1],
-                        File_content: content
+                        File_content: context
                     }
                     this.missionsDTO.mission[this.savepoint].node[0].nodeFile.push(file);
                     break;
@@ -244,137 +242,3 @@ export class commends {
 
 
 
-// terminal.write('Welcome to NetRunner!\r\n');
-// let currentPath = '/home/user';
-// prompt(currentPath);
-// terminal.onKey(({ key, domEvent }) => {
-//     const char = key;
-//     if (domEvent.keyCode === 13) {  // Enter key
-//         terminal.writeln('');
-//         const command = currentInput.trim().split(" ");
-//         switch (command[0]) {
-//             case 'pwd':
-//                 terminal.write(fs.getPathInfo(currentPath).absolutePath + '\r\n');
-//                 break;
-//             case 'cd':
-//                 console.log(command[1]);
-//                 if (command[1] === undefined) {
-//                     currentPath = "/root";
-//                 } else if (command[1] == '..') {
-//                     if (currentPath == '/') {
-//                         currentPath = '/';
-//                     } else {
-//                         let lastPath = currentPath.lastIndexOf("/");
-//                         let temp = currentPath.substring(0, lastPath);
-//                         currentPath = temp;
-//                     }
-//                 } else if (fs.isOverlap(command[1], currentPath) == false) {
-//                     currentPath += ("/" + command[1]);
-//                 } else if (fs.findDirectory(command[1]) == true) {
-//                     currentPath = command[1];
-//                 } else {
-//                     terminal.write("No such path found\r\n");
-//                 }
-//                 break;
-//             case 'cat':
-//                 break;
-//             case 'ls':
-//                 for (const key in fs.getPathInfo(currentPath).files) {
-//                     terminal.write(fs.getPathInfo(currentPath).files[key]);
-//                     if (command[1] == "-al") {
-//                         terminal.write("[" + fs.getPathInfo(currentPath).filestype[key] + "]");
-//                     }
-//                     terminal.write(" ");
-//                 }
-//                 terminal.write("\r\n");
-//                 break;
-//             case 'help':
-//                 terminal.write('Commands:\r\nls - List files\r\nhelp - Show this help message\r\n');
-//                 break;
-//             case 'cp':
-//                 break;
-//             case 'mv':
-//                 break;
-//             case 'rm':
-//                 let temp5 = currentPath;
-//                 if (command[1] == "*") {
-//                     fs.deleteDirectory(currentPath);
-//                     fs.createDirectory(currentPath);
-//                 }
-//                 if (fs.isOverlap(command[1], currentPath) == false) {
-//                     for (const key in fs.getPathInfo(currentPath).files) {
-//                         if (fs.getPathInfo(currentPath).files[key] == command[1]) {
-//                             if (fs.getPathInfo(currentPath).filestype[key] == "file") {
-//                                 fs.deleteFile(temp5 += ("/" + command[1]));
-//                             } else {
-//                                 fs.deleteDirectory(temp5 += ("/" + command[1]));
-//                             }
-//                         }
-//                     }
-//                 }
-//                 break;
-//             case 'clear':
-//                 terminal.clear();
-//                 break;
-//             case 'mkdir':
-//                 let temp2 = currentPath;
-//                 temp2 += ("/" + command[1]);
-//                 fs.createDirectory(temp2);
-//                 break;
-//             case 'rmdir':
-//                 let temp3 = currentPath;
-//                 temp3 += ("/" + command[1]);
-//                 fs.deleteDirectory(temp3);
-//                 break;
-//             case 'touch':
-//                 let temp4 = currentPath;
-//                 temp4 += ("/" + command[1]);
-//                 fs.createFile(temp4);
-//                 break;
-//             case 'vi':
-//                 break;
-
-
-//             case 'ps':
-//                 break;
-//             case 'kill':
-//                 break;
-//             case 'nmap':
-//                 break;
-//             case 'porthack':
-//                 break;
-//             case 'scp':
-//                 break;
-//             case 'sshcrack':
-//                 break;
-//             case 'scan':
-//                 break;
-//             case 'connect':
-//                 break;
-//             case 'disconnect':
-//                 break;
-
-
-//             default:
-//                 terminal.write('Unknown command\r\n');
-//                 break;
-//         }
-//         currentInput = '';
-//         prompt(currentPath);
-//     } else if (domEvent.keyCode === 8) {
-//         // Backspace 처리
-//         if (currentInput.length > 0) {
-//             terminal.write('\b \b'); // 터미널에서 문자를 제거
-//             currentInput = currentInput.slice(0, -1);
-//         }
-//     } else {
-//         currentInput += char;
-//         terminal.write(char);
-//     }
-// });
-// function prompt(location) {
-//     if (location == "/root") {
-//         location = '~';
-//     }
-//     terminal.write(`root@root[${location}]$`);
-// }
