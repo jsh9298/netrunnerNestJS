@@ -10,12 +10,14 @@ import { TypeOrmExModule } from 'src/typeorm-ex/typeorm-ex.module';
 import { Tool } from './tools/tool.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from 'src/configs/typeorm.config';
+import { FilesystemService } from 'src/filesystem/filesystem.service';
+import { commends } from 'src/filesystem/commends';
 
 
 @Module({
-  imports:[SavefileModule,AuthModule,TypeOrmModule.forRoot(typeORMConfig),TypeOrmModule.forFeature([Tool]),TypeOrmExModule.forCustomRepository([ToolsRepository])],
+  imports: [SavefileModule, AuthModule, TypeOrmModule.forRoot(typeORMConfig), TypeOrmModule.forFeature([Tool]), TypeOrmExModule.forCustomRepository([ToolsRepository])],
   controllers: [MissionsController],
-  providers: [MissionsService,SaveFileService,UserRepository,ToolsRepository],
-  exports:[ToolsRepository,MissionsService]
+  providers: [MissionsService, SaveFileService, UserRepository, ToolsRepository, FilesystemService, commends],
+  exports: [ToolsRepository, MissionsService]
 })
-export class MissionsModule {}
+export class MissionsModule { }

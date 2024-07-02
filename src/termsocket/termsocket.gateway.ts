@@ -46,9 +46,7 @@ export class TermsocketGateway implements OnGatewayConnection {
       return;
     }
     const com = this.commandMap.get(client.id);
-    console.log("com :", com);
     const response = data.payload.split(' ');
-    console.log("data:", data);
     switch (response[0]) {
       case 'pwd':
         data.payload = com.pwd();

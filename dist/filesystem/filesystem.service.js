@@ -21,17 +21,17 @@ let FilesystemService = class FilesystemService {
     async initFs(userId, savepoint, location) {
         const sf = await this.saveFileService.getXml(userId, location);
         let dsl = [];
-        for (let index = 0; index < sf.userNode[0].userDirectorys.length; index++) {
-            dsl.push(sf.userNode[0].userDirectorys[index].userDirPath);
+        for (let index = 0; index < sf.userNode.userDirectorys[0].userDirPath.length; index++) {
+            dsl.push(sf.userNode.userDirectorys[0].userDirPath[index]);
         }
         this.dirlist = dsl;
         let fsl = [];
-        for (let index = 0; index < sf.userNode[0].userFile.length; index++) {
-            fsl.push(sf.userNode[0].userFile[index].userFile_name);
+        for (let index = 0; index < sf.userNode.userFile.length; index++) {
+            fsl.push(sf.userNode.userFile[index].userFile_name);
         }
         this.filelist = fsl;
         this.currentUser = "myNode";
-        this.currentip = sf.userNode[0].userIP;
+        this.currentip = sf.userNode.userIP;
         this.sf = sf;
         this.savepoint = savepoint;
         this.setC(userId);
@@ -46,20 +46,22 @@ let FilesystemService = class FilesystemService {
         if (!this.filesystemMap.has(userId)) {
             return false;
         }
-        this.filesystemMap.get(userId).fs.stringFileSystem();
+        this.filesystemMap.get(userId);
         this.filesystemMap.delete(userId);
         return true;
     }
     setC(userId) {
         if (!this.filesystemMap.has(userId)) {
-            const c = new commends_1.commends(userId, this.sf, this.savepoint);
+            const c = new commends_1.commends(this.saveFileService, userId, this.sf, this.savepoint);
             c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
             this.filesystemMap.set(userId, c);
         }
         return this.filesystemMap.get(userId);
     }
     getC(userId) {
-        return this.filesystemMap.get(userId);
+        if (this.filesystemMap.has(userId)) {
+            return this.filesystemMap.get(userId);
+        }
     }
     async getSys(user, id) {
         await this.initFs(user.userId, id, `/game/${user.userId}`);
@@ -70,7 +72,8 @@ let FilesystemService = class FilesystemService {
         const result = typelist.match(regex);
         const regex2 = /\[(.*?)\]/g;
         const filestype = result.map(item => item.replace(regex2, '$1'));
-        return { files, filestype };
+        const currentpath = c.pwd();
+        return { files, filestype, currentpath };
     }
 };
 exports.FilesystemService = FilesystemService;

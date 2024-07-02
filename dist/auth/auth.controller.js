@@ -43,6 +43,9 @@ let AuthController = class AuthController {
     getProfile(id) {
         return this.authService.getProfile(id);
     }
+    getRank() {
+        return this.authService.ranking();
+    }
 };
 exports.AuthController = AuthController;
 __decorate([
@@ -67,7 +70,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "changepass", null);
 __decorate([
-    (0, common_1.Get)('/checkDuple/:id'),
+    (0, common_1.Get)('/check/:id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -88,6 +91,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "getProfile", null);
+__decorate([
+    (0, common_1.Get)('/ranking/rank'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "getRank", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

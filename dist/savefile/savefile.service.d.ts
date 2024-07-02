@@ -10,5 +10,6 @@ export declare class SaveFileService {
     getXml(userId: string, location: string): Promise<MissionsDTO>;
     readXml(userId: string, location: string): Promise<MissionsDTO>;
     saveXml(userId: string, location: string, missions: MissionsDTO): Promise<void>;
-    updateXml(userId: string, missions: MissionsDTO): void;
+    saveErrorLog(error: any): Promise<void>;
+    updateXml(userId: string, missions: MissionsDTO): Promise<void>;
 }

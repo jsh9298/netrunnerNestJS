@@ -1,6 +1,8 @@
 import { MissionsDTO } from "src/savefile/savefile.Dto";
+import { SaveFileService } from "src/savefile/savefile.service";
 import { FileSystem } from "./filesystemcore/fileSystems";
 export declare class commends {
+    private xmlService;
     fs: FileSystem;
     currentIP: string;
     currentUser: string;
@@ -11,7 +13,7 @@ export declare class commends {
     savepoint: number;
     isUserNode: boolean;
     nodelist: Map<string, number>;
-    constructor(userId: string, missionsDTO: MissionsDTO, savepoint: number);
+    constructor(xmlService: SaveFileService, userId: string, missionsDTO: MissionsDTO, savepoint: number);
     setFs(dirlist: string[], filelist: string[], User: string, Ip: string): void;
     mkNodeList(): void;
     pwd(): string;
@@ -24,6 +26,9 @@ export declare class commends {
     mkdir(payload: any): string;
     rmdir(payload: any): string;
     cat(payload: any): string;
-    vi(): void;
-    checkMission(): any;
+    touch(payload: any): string;
+    vi(payload: any): string;
+    write(payload: any, context: any): Promise<string>;
+    scan(payload: any): void;
+    checkMission(): MissionsDTO;
 }

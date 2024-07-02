@@ -39,14 +39,24 @@ let GuisocketGateway = class GuisocketGateway {
         client.join(data.roomId);
         console.log("join gui:", data);
     }
+    handleContent(client, data) {
+        if (!client.user) {
+            return;
+        }
+        const com = this.commandMap.get(client.id);
+        const response = data.payload.split(' ');
+        switch (response[0]) {
+            case 'write':
+                com.write(response, data.context.toString());
+                break;
+        }
+    }
     handleMessage(client, data) {
         if (!client.user) {
             return;
         }
         const com = this.commandMap.get(client.id);
-        console.log("com :", com);
         const response = data.payload.split(' ');
-        console.log("data:", data);
         switch (response[0]) {
             case 'pwd':
                 data.payload = com.pwd();
@@ -78,6 +88,12 @@ let GuisocketGateway = class GuisocketGateway {
             case 'cat':
                 data.payload = com.cat(response);
                 break;
+            case 'vi':
+                data.payload = com.vi(response);
+                break;
+            case 'touch':
+                data.payload = com.touch(response);
+                break;
             default:
                 data.payload = "Unkown commends";
                 break;
@@ -85,7 +101,7 @@ let GuisocketGateway = class GuisocketGateway {
         this.server.to(data.roomId).emit('message', data.payload);
     }
     handleLeave(client, data) {
-        console.log("leave:", data);
+        console.log("leave gui:", data);
         client.leave(data.roomId);
     }
 };
@@ -100,6 +116,12 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], GuisocketGateway.prototype, "handleJoin", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('content'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], GuisocketGateway.prototype, "handleContent", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('message'),
     __metadata("design:type", Function),

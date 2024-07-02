@@ -3,6 +3,8 @@ import * as path from 'path';
 import * as xml2js from 'xml2js';
 import { MissionsDTO, MissionDTO, UserNodeDTO } from './savefile.Dto';
 import { Injectable } from "@nestjs/common";
+import * as convert from 'xml-js';
+
 
 @Injectable()
 export class SaveFileService {
@@ -17,13 +19,13 @@ export class SaveFileService {
   }
 
   async getXml(userId: string, location: string): Promise<MissionsDTO> {
-    if (this.missionsCache[userId]) {
-      return this.missionsCache[userId];
-    }
-
+    // if (this.missionsCache[userId]) {
+    //   return this.missionsCache[userId];
+    // } else {
     const missions = await this.readXml(userId, location);
     this.missionsCache[userId] = missions;
     return missions;
+    // }
   }
 
   async readXml(userId: string, location: string): Promise<MissionsDTO> {
@@ -35,13 +37,12 @@ export class SaveFileService {
       const missions: MissionsDTO = new MissionsDTO();
       const usernode: UserNodeDTO = new UserNodeDTO();
       const mission: MissionDTO[] = [];
-      // 각 미션 데이터를 MissionDTO 인스턴스로 변환
       for (const missionItem of missionData.missions.mission) {
         const mission2 = new MissionDTO();
         Object.assign(mission2, missionItem);
         mission.push(mission2);
       }
-      Object.assign(usernode, missionData.missions.userNode);
+      Object.assign(usernode, missionData.missions.userNode[0]);
       missions.mission = mission;
       missions.userNode = usernode;
       return missions;
@@ -54,17 +55,33 @@ export class SaveFileService {
   async saveXml(userId: string, location: string, missions: MissionsDTO): Promise<void> {
     try {
       const xmlFilePath = path.join(location, `${userId}sinario.xml`);
-      const builder = new xml2js.Builder();
-      const xmlData = builder.buildObject({ missions: { mission: missions } });
+      const xmlData = convert.js2xml({ missions: missions }, {
+        compact: true,
+        indentAttributes: true,
+        spaces: '\t',
+        fullTagEmptyElement: true,
+        ignoreAttributes: true
+      });
       await fs.promises.writeFile(xmlFilePath, xmlData);
       this.missionsCache[userId] = missions;
     } catch (err) {
-      console.error(err);
+      await this.saveErrorLog(err);
       return;
     }
   }
 
-  updateXml(userId: string, missions: MissionsDTO): void {
+  async saveErrorLog(error) {
+    try {
+      const errorLogPath = path.join(__dirname, 'error.log');
+      const errorLogEntry = `${new Date().toISOString()} - ${error.message}\n${error.stack}`;
+      await fs.promises.appendFile(errorLogPath, errorLogEntry);
+    } catch (logError) {
+      console.error('Error saving error log:', logError);
+    }
+  }
+  async updateXml(userId: string, missions: MissionsDTO): Promise<void> {
+
     this.missionsCache[userId] = missions;
+    await this.saveXml(userId, `/game/${userId}`, missions);
   }
 }

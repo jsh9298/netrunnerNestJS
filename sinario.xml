@@ -25,9 +25,7 @@
             <userFile>
                 <userFile_name>/home/myNode/result.txt</userFile_name> 
 		        <userFile_content>
-                    <![CDATA[
-                    Hello World!
-                    ]]>
+                    <![CDATA[Hello World!]]>
                 </userFile_content>
             </userFile>
              <userProgram> <!--노드에 설치된 프로그램--> <!-- nodePort의 serviceName과 연동-->

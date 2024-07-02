@@ -45,12 +45,10 @@ export class GuisocketGateway implements OnGatewayConnection {
       return;
     }
     const com = this.commandMap.get(client.id);
-    console.log("com :", com);
     const response = data.payload.split(' ');
-    console.log("data:", data);
     switch (response[0]) {
       case 'write':
-        data.payload = com.write(response, data.context.toString());
+        com.write(response, data.context.toString());
         break;
     }
     // this.server.to(data.roomId).emit('content', data.payload);
@@ -62,9 +60,7 @@ export class GuisocketGateway implements OnGatewayConnection {
       return;
     }
     const com = this.commandMap.get(client.id);
-    console.log("com :", com);
     const response = data.payload.split(' ');
-    console.log("data:", data);
     switch (response[0]) {
       case 'pwd':
         data.payload = com.pwd();
@@ -110,7 +106,7 @@ export class GuisocketGateway implements OnGatewayConnection {
   }
   @SubscribeMessage('leave')
   handleLeave(client: any, data: { roomId: string }) {
-    console.log("leave:", data);
+    console.log("leave gui:", data);
     client.leave(data.roomId);
   }
 

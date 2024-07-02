@@ -12,6 +12,7 @@ const path = require("path");
 const xml2js = require("xml2js");
 const savefile_Dto_1 = require("./savefile.Dto");
 const common_1 = require("@nestjs/common");
+const convert = require("xml-js");
 let SaveFileService = class SaveFileService {
     constructor() {
         this._missionsCache = {};
@@ -23,9 +24,6 @@ let SaveFileService = class SaveFileService {
         this._missionsCache = missions;
     }
     async getXml(userId, location) {
-        if (this.missionsCache[userId]) {
-            return this.missionsCache[userId];
-        }
         const missions = await this.readXml(userId, location);
         this.missionsCache[userId] = missions;
         return missions;
@@ -44,7 +42,7 @@ let SaveFileService = class SaveFileService {
                 Object.assign(mission2, missionItem);
                 mission.push(mission2);
             }
-            Object.assign(usernode, missionData.missions.userNode);
+            Object.assign(usernode, missionData.missions.userNode[0]);
             missions.mission = mission;
             missions.userNode = usernode;
             return missions;
@@ -57,18 +55,34 @@ let SaveFileService = class SaveFileService {
     async saveXml(userId, location, missions) {
         try {
             const xmlFilePath = path.join(location, `${userId}sinario.xml`);
-            const builder = new xml2js.Builder();
-            const xmlData = builder.buildObject({ missions: { mission: missions } });
+            const xmlData = convert.js2xml({ missions: missions }, {
+                compact: true,
+                indentAttributes: true,
+                spaces: '\t',
+                fullTagEmptyElement: true,
+                ignoreAttributes: true
+            });
             await fs.promises.writeFile(xmlFilePath, xmlData);
             this.missionsCache[userId] = missions;
         }
         catch (err) {
-            console.error(err);
+            await this.saveErrorLog(err);
             return;
         }
     }
-    updateXml(userId, missions) {
+    async saveErrorLog(error) {
+        try {
+            const errorLogPath = path.join(__dirname, 'error.log');
+            const errorLogEntry = `${new Date().toISOString()} - ${error.message}\n${error.stack}`;
+            await fs.promises.appendFile(errorLogPath, errorLogEntry);
+        }
+        catch (logError) {
+            console.error('Error saving error log:', logError);
+        }
+    }
+    async updateXml(userId, missions) {
         this.missionsCache[userId] = missions;
+        await this.saveXml(userId, `/game/${userId}`, missions);
     }
 };
 exports.SaveFileService = SaveFileService;

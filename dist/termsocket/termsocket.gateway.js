@@ -43,9 +43,7 @@ let TermsocketGateway = class TermsocketGateway {
             return;
         }
         const com = this.commandMap.get(client.id);
-        console.log("com :", com);
         const response = data.payload.split(' ');
-        console.log("data:", data);
         switch (response[0]) {
             case 'pwd':
                 data.payload = com.pwd();
@@ -76,6 +74,12 @@ let TermsocketGateway = class TermsocketGateway {
                 break;
             case 'cat':
                 data.payload = com.cat(response);
+                break;
+            case 'touch':
+                data.payload = com.touch(response);
+                break;
+            case 'vi':
+                data.payload = com.vi(response);
                 break;
             default:
                 data.payload = "Unkown commends";

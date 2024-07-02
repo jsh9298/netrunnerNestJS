@@ -5,10 +5,14 @@ import { MissionDTO } from 'src/savefile/savefile.Dto';
 import { ToolsRepository } from './tools/tool.repository';
 import { Tool } from './tools/tool.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FilesystemService } from 'src/filesystem/filesystem.service';
+import { commends } from 'src/filesystem/commends';
+
 // import { UserRepository } from 'src/auth/users/user.repository';
 
 @Injectable()
 export class MissionsService {
+
     constructor(
         private xmlService: SaveFileService,
         @InjectRepository(Tool)
@@ -16,7 +20,6 @@ export class MissionsService {
         // private userRepository:UserRepository
     ) { }
     async getMissons(user: User): Promise<MissionDTO[]> {
-        console.log(user.userId);
         const mission = await this.xmlService.getXml(user.userId, user.location);
         return mission.mission;
     }
@@ -29,7 +32,6 @@ export class MissionsService {
         }
     }
     async setTool(): Promise<void> {
-        console.log("call");
         const defaultTools: Partial<Tool>[] = [
             { name: 'notice', cost: 1 },
             { name: 'suggestion', cost: 1 },
@@ -51,15 +53,27 @@ export class MissionsService {
             await this.toolsRepository.save(tool);
         }
     }
-    async checkClear(user: User, id: number): Promise<boolean> {
-        // await this.xmlService.updateXml(user.userId,)  --> commends에서 checkMission 받아옴
+    async checkClear(user: User, id: number): Promise<{ success: boolean, nextMissionId: number }> {
         const userfile = await this.xmlService.getXml(user.userId, user.location);
-        let result: boolean = true;
-
-        if (result) {
+        let success: boolean = false;
+        let nextMissionId: number = user.savepoint;
+        for (let index = 0; index < userfile.userNode.userFile.length; index++) {
+            if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_name.toString().trim() == userfile.userNode.userFile[index].userFile_name.toString().trim()) {
+                if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_content.toString().replace(/\n|\r|\t/g, '').trim() == userfile.userNode.userFile[index].userFile_content.toString().replace(/\n|\r|\t/g, '').trim()) {
+                    success = true;
+                    break;
+                } else {
+                    success = false;
+                    break;
+                }
+                // .toString().replace('/\\n|\\t|\\r/gm', '')
+            }
+        }
+        if (success) {
             this.xmlService.saveXml(user.userId, user.location, userfile);
             user.save({ data: user.savepoint++ });
+            nextMissionId++;
         }
-        return result;
+        return { success, nextMissionId };
     }
 }

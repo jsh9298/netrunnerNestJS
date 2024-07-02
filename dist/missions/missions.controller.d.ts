@@ -8,5 +8,8 @@ export declare class MissionsController {
     getMisson(id: number, user: User): Promise<MissionDTO>;
     getPoints(id: string, user: User): number;
     getTools(): Promise<Tool[]>;
-    checkIsclear(user: User, id: number): Promise<boolean>;
+    checkIsclear(user: User, id: number): Promise<{
+        success: boolean;
+        nextMissionId: number;
+    }>;
 }

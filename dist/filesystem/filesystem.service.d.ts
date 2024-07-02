@@ -19,5 +19,6 @@ export declare class FilesystemService {
     getSys(user: User, id: number): Promise<{
         files: string[];
         filestype: string[];
+        currentpath: string;
     }>;
 }

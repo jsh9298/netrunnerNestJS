@@ -72,6 +72,17 @@ let AuthService = class AuthService {
         return this.userRepository.getProfile(Id);
     }
     async ranking() {
+        const user_list = await this.userRepository.find({
+            select: {
+                userId: true,
+                point: true,
+                level: true
+            }, order: {
+                level: "DESC",
+                userId: "ASC"
+            }
+        });
+        return user_list;
     }
     signOut(userid) {
         return this.filesystemService.rmC(userid);

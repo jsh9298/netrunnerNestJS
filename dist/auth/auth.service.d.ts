@@ -5,6 +5,7 @@ import { SignInDto } from './dto/signin.dto';
 import { changePass } from './dto/changePass.dto';
 import { SaveFileService } from 'src/savefile/savefile.service';
 import { FilesystemService } from 'src/filesystem/filesystem.service';
+import { User } from './users/user.entity';
 export declare class AuthService {
     private userRepository;
     private jwtService;
@@ -23,6 +24,6 @@ export declare class AuthService {
         level: number;
         point: number;
     }>;
-    ranking(): Promise<void>;
+    ranking(): Promise<User[]>;
     signOut(userid: string): boolean;
 }

@@ -11,6 +11,11 @@ export declare class GuisocketGateway implements OnGatewayConnection {
     handleJoin(client: any, data: {
         roomId: string;
     }): void;
+    handleContent(client: any, data: {
+        roomId: string;
+        payload: string;
+        context: string;
+    }): void;
     handleMessage(client: any, data: {
         roomId: string;
         payload: string;

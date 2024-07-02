@@ -64,7 +64,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MissionsController.prototype, "getTools", null);
 __decorate([
-    (0, common_1.Post)("/check/:id"),
+    (0, common_1.Post)("/complete/:id"),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __param(1, (0, common_1.Param)('id')),

@@ -24,7 +24,6 @@ let MissionsService = class MissionsService {
         this.toolsRepository = toolsRepository;
     }
     async getMissons(user) {
-        console.log(user.userId);
         const mission = await this.xmlService.getXml(user.userId, user.location);
         return mission.mission;
     }
@@ -38,7 +37,6 @@ let MissionsService = class MissionsService {
         }
     }
     async setTool() {
-        console.log("call");
         const defaultTools = [
             { name: 'notice', cost: 1 },
             { name: 'suggestion', cost: 1 },
@@ -62,12 +60,26 @@ let MissionsService = class MissionsService {
     }
     async checkClear(user, id) {
         const userfile = await this.xmlService.getXml(user.userId, user.location);
-        let result = true;
-        if (result) {
+        let success = false;
+        let nextMissionId = user.savepoint;
+        for (let index = 0; index < userfile.userNode.userFile.length; index++) {
+            if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_name.toString().trim() == userfile.userNode.userFile[index].userFile_name.toString().trim()) {
+                if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_content.toString().replace(/\n|\r|\t/g, '').trim() == userfile.userNode.userFile[index].userFile_content.toString().replace(/\n|\r|\t/g, '').trim()) {
+                    success = true;
+                    break;
+                }
+                else {
+                    success = false;
+                    break;
+                }
+            }
+        }
+        if (success) {
             this.xmlService.saveXml(user.userId, user.location, userfile);
             user.save({ data: user.savepoint++ });
+            nextMissionId++;
         }
-        return result;
+        return { success, nextMissionId };
     }
 };
 exports.MissionsService = MissionsService;

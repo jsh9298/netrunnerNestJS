@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.commends = void 0;
 const fileSystems_1 = require("./filesystemcore/fileSystems");
 class commends {
-    constructor(userId, missionsDTO, savepoint) {
+    constructor(xmlService, userId, missionsDTO, savepoint) {
+        this.xmlService = xmlService;
         this.fs = new fileSystems_1.FileSystem();
         this.currentIP = "";
         this.currentUser = "";
@@ -118,6 +119,7 @@ class commends {
     }
     cp(payload) {
         this.fs.createFile(payload[2]);
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
     mv(payload) {
@@ -129,6 +131,7 @@ class commends {
             this.fs.createFile(payload[2] + '/' + payload[1]);
         }
         this.fs.deleteFile(payload[1]);
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
     rm(payload) {
@@ -149,27 +152,29 @@ class commends {
                 }
             }
         }
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
     mkdir(payload) {
         let temp = this.currentpath;
         temp += ("/" + payload[1]);
         this.fs.createDirectory(temp);
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
     rmdir(payload) {
         let temp = this.currentpath;
         temp += ("/" + payload[1]);
         this.fs.deleteDirectory(temp);
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
     cat(payload) {
         let printFile = "can't find file";
-        console.log("result1:", printFile);
         if (this.isUserNode) {
-            for (let index = 0; index < this.missionsDTO.userNode[0].userFile.length; index++) {
-                if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.userNode[0].userFile[index].userFile_name) {
-                    printFile = this.missionsDTO.userNode[0].userFile[index].userFile_content.toString().trim();
+            for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {
+                if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.userNode.userFile[index].userFile_name) {
+                    printFile = this.missionsDTO.userNode.userFile[index].userFile_content.toString().trim();
                 }
             }
         }
@@ -180,11 +185,63 @@ class commends {
                 }
             }
         }
-        console.log("result2:", printFile.toString().trim());
-        console.log("result2type :", typeof printFile);
         return printFile;
     }
-    vi() { }
+    touch(payload) {
+        let temp = this.currentpath;
+        temp += ("/" + payload[1]);
+        this.fs.createFile(temp);
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
+        return " ";
+    }
+    vi(payload) {
+        if (this.fs.isOverlap(payload[1], this.currentpath)) {
+            const temp = `touch ${payload[1]}`.split(' ');
+            return this.touch(temp);
+        }
+        else {
+            const temp = `cat ${payload[1]}`.split(' ');
+            return this.cat(temp);
+        }
+    }
+    async write(payload, context) {
+        if (this.isUserNode) {
+            for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {
+                if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.userNode.userFile[index].userFile_name) {
+                    this.missionsDTO.userNode.userFile[index].userFile_content = [context];
+                    break;
+                }
+                else {
+                    const file = {
+                        userFile_name: this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1],
+                        userFile_content: context
+                    };
+                    this.missionsDTO.userNode.userFile.push(file);
+                    break;
+                }
+            }
+        }
+        else {
+            for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(this.currentIP)].nodeFile.length; index++) {
+                if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.mission[this.savepoint].node[0].nodeFile[index].File_name) {
+                    this.missionsDTO.mission[this.savepoint].node[0].nodeFile[index].File_content = [context];
+                    break;
+                }
+                else {
+                    const file = {
+                        File_name: this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1],
+                        File_content: context
+                    };
+                    this.missionsDTO.mission[this.savepoint].node[0].nodeFile.push(file);
+                    break;
+                }
+            }
+        }
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
+        return "";
+    }
+    scan(payload) {
+    }
     checkMission() {
         return this.missionsDTO;
     }

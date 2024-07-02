@@ -19,4 +19,5 @@ export declare class AuthController {
         level: number;
         point: number;
     }>;
+    getRank(): Promise<User[]>;
 }

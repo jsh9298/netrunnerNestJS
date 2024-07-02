@@ -19,6 +19,8 @@ const typeorm_ex_module_1 = require("../typeorm-ex/typeorm-ex.module");
 const tool_entity_1 = require("./tools/tool.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_config_1 = require("../configs/typeorm.config");
+const filesystem_service_1 = require("../filesystem/filesystem.service");
+const commends_1 = require("../filesystem/commends");
 let MissionsModule = class MissionsModule {
 };
 exports.MissionsModule = MissionsModule;
@@ -26,7 +28,7 @@ exports.MissionsModule = MissionsModule = __decorate([
     (0, common_1.Module)({
         imports: [savefile_module_1.SavefileModule, auth_module_1.AuthModule, typeorm_1.TypeOrmModule.forRoot(typeorm_config_1.typeORMConfig), typeorm_1.TypeOrmModule.forFeature([tool_entity_1.Tool]), typeorm_ex_module_1.TypeOrmExModule.forCustomRepository([tool_repository_1.ToolsRepository])],
         controllers: [missions_controller_1.MissionsController],
-        providers: [missions_service_1.MissionsService, savefile_service_1.SaveFileService, user_repository_1.UserRepository, tool_repository_1.ToolsRepository],
+        providers: [missions_service_1.MissionsService, savefile_service_1.SaveFileService, user_repository_1.UserRepository, tool_repository_1.ToolsRepository, filesystem_service_1.FilesystemService, commends_1.commends],
         exports: [tool_repository_1.ToolsRepository, missions_service_1.MissionsService]
     })
 ], MissionsModule);

@@ -1,4 +1,5 @@
 import { FileContentDTO, MissionsDTO, NodeFileDTO, UserFileDTO } from "src/savefile/savefile.Dto";
+import { SaveFileService } from "src/savefile/savefile.service";
 import { FileSystem } from "./filesystemcore/fileSystems";
 
 
@@ -13,7 +14,7 @@ export class commends {
     savepoint: number = 0;
     isUserNode: boolean = true;
     nodelist: Map<string, number> = new Map();
-    constructor(userId: string, missionsDTO: MissionsDTO, savepoint: number) {
+    constructor(private xmlService: SaveFileService, userId: string, missionsDTO: MissionsDTO, savepoint: number) {
         this.userId = userId;
         this.userLocation = `/game/${userId}`
         this.missionsDTO = missionsDTO;
@@ -110,6 +111,7 @@ export class commends {
     }
     cp(payload) {
         this.fs.createFile(payload[2]);
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
     mv(payload) {
@@ -120,6 +122,7 @@ export class commends {
             this.fs.createFile(payload[2] + '/' + payload[1]);
         }
         this.fs.deleteFile(payload[1]);
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
     rm(payload) {
@@ -139,28 +142,30 @@ export class commends {
                 }
             }
         }
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
     mkdir(payload) {
         let temp = this.currentpath;
         temp += ("/" + payload[1]);
         this.fs.createDirectory(temp);
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
     rmdir(payload) {
         let temp = this.currentpath;
         temp += ("/" + payload[1]);
         this.fs.deleteDirectory(temp);
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
 
     cat(payload) {
         let printFile = "can't find file";
-        console.log("result1:", printFile);
         if (this.isUserNode) {
-            for (let index = 0; index < this.missionsDTO.userNode[0].userFile.length; index++) {
-                if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.userNode[0].userFile[index].userFile_name) {
-                    printFile = this.missionsDTO.userNode[0].userFile[index].userFile_content.toString().trim();
+            for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {
+                if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.userNode.userFile[index].userFile_name) {
+                    printFile = this.missionsDTO.userNode.userFile[index].userFile_content.toString().trim();
                 }
             }
         } else {
@@ -170,18 +175,16 @@ export class commends {
                 }
             }
         }
-        console.log("result2:", printFile);
-        console.log("result2type :", typeof printFile);
         return printFile;
     }
     touch(payload) {
         let temp = this.currentpath;
         temp += ("/" + payload[1]);
         this.fs.createFile(temp);
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
     vi(payload) {
-        console.log("vi test", payload);
         if (this.fs.isOverlap(payload[1], this.currentpath)) {
             const temp = `touch ${payload[1]}`.split(' ');
             return this.touch(temp);
@@ -191,26 +194,25 @@ export class commends {
         }
     }
     //write 파일명 내용
-    write(payload, context) {
-        console.log("write test", payload, context);
+    async write(payload, context) {
         if (this.isUserNode) {
-            for (let index = 0; index < this.missionsDTO.userNode[0].userFile.length; index++) {
-                if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.userNode[0].userFile[index].userFile_name) {
-                    this.missionsDTO.userNode[0].userFile[index].userFile_content = context;
+            for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {
+                if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.userNode.userFile[index].userFile_name) {
+                    this.missionsDTO.userNode.userFile[index].userFile_content = [context];
                     break;
                 } else {
                     const file: UserFileDTO = {
                         userFile_name: this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1],
                         userFile_content: context
                     }
-                    this.missionsDTO.userNode[0].userFile.push(file);
+                    this.missionsDTO.userNode.userFile.push(file);
                     break;
                 }
             }
         } else {
             for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(this.currentIP)].nodeFile.length; index++) {
                 if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.mission[this.savepoint].node[0].nodeFile[index].File_name) {
-                    this.missionsDTO.mission[this.savepoint].node[0].nodeFile[index].File_content = context;
+                    this.missionsDTO.mission[this.savepoint].node[0].nodeFile[index].File_content = [context];
                     break;
                 } else {
                     const file: NodeFileDTO = {
@@ -222,6 +224,7 @@ export class commends {
                 }
             }
         }
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
         return "";
     }
     scan(payload) {
@@ -234,9 +237,10 @@ export class commends {
     //connect
     //disconnect
 
-    checkMission() {
+    checkMission(): MissionsDTO {
         return this.missionsDTO; //xmlDTO리턴
     }
+
 }
 
 

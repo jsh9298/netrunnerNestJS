@@ -10,37 +10,36 @@ import * as path from 'path';
 import { Profile } from "../dto/profile.dto";
 
 @CustomRepository(User)
-export class UserRepository extends Repository<User>{
-    async createUser(authCredentialsDto:AuthCredentialsDto):Promise<void>{
-        const {userId,username,password,email}=authCredentialsDto;
+export class UserRepository extends Repository<User> {
+    async createUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+        const { userId, username, password, email } = authCredentialsDto;
         const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(password,salt);
+        const hashedPassword = await bcrypt.hash(password, salt);
         const savepoint = 0;
-        const location =`/game/${userId}`;
+        const location = `/game/${userId}`;
         const score = 0;
         const point = 0;
         const level = 0;
         const tool = "";
-        const user = this.create({userId,username,password:hashedPassword,email,savepoint,location,score,point,level,tool});
+        const user = this.create({ userId, username, password: hashedPassword, email, savepoint, location, score, point, level, tool });
         try {
             let orginFilepath = "/game/origin/sinario.xml";
-            const userDirectory = path.join("/game",userId);
+            const userDirectory = path.join("/game", userId);
             const originFile = path.basename(orginFilepath);//orginFilepath
             const userFile = `${userId}${originFile}`;
-            const destinationPath = path.join(userDirectory,userFile);
-            if(!fs.existsSync(userDirectory)){
-                fs.mkdirSync(userDirectory,{recursive:true});
+            const destinationPath = path.join(userDirectory, userFile);
+            if (!fs.existsSync(userDirectory)) {
+                fs.mkdirSync(userDirectory, { recursive: true });
             }
-            fs.copyFileSync(orginFilepath,destinationPath);
+            fs.copyFileSync(orginFilepath, destinationPath);
             await this.save(user);
         } catch (error) {
             console.error(error);
             throw new InternalServerErrorException();
         }
     }
-    async getProfile(userId:string):Promise<Profile>{
-        const {level,point} = await this.findOne({where:{userId}});
-        console.log(await this.findOne({where:{userId}}));
-        return {userId,level,point};
+    async getProfile(userId: string): Promise<Profile> {
+        const { level, point } = await this.findOne({ where: { userId } });
+        return { userId, level, point };
     }
 }  

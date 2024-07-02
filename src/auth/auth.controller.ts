@@ -11,33 +11,37 @@ import { Profile } from './dto/profile.dto';
 @Controller('auth')
 export class AuthController {
     constructor(
-        private authService:AuthService,
-    ){}
+        private authService: AuthService,
+    ) { }
     @Post('/signup')
-    signUp(@Body() authCredentialsDto:AuthCredentialsDto):Promise<void>{
+    signUp(@Body() authCredentialsDto: AuthCredentialsDto): Promise<void> {
         return this.authService.signUp(authCredentialsDto);
     }
     @Post('/signin')
-    signIn(@Body(ValidationPipe)signInDto:SignInDto):Promise<{accessToken:string,missionId:number}>{
+    signIn(@Body(ValidationPipe) signInDto: SignInDto): Promise<{ accessToken: string, missionId: number }> {
         return this.authService.signin(signInDto);
     }
     @Patch('/changepass')
     changepass(
-    @Body()changepass:changePass):Promise<void>{
+        @Body() changepass: changePass): Promise<void> {
         return this.authService.changePass(changepass);
     }
-    @Get('/checkDuple/:id')
-    checkDuple(@Param('id') id:string):Promise<boolean>{
+    @Get('/check/:id')
+    checkDuple(@Param('id') id: string): Promise<boolean> {
         return this.authService.checkDuple(id);
     }
-    
+
     @Post('/signout')
     @UseGuards(AuthGuard('jwt'))
-    signout(@GetUser() user:User):boolean{
+    signout(@GetUser() user: User): boolean {
         return this.authService.signOut(user.userId);
     }
     @Get('/:id')
-    getProfile(@Param('id') id:string ):Promise<{userId:string,level:number,point:number}>{
-        return this.authService.getProfile(id);   
-   }
+    getProfile(@Param('id') id: string): Promise<{ userId: string, level: number, point: number }> {
+        return this.authService.getProfile(id);
+    }
+    @Get('/ranking/rank')
+    getRank() {
+        return this.authService.ranking();
+    }
 }
