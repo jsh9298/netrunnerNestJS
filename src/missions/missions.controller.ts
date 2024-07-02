@@ -28,13 +28,19 @@ export class MissionsController {
         }
     }
     @Get("/tools")
-    async getTools(): Promise<Tool[]> {
-        return await this.missionsService.getTools();
+    @UseGuards(AuthGuard('jwt'))
+    async getTools(@GetUser() user: User) {
+        return await this.missionsService.getTools(user);
     }
     @Post("/complete/:id")
     @UseGuards(AuthGuard('jwt'))
     checkIsclear(@GetUser() user: User, @Param('id') id: number): Promise<{ success: boolean, nextMissionId: number }> {
         return this.missionsService.checkClear(user, id);
+    }
+    @Post("/tool/:toolId")
+    @UseGuards(AuthGuard('jwt'))
+    buyTools(@GetUser() user: User, @Param('toolId') toolId: number): Promise<boolean> {
+        return this.missionsService.buyTools(user, toolId);
     }
 }
 //체크버튼

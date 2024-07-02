@@ -31,11 +31,14 @@ let MissionsController = class MissionsController {
             return user.point;
         }
     }
-    async getTools() {
-        return await this.missionsService.getTools();
+    async getTools(user) {
+        return await this.missionsService.getTools(user);
     }
     checkIsclear(user, id) {
         return this.missionsService.checkClear(user, id);
+    }
+    buyTools(user, toolId) {
+        return this.missionsService.buyTools(user, toolId);
     }
 };
 exports.MissionsController = MissionsController;
@@ -59,8 +62,10 @@ __decorate([
 ], MissionsController.prototype, "getPoints", null);
 __decorate([
     (0, common_1.Get)("/tools"),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    __param(0, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], MissionsController.prototype, "getTools", null);
 __decorate([
@@ -72,6 +77,15 @@ __decorate([
     __metadata("design:paramtypes", [user_entity_1.User, Number]),
     __metadata("design:returntype", Promise)
 ], MissionsController.prototype, "checkIsclear", null);
+__decorate([
+    (0, common_1.Post)("/tool/:toolId"),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    __param(0, (0, get_user_decorator_1.GetUser)()),
+    __param(1, (0, common_1.Param)('toolId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_entity_1.User, Number]),
+    __metadata("design:returntype", Promise)
+], MissionsController.prototype, "buyTools", null);
 exports.MissionsController = MissionsController = __decorate([
     (0, common_1.Controller)('missions'),
     __metadata("design:paramtypes", [missions_service_1.MissionsService])

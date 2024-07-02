@@ -23,9 +23,17 @@ export class MissionsService {
         const mission = await this.xmlService.getXml(user.userId, user.location);
         return mission.mission;
     }
-    async getTools(): Promise<Tool[]> {
+    async getTools(user: User) {
         try {
-            const result = await this.toolsRepository.find();
+            const result = [];
+            const tools = await this.toolsRepository.find();
+            const usersTools = user.tool;
+            for (let index = 0; index < tools.length; index++) {
+                const { id, name, cost } = tools[index];
+                const isBuy = usersTools.includes(name) ? true : false;
+                const tool = { id, name, cost, isBuy };
+                result.push(tool);
+            }
             return result;
         } catch (error) {
             console.error(error);
@@ -70,10 +78,28 @@ export class MissionsService {
             }
         }
         if (success) {
+            const rewardPoint: number = userfile.mission[id].reward[0].point;
+            console.log(rewardPoint);
             this.xmlService.saveXml(user.userId, user.location, userfile);
             user.save({ data: user.savepoint++ });
+            user.save({ data: user.point += rewardPoint });
+            if (userfile.mission[id].reward.toolFile != '') {
+                const rewardTool: string = userfile.mission[id].reward.toolFile;
+                user.save({ data: user.tool + "," + rewardTool });
+            }
             nextMissionId++;
         }
         return { success, nextMissionId };
+    }
+
+    async buyTools(user: User, id: number): Promise<boolean> {
+        const tool = await this.toolsRepository.findOne({ where: { id } });
+        if (user.point >= tool.cost) {
+            user.save({ data: user.point -= tool.cost });
+            user.save({ data: user.tool += tool.name + "," });
+            return true;
+        } else {
+            return false;
+        }
     }
 }
