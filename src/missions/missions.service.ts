@@ -67,7 +67,7 @@ export class MissionsService {
         let nextMissionId: number = user.savepoint;
         for (let index = 0; index < userfile.userNode.userFile.length; index++) {
             if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_name.toString().trim() == userfile.userNode.userFile[index].userFile_name.toString().trim()) {
-                if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_content.toString().replace(/\n|\r|\t/g, '').trim() == userfile.userNode.userFile[index].userFile_content.toString().replace(/\n|\r|\t/g, '').trim()) {
+                if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_content.toString().replace(/\n|\r|\t|\s*/g, '').trim() == userfile.userNode.userFile[index].userFile_content.toString().replace(/\n|\r|\t|\s*/g, '').trim()) {
                     success = true;
                     break;
                 } else {
@@ -78,11 +78,11 @@ export class MissionsService {
             }
         }
         if (success) {
-            const rewardPoint: number = userfile.mission[id].reward[0].point;
-            console.log(rewardPoint);
+            const rewardPoint: number = parseInt(userfile.mission[id].reward[0].point[0]);
+            const resultPoint: number = user.point + rewardPoint;
             this.xmlService.saveXml(user.userId, user.location, userfile);
             user.save({ data: user.savepoint++ });
-            user.save({ data: user.point += rewardPoint });
+            user.save({ data: user.point = resultPoint });
             if (userfile.mission[id].reward.toolFile != '') {
                 const rewardTool: string = userfile.mission[id].reward.toolFile;
                 user.save({ data: user.tool + "," + rewardTool });
@@ -95,7 +95,8 @@ export class MissionsService {
     async buyTools(user: User, id: number): Promise<boolean> {
         const tool = await this.toolsRepository.findOne({ where: { id } });
         if (user.point >= tool.cost) {
-            user.save({ data: user.point -= tool.cost });
+            const resultPoint: number = user.point - tool.cost;
+            user.save({ data: user.point = resultPoint });
             user.save({ data: user.tool += tool.name + "," });
             return true;
         } else {

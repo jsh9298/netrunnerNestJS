@@ -84,6 +84,12 @@ export class TermsocketGateway implements OnGatewayConnection {
       case 'vi':
         data.payload = com.vi(response);
         break;
+      case 'ssh':
+        data.payload = com.ssh(response);
+        break;
+      case 'scan':
+        data.payload = com.scan(response);
+        break;
       // case 'ps':
       //   payload = this.com.ps(payload);
       //     break;

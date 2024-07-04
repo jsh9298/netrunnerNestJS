@@ -77,6 +77,9 @@
 						<serviceName>SNMP</serviceName>
 						<servicePort>161</servicePort>
 						<portState>CLOSED</portState>
+                        <serviceName>SNMP</serviceName>
+						<servicePort>162</servicePort>
+						<portState>CLOSED</portState>
 					</service>
                 </UDP>
             </nodePort>
