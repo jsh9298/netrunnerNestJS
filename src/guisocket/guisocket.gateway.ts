@@ -4,6 +4,7 @@ import * as jwt from 'jsonwebtoken';
 import * as config from 'config';
 import { commends } from '../filesystem/commends';
 import { FilesystemService } from 'src/filesystem/filesystem.service';
+import { User } from 'src/auth/users/user.entity';
 
 @WebSocketGateway({
   cors: true, namespace: 'gui'
@@ -24,8 +25,9 @@ export class GuisocketGateway implements OnGatewayConnection {
       const payload = jwt.verify(token, config.get('jwt.secret'));
       client.user = payload;
       console.log("cl gui id:", client.user.userId);
-      // this.fileSystemService.setFileSystem(client.user.userId);
-      this.fileSystemService.initFs(client.user.userId, 0, `/game/${client.user.userId}`);
+      const userId = client.user.userId;
+      const user = await User.findOne({ where: { userId } });
+      this.fileSystemService.initFs(userId, user.savepoint, `/game/${userId}`);
       this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
 
     } catch (error) {

@@ -18,6 +18,7 @@ export class MissionsService {
         @InjectRepository(Tool)
         private toolsRepository: ToolsRepository,
         // private userRepository:UserRepository
+        private commend: commends
     ) { }
     async getMissons(user: User): Promise<MissionDTO[]> {
         const mission = await this.xmlService.getXml(user.userId, user.location);
@@ -83,11 +84,15 @@ export class MissionsService {
             this.xmlService.saveXml(user.userId, user.location, userfile);
             user.save({ data: user.savepoint++ });
             user.save({ data: user.point = resultPoint });
-            if (userfile.mission[id].reward.toolFile != '') {
-                const rewardTool: string = userfile.mission[id].reward.toolFile;
-                user.save({ data: user.tool + "," + rewardTool });
+            if (userfile.mission[id].reward[0].toolFile != '') {
+                console.log(typeof userfile.mission[id].reward[0].toolFile, userfile.mission[id].reward[0].toolFile);
+                const rewardTool: string[] = userfile.mission[id].reward[0].toolFile.toString().split(" ");
+                for (let index = 0; index < rewardTool.length; index++) {
+                    user.save({ data: user.tool + "," + rewardTool[index] });
+                }
             }
             nextMissionId++;
+            this.commend.updateSave(nextMissionId);
         }
         return { success, nextMissionId };
     }

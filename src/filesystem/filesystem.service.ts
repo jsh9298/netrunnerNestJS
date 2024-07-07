@@ -36,13 +36,6 @@ export class FilesystemService {
         this.savepoint = savepoint;
         this.setC(userId);
     }
-    setFileSystem(userId: string) {
-        this.dirlist = ["/root", "/tmp", "/home/user", "/home/user/documents"];
-        this.filelist = ["/home/user/documents/document1.txt", "/home/user/file1.txt", "/home/user/file2.txt"];
-        this.currentUser = "/";
-        this.currentip = "192.168.25.15";
-        // this.setC(userId);
-    }
 
     rmC(userId: string): boolean {
         if (!this.filesystemMap.has(userId)) {
@@ -69,7 +62,7 @@ export class FilesystemService {
         }
     }
     async getSys(user: User, id: number) {
-        await this.initFs(user.userId, id, `/game/${user.userId}`);
+        // await this.initFs(user.userId, id, `/game/${user.userId}`);
         let c = this.getC(user.userId);
         const files = c.ls('ls').trim().split(' ');
         const typelist = c.ls(['ls', '-al']);

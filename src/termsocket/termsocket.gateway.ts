@@ -4,6 +4,7 @@ import * as jwt from 'jsonwebtoken';
 import * as config from 'config';
 import { commends } from '../filesystem/commends';
 import { FilesystemService } from 'src/filesystem/filesystem.service';
+import { User } from 'src/auth/users/user.entity';
 
 @WebSocketGateway({
   cors: true, namespace: 'term'
@@ -19,12 +20,14 @@ export class TermsocketGateway implements OnGatewayConnection {
   @WebSocketServer()
   server: Server;
 
-  handleConnection(client: any, ...args: any[]) {
+  async handleConnection(client: any, ...args: any[]) {
     try {
       const token = client.handshake?.query?.token;
       const payload = jwt.verify(token, config.get('jwt.secret'));
       client.user = payload;
-      this.fileSystemService.initFs(client.user.userId, 0, `/game/${client.user.userId}`);
+      const userId = client.user.userId;
+      const user = await User.findOne({ where: { userId } });
+      this.fileSystemService.initFs(userId, user.savepoint, `/game/${userId}`);
       this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
 
     } catch (error) {
@@ -90,33 +93,9 @@ export class TermsocketGateway implements OnGatewayConnection {
       case 'scan':
         data.payload = com.scan(response);
         break;
-      // case 'ps':
-      //   payload = this.com.ps(payload);
-      //     break;
-      // case 'kill':
-      //   payload = this.com.kill(payload);
-      //     break;
-      // case 'nmap':
-      //   payload = this.com.nmap(payload);
-      //     break;
-      // case 'porthack':
-      //   payload = this.com.porthack(payload);
-      //     break;
-      // case 'scp':
-      //   payload = this.com.scp(payload);
-      //     break;
-      // case 'sshcrack':
-      //   payload = this.com.sshcrack(payload);
-      //     break;
-      // case 'scan':
-      //   payload = this.com.scan(payload);
-      //     break;
-      // case 'connect':
-      //   payload = this.com.connect(payload);
-      //     break;
-      // case 'disconnect':
-      //   payload = this.com.disconnect(payload);
-      //     break;
+      case 'exit':
+        data.payload = com.exit();
+        break;
       default:
         data.payload = "Unkown commends";
         break;

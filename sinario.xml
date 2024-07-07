@@ -40,7 +40,9 @@
         </scenario> <!--시나리오-->
         <!--1: 명령어입력 , 2: 특정 파일 삭제, , 3: 특정 파일 가져오기, 4: 특정 디렉토리 삭제, 5: 특정 IP 탐지 -->
 		<!--6: 특정 서비스 탐지 -->
-		<!-- 다른유형이 생각나면 추가바람-->
+		<!-- 다른유형이 생각나면 추가바람
+        유형 검사는 제외했습니다. 위에 기재된 문재 유형들은, 저 유형에 맞춰서 시나리오 퀘스트를 작성해주시면 될듯합니다.
+        -->
         <correctAnswer>
             <myNode> <!--2024-06-15 추가--> <!--정답을 파일 위주로 할건지, 터미널 입력 사항 위주로 할건지 고민-->
                 <dirPath>/home/myNode</dirPath>
@@ -91,7 +93,7 @@
 				<programName>SNMP</programName>
             </nodeProgram>
             <nodeFile>
-                <File_name>/home/node01</File_name> 
+                <File_name>/home/node01</File_name>  <!--node01 디렉터리 밑에 생성하려면, /home/node01/textname.txt 형식으로 파일명을 작성해주세요-->
 		        <File_content>
                     <![CDATA[
                      Hello Netrunner!
@@ -101,7 +103,7 @@
         </node>
         <reward>
             <point>1000</point> <!--숫자 기입-->
-            <toolFile></toolFile> <!--얘는 문자열널어 될?듯-->
+            <toolFile></toolFile> <!--얘는 문자열널어 주시고, 복수의 툴이 리워드로 주어지는경우 split할수 있도록 띄어쓰기하셔서 한줄에 넣어주세요-->
         </reward>
     </mission>
 </missions>

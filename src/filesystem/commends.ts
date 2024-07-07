@@ -1,7 +1,6 @@
 import { FileContentDTO, MissionsDTO, NodeFileDTO, UserFileDTO } from "src/savefile/savefile.Dto";
 import { SaveFileService } from "src/savefile/savefile.service";
 import { FileSystem } from "./filesystemcore/fileSystems";
-import { format } from "util";
 
 
 export class commends {
@@ -13,10 +12,10 @@ export class commends {
     userId: string = "";
     userLocation: string = "";
     missionsDTO = null;
-    savepoint: number = 0;
     isUserNode: boolean = true;
     nodelist: Map<string, number> = new Map();
     currentNode: number = 0;
+    savepoint: number;
     constructor(private xmlService: SaveFileService, userId: string, missionsDTO: MissionsDTO, savepoint: number) {
         this.userId = userId;
         this.userLocation = `/game/${userId}`
@@ -24,9 +23,9 @@ export class commends {
         this.savepoint = savepoint;
         if (this.missionsDTO) {
             this.mkNodeList();
+            this.userIP = this.missionsDTO.userNode.userIP;
         }
-        // this.userIP = this.missionsDTO.userNode.userIP;
-        // console.log(this.userIP);
+
     }
     setFs(dirlist: string[], filelist: string[], User: string, Ip: string) {
         this.fs = new FileSystem();
@@ -63,6 +62,7 @@ export class commends {
         } else {
             this.currentpath = `/home/${this.currentUser}`;
         }
+
     }
 
     mkNodeList() {
@@ -280,12 +280,28 @@ export class commends {
         }
 
     }
-    //porthack
-    //scp
-    //sshcrack
-    //scan
-    //connect
-    //disconnect
+    exit() {
+        if (this.isUserNode == false) {
+            this.currentIP = this.userIP;
+            this.isUserNode = true;
+            this.currentNode = 0;
+            this.currentUser = "myNode";
+            let dirlist: string[] = [];
+            for (let index = 0; index < this.missionsDTO.userNode.userDirectorys[0].userDirPath.length; index++) {
+                dirlist.push(this.missionsDTO.userNode.userDirectorys[0].userDirPath[index]);
+            }
+            let filelist: string[] = [];
+            for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {
+                filelist.push(this.missionsDTO.userNode.userFile[index].userFile_name);
+            }
+            this.setFs(dirlist, filelist, this.currentUser, this.currentIP);
+        } else {
+            return "Unkown commends";
+        }
+    }
+
+
+
     calcSubnet(cidraddress: string, ipaddress: string) {
         const [cidrAddress, cidrPrefix] = cidraddress.split('/');
         // IP 주소 분리
@@ -323,6 +339,11 @@ export class commends {
         const entries = Object.entries(Object.fromEntries(map));
         const found = entries.find(([key, val]) => val === value);
         return found ? found[0] : undefined;
+    }
+    updateSave(save: number) {
+        this.savepoint = save;
+
+        console.log("Now SavePoint : ", this.savepoint);
     }
 }
 
