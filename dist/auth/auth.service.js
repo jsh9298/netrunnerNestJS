@@ -84,8 +84,10 @@ let AuthService = class AuthService {
         });
         return user_list;
     }
-    signOut(userid) {
-        return this.filesystemService.rmC(userid);
+    async signOut(user) {
+        const mission = await this.xmlservice.readXml(user.userId, user.location);
+        this.xmlservice.saveXml(user.userId, user.location, mission);
+        this.filesystemService.rmC(user.userId);
     }
 };
 exports.AuthService = AuthService;

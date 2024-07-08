@@ -13,7 +13,7 @@ export declare class AuthController {
     }>;
     changepass(changepass: changePass): Promise<void>;
     checkDuple(id: string): Promise<boolean>;
-    signout(user: User): boolean;
+    signout(user: User): Promise<void>;
     getProfile(id: string): Promise<{
         userId: string;
         level: number;

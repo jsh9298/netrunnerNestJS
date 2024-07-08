@@ -15,6 +15,7 @@ const socket_io_1 = require("socket.io");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const filesystem_service_1 = require("../filesystem/filesystem.service");
+const user_entity_1 = require("../auth/users/user.entity");
 let GuisocketGateway = class GuisocketGateway {
     constructor(fileSystemService) {
         this.fileSystemService = fileSystemService;
@@ -26,8 +27,10 @@ let GuisocketGateway = class GuisocketGateway {
             const payload = jwt.verify(token, config.get('jwt.secret'));
             client.user = payload;
             console.log("cl gui id:", client.user.userId);
-            this.fileSystemService.initFs(client.user.userId, 0, `/game/${client.user.userId}`);
-            this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
+            const userId = client.user.userId;
+            const user = await user_entity_1.User.findOne({ where: { userId } });
+            this.fileSystemService.initFs(userId, user.savepoint, `/game/${userId}`);
+            this.commandMap.set(client.id, await this.fileSystemService.setC(client.user.userId));
         }
         catch (error) {
             client.disconnect();

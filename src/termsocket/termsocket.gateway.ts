@@ -28,7 +28,7 @@ export class TermsocketGateway implements OnGatewayConnection {
       const userId = client.user.userId;
       const user = await User.findOne({ where: { userId } });
       this.fileSystemService.initFs(userId, user.savepoint, `/game/${userId}`);
-      this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
+      this.commandMap.set(client.id, await this.fileSystemService.setC(client.user.userId));
 
     } catch (error) {
       client.disconnect();

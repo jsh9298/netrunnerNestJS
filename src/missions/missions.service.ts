@@ -84,12 +84,13 @@ export class MissionsService {
             this.xmlService.saveXml(user.userId, user.location, userfile);
             user.save({ data: user.savepoint++ });
             user.save({ data: user.point = resultPoint });
-            if (userfile.mission[id].reward[0].toolFile != '') {
-                console.log(typeof userfile.mission[id].reward[0].toolFile, userfile.mission[id].reward[0].toolFile);
-                const rewardTool: string[] = userfile.mission[id].reward[0].toolFile.toString().split(" ");
-                for (let index = 0; index < rewardTool.length; index++) {
-                    user.save({ data: user.tool + "," + rewardTool[index] });
-                }
+            if (userfile.mission[id].reward[0].toolFile[0] != '') {
+                const rewardTool: string[] = userfile.mission[id].reward[0].toolFile[0].split(" ");
+                console.log("reward:", rewardTool);
+                const tools = rewardTool.join(",");
+                user.save({ data: user.tool += tools + "," });
+                console.log("save", tools);
+                console.log("savecheck");
             }
             nextMissionId++;
             this.commend.updateSave(nextMissionId);

@@ -25,5 +25,5 @@ export declare class AuthService {
         point: number;
     }>;
     ranking(): Promise<User[]>;
-    signOut(userid: string): boolean;
+    signOut(user: User): Promise<void>;
 }

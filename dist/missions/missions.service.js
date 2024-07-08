@@ -18,10 +18,12 @@ const savefile_service_1 = require("../savefile/savefile.service");
 const tool_repository_1 = require("./tools/tool.repository");
 const tool_entity_1 = require("./tools/tool.entity");
 const typeorm_1 = require("@nestjs/typeorm");
+const commends_1 = require("../filesystem/commends");
 let MissionsService = class MissionsService {
-    constructor(xmlService, toolsRepository) {
+    constructor(xmlService, toolsRepository, commend) {
         this.xmlService = xmlService;
         this.toolsRepository = toolsRepository;
+        this.commend = commend;
     }
     async getMissons(user) {
         const mission = await this.xmlService.getXml(user.userId, user.location);
@@ -72,7 +74,7 @@ let MissionsService = class MissionsService {
         let nextMissionId = user.savepoint;
         for (let index = 0; index < userfile.userNode.userFile.length; index++) {
             if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_name.toString().trim() == userfile.userNode.userFile[index].userFile_name.toString().trim()) {
-                if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_content.toString().replace(/\n|\r|\t/g, '').trim() == userfile.userNode.userFile[index].userFile_content.toString().replace(/\n|\r|\t/g, '').trim()) {
+                if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_content.toString().replace(/\n|\r|\t|\s*/g, '').trim() == userfile.userNode.userFile[index].userFile_content.toString().replace(/\n|\r|\t|\s*/g, '').trim()) {
                     success = true;
                     break;
                 }
@@ -83,23 +85,29 @@ let MissionsService = class MissionsService {
             }
         }
         if (success) {
-            const rewardPoint = userfile.mission[id].reward[0].point;
-            console.log(rewardPoint);
+            const rewardPoint = parseInt(userfile.mission[id].reward[0].point[0]);
+            const resultPoint = user.point + rewardPoint;
             this.xmlService.saveXml(user.userId, user.location, userfile);
             user.save({ data: user.savepoint++ });
-            user.save({ data: user.point += rewardPoint });
-            if (userfile.mission[id].reward.toolFile != '') {
-                const rewardTool = userfile.mission[id].reward.toolFile;
-                user.save({ data: user.tool + "," + rewardTool });
+            user.save({ data: user.point = resultPoint });
+            if (userfile.mission[id].reward[0].toolFile[0] != '') {
+                const rewardTool = userfile.mission[id].reward[0].toolFile[0].split(" ");
+                console.log("reward:", rewardTool);
+                const tools = rewardTool.join(",");
+                user.save({ data: user.tool += tools + "," });
+                console.log("save", tools);
+                console.log("savecheck");
             }
             nextMissionId++;
+            this.commend.updateSave(nextMissionId);
         }
         return { success, nextMissionId };
     }
     async buyTools(user, id) {
         const tool = await this.toolsRepository.findOne({ where: { id } });
         if (user.point >= tool.cost) {
-            user.save({ data: user.point -= tool.cost });
+            const resultPoint = user.point - tool.cost;
+            user.save({ data: user.point = resultPoint });
             user.save({ data: user.tool += tool.name + "," });
             return true;
         }
@@ -113,6 +121,7 @@ exports.MissionsService = MissionsService = __decorate([
     (0, common_1.Injectable)(),
     __param(1, (0, typeorm_1.InjectRepository)(tool_entity_1.Tool)),
     __metadata("design:paramtypes", [savefile_service_1.SaveFileService,
-        tool_repository_1.ToolsRepository])
+        tool_repository_1.ToolsRepository,
+        commends_1.commends])
 ], MissionsService);
 //# sourceMappingURL=missions.service.js.map

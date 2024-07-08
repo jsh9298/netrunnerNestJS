@@ -33,8 +33,8 @@ export class AuthController {
 
     @Post('/signout')
     @UseGuards(AuthGuard('jwt'))
-    signout(@GetUser() user: User): boolean {
-        return this.authService.signOut(user.userId);
+    async signout(@GetUser() user: User) {
+        return this.authService.signOut(user);
     }
     @Get('/:id')
     getProfile(@Param('id') id: string): Promise<{ userId: string, level: number, point: number }> {

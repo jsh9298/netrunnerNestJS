@@ -37,8 +37,8 @@ let AuthController = class AuthController {
     checkDuple(id) {
         return this.authService.checkDuple(id);
     }
-    signout(user) {
-        return this.authService.signOut(user.userId);
+    async signout(user) {
+        return this.authService.signOut(user);
     }
     getProfile(id) {
         return this.authService.getProfile(id);
@@ -82,7 +82,7 @@ __decorate([
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [user_entity_1.User]),
-    __metadata("design:returntype", Boolean)
+    __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signout", null);
 __decorate([
     (0, common_1.Get)('/:id'),

@@ -7,7 +7,7 @@ export declare class TermsocketGateway implements OnGatewayConnection {
     private commandMap;
     constructor(fileSystemService: FilesystemService);
     server: Server;
-    handleConnection(client: any, ...args: any[]): void;
+    handleConnection(client: any, ...args: any[]): Promise<void>;
     handleJoin(client: any, data: {
         roomId: string;
     }): void;

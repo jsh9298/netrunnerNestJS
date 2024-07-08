@@ -47,10 +47,10 @@ export class FilesystemService {
         return true;
     }
 
-    setC(userId: string): commends {
+    async setC(userId: string): Promise<commends> {
         if (!this.filesystemMap.has(userId)) {
             const c = new commends(this.saveFileService, userId, this.sf, this.savepoint);
-            c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
+            await c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
             this.filesystemMap.set(userId, c);
         }
         return this.filesystemMap.get(userId);
@@ -62,8 +62,8 @@ export class FilesystemService {
         }
     }
     async getSys(user: User, id: number) {
-        // await this.initFs(user.userId, id, `/game/${user.userId}`);
-        let c = this.getC(user.userId);
+        await this.initFs(user.userId, id, `/game/${user.userId}`);
+        let c = await this.setC(user.userId);
         const files = c.ls('ls').trim().split(' ');
         const typelist = c.ls(['ls', '-al']);
         const regex = /\[(directory|file)\]/g;

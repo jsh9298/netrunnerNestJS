@@ -36,12 +36,6 @@ let FilesystemService = class FilesystemService {
         this.savepoint = savepoint;
         this.setC(userId);
     }
-    setFileSystem(userId) {
-        this.dirlist = ["/root", "/tmp", "/home/user", "/home/user/documents"];
-        this.filelist = ["/home/user/documents/document1.txt", "/home/user/file1.txt", "/home/user/file2.txt"];
-        this.currentUser = "/";
-        this.currentip = "192.168.25.15";
-    }
     rmC(userId) {
         if (!this.filesystemMap.has(userId)) {
             return false;
@@ -50,10 +44,10 @@ let FilesystemService = class FilesystemService {
         this.filesystemMap.delete(userId);
         return true;
     }
-    setC(userId) {
+    async setC(userId) {
         if (!this.filesystemMap.has(userId)) {
             const c = new commends_1.commends(this.saveFileService, userId, this.sf, this.savepoint);
-            c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
+            await c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
             this.filesystemMap.set(userId, c);
         }
         return this.filesystemMap.get(userId);
@@ -65,7 +59,7 @@ let FilesystemService = class FilesystemService {
     }
     async getSys(user, id) {
         await this.initFs(user.userId, id, `/game/${user.userId}`);
-        let c = this.getC(user.userId);
+        let c = await this.setC(user.userId);
         const files = c.ls('ls').trim().split(' ');
         const typelist = c.ls(['ls', '-al']);
         const regex = /\[(directory|file)\]/g;

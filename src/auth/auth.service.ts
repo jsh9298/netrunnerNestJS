@@ -80,7 +80,9 @@ export class AuthService {
         });
         return user_list;
     }
-    signOut(userid: string): boolean {
-        return this.filesystemService.rmC(userid);
+    async signOut(user: User) {
+        const mission = await this.xmlservice.readXml(user.userId, user.location);
+        this.xmlservice.saveXml(user.userId, user.location, mission);
+        this.filesystemService.rmC(user.userId);
     }
 }

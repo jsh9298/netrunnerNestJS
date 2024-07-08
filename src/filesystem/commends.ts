@@ -1,6 +1,7 @@
 import { FileContentDTO, MissionsDTO, NodeFileDTO, UserFileDTO } from "src/savefile/savefile.Dto";
 import { SaveFileService } from "src/savefile/savefile.service";
 import { FileSystem } from "./filesystemcore/fileSystems";
+import { User } from "src/auth/users/user.entity";
 
 
 export class commends {
@@ -25,12 +26,12 @@ export class commends {
             this.mkNodeList();
             this.userIP = this.missionsDTO.userNode.userIP;
         }
-
+        console.log("init SavePoint : ", this.savepoint);
     }
-    setFs(dirlist: string[], filelist: string[], User: string, Ip: string) {
+    async setFs(dirlist: string[], filelist: string[], uSer: string, Ip: string) {
         this.fs = new FileSystem();
         this.currentIP = Ip;
-        this.currentUser = User;
+        this.currentUser = uSer;
         this.fs.createDirectory("/bin");
         this.fs.createDirectory("/boot");
         this.fs.createDirectory("/dev");
@@ -62,7 +63,10 @@ export class commends {
         } else {
             this.currentpath = `/home/${this.currentUser}`;
         }
-
+        const userId = this.userId;
+        const user = await User.findOne({ where: { userId } });
+        this.savepoint = user.savepoint;
+        console.log("setFS SavePoint : ", this.savepoint);
     }
 
     mkNodeList() {
@@ -302,6 +306,8 @@ export class commends {
 
 
 
+
+
     calcSubnet(cidraddress: string, ipaddress: string) {
         const [cidrAddress, cidrPrefix] = cidraddress.split('/');
         // IP 주소 분리
@@ -346,7 +352,3 @@ export class commends {
         console.log("Now SavePoint : ", this.savepoint);
     }
 }
-
-
-
-

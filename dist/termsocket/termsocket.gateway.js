@@ -15,18 +15,21 @@ const socket_io_1 = require("socket.io");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const filesystem_service_1 = require("../filesystem/filesystem.service");
+const user_entity_1 = require("../auth/users/user.entity");
 let TermsocketGateway = class TermsocketGateway {
     constructor(fileSystemService) {
         this.fileSystemService = fileSystemService;
         this.commandMap = new Map();
     }
-    handleConnection(client, ...args) {
+    async handleConnection(client, ...args) {
         try {
             const token = client.handshake?.query?.token;
             const payload = jwt.verify(token, config.get('jwt.secret'));
             client.user = payload;
-            this.fileSystemService.initFs(client.user.userId, 0, `/game/${client.user.userId}`);
-            this.commandMap.set(client.id, this.fileSystemService.setC(client.user.userId));
+            const userId = client.user.userId;
+            const user = await user_entity_1.User.findOne({ where: { userId } });
+            this.fileSystemService.initFs(userId, user.savepoint, `/game/${userId}`);
+            this.commandMap.set(client.id, await this.fileSystemService.setC(client.user.userId));
         }
         catch (error) {
             client.disconnect();
@@ -80,6 +83,15 @@ let TermsocketGateway = class TermsocketGateway {
                 break;
             case 'vi':
                 data.payload = com.vi(response);
+                break;
+            case 'ssh':
+                data.payload = com.ssh(response);
+                break;
+            case 'scan':
+                data.payload = com.scan(response);
+                break;
+            case 'exit':
+                data.payload = com.exit();
                 break;
             default:
                 data.payload = "Unkown commends";

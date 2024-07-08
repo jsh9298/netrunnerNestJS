@@ -5,16 +5,18 @@ export declare class commends {
     private xmlService;
     fs: FileSystem;
     currentIP: string;
+    userIP: string;
     currentUser: string;
     currentpath: string;
     userId: string;
     userLocation: string;
     missionsDTO: any;
-    savepoint: number;
     isUserNode: boolean;
     nodelist: Map<string, number>;
+    currentNode: number;
+    savepoint: number;
     constructor(xmlService: SaveFileService, userId: string, missionsDTO: MissionsDTO, savepoint: number);
-    setFs(dirlist: string[], filelist: string[], User: string, Ip: string): void;
+    setFs(dirlist: string[], filelist: string[], uSer: string, Ip: string): Promise<void>;
     mkNodeList(): void;
     pwd(): string;
     cd(payload: any): "" | "No such path found";
@@ -29,6 +31,10 @@ export declare class commends {
     touch(payload: any): string;
     vi(payload: any): string;
     write(payload: any, context: any): Promise<string>;
-    scan(payload: any): void;
-    checkMission(): MissionsDTO;
+    scan(payload: any): string;
+    ssh(payload: any): string;
+    exit(): string;
+    calcSubnet(cidraddress: string, ipaddress: string): boolean;
+    getKeyByValue(map: Map<string, number>, value: number): string | undefined;
+    updateSave(save: number): void;
 }
