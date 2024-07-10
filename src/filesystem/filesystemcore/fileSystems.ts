@@ -17,6 +17,7 @@ class TreeNode {
 
 class FileSystem {
     root: TreeNode;
+    result: string[] = [];
     constructor() {
         this.root = new TreeNode("/", "directory");  // 루트 디렉토리 생성
     }
@@ -133,7 +134,7 @@ class FileSystem {
         }
     }
 
-    result: string[];
+
     stringFileSystem() {
         this._traverseFileSystem_s(this.root, "");
         return this.result;
@@ -141,7 +142,7 @@ class FileSystem {
 
     _traverseFileSystem_s(node, path) {
         if (path != "") {
-            this.result.push(path);
+            this.result.push(`${path} [${node.type}]`);
         }
         for (let child of node.children) {
             let newPath = `${path}/${child.name}`;
@@ -230,7 +231,6 @@ class FileSystem {
         }
         return pathfinder;
     }
-
 }
 
 export { FileSystem };

@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <missions>
-        <userNode> <!--플레이어의 기본 노드 이거는 최상단에 하나만 해두면됨-->
-            <userMAC>FF:FF:FF:FF:FF:01</userMAC> <!--MAC 주소-->
-            <userIP>192.168.25.2</userIP> <!--IP 주소-->
-            <userPort>
-                <userTCP>
-					<userService>
-						<userServiceName>OpenSSL</userServiceName>
-						<userServicePort>22</userServicePort>
-						<userPortState>OPEN</userPortState>
-					</userService>
-                </userTCP>
-                <userUDP>
-					<userService>
-						<userServiceName></userServiceName>
-						<userServicePort></userServicePort>
-						<userPortState></userPortState>
-					</userService>
-                </userUDP>
-            </userPort>
-            <userDirectorys> <!--디렉터리 구조 서술-->
-                <userDirPath>/home/myNode</userDirPath>
-            </userDirectorys>
-            <userFile>
-                <userFile_name>/home/myNode/result.txt</userFile_name> 
-		        <userFile_content>
-                    <![CDATA[Hello World!]]>
-                </userFile_content>
-            </userFile>
-             <userProgram> <!--노드에 설치된 프로그램--> <!-- nodePort의 serviceName과 연동-->
-                <userProgramName>OpenSSL</userProgramName>
-				<userProgramName>SNMP</userProgramName>
-            </userProgram>
-        </userNode>
+    <userNode> <!--플레이어의 기본 노드 이거는 최상단에 하나만 해두면됨-->
+        <userMAC>FF:FF:FF:FF:FF:01</userMAC> <!--MAC 주소-->
+        <userIP>192.168.25.2</userIP> <!--IP 주소-->
+        <userPort>
+            <userTCP>
+				<userService>
+					<userServiceName>OpenSSL</userServiceName>
+					<userServicePort>22</userServicePort>
+					<userPortState>OPEN</userPortState>
+				</userService>
+            </userTCP>
+            <userUDP>
+				<userService>
+					<userServiceName></userServiceName>
+					<userServicePort></userServicePort>
+					<userPortState></userPortState>
+				</userService>
+            </userUDP>
+        </userPort>
+        <userDirectorys> <!--디렉터리 구조 서술-->
+            <userDirPath>/home/myNode</userDirPath>
+        </userDirectorys>
+        <userFile>
+            <userFile_name>/home/myNode/result.txt</userFile_name> 
+		    <userFile_content>
+                <![CDATA[Hello World!]]>
+            </userFile_content>
+        </userFile>
+        <userProgram> <!--노드에 설치된 프로그램--> <!-- nodePort의 serviceName과 연동-->
+            <userProgramName>OpenSSL</userProgramName>
+			<userProgramName>SNMP</userProgramName>
+        </userProgram>
+    </userNode>
     <mission>
         <scenario>
             "튜토리얼 입니다."
@@ -104,6 +104,79 @@
         <reward>
             <point>1000</point> <!--숫자 기입-->
             <toolFile></toolFile> <!--얘는 문자열널어 주시고, 복수의 툴이 리워드로 주어지는경우 split할수 있도록 띄어쓰기하셔서 한줄에 넣어주세요-->
+        </reward>
+    </mission>
+    <mission>
+        <scenario>
+            "2번째 튜토리얼 입니다."
+			, "'scan 192.168.25.0/24 > result.txt' 명령어로 다른 컴퓨터의 IP와 Port 정보를 검색해 저장해 주세요  "
+        </scenario> <!--시나리오-->
+        <!--1: 명령어입력 , 2: 특정 파일 삭제, , 3: 특정 파일 가져오기, 4: 특정 디렉토리 삭제, 5: 특정 IP 탐지 -->
+		<!--6: 특정 서비스 탐지 -->
+		<!-- 다른유형이 생각나면 추가바람
+        유형 검사는 제외했습니다. 위에 기재된 문재 유형들은, 저 유형에 맞춰서 시나리오 퀘스트를 작성해주시면 될듯합니다.
+        -->
+        <correctAnswer>
+            <myNode> <!--2024-06-15 추가--> <!--정답을 파일 위주로 할건지, 터미널 입력 사항 위주로 할건지 고민-->
+                <dirPath>/home/myNode</dirPath>
+                <nodeFile>
+                    <File_name>/home/myNode/result2.txt</File_name>
+		            <File_content><!--cdata로 해야 태그로 인식 안하고 내용으로 인식함-->
+                        <![CDATA[
+                        username{ node01 }
+						IP{ 192.168.25.3 }
+						Port[
+						  {22 : OPEN} ,
+						  {161 : CLOSED} ,
+						  {162 : CLOSED}
+						]
+                        ]]>
+                    </File_content>
+                </nodeFile>
+            </myNode>
+            <!--'192.168.25.15' host의 'mysql'의 서비스 상태를 'result.txt' 파일이 존재할 것 -->
+        </correctAnswer> <!--달성 조건-->
+        <node> <!--미션 수행 노드-->
+            <nodeMAC>FF:FF:FF:FF:FF:02</nodeMAC> <!--MAC 주소-->
+            <nodeIP>192.168.25.3</nodeIP> <!--IP 주소-->
+            <nodePort>
+                <TCP>
+					<service>	<!--24.06.27--> <!--포트랑 서비스 하는 프로그램이 있으면 프로그램이름이랑 연동-->
+						<serviceName>OpenSSL</serviceName>
+						<servicePort>22</servicePort>
+						<portState>OPEN</portState>
+					</service>
+                </TCP>
+                <UDP>
+					<service>
+						<serviceName>SNMP</serviceName>
+						<servicePort>161</servicePort>
+						<portState>CLOSED</portState>
+                        <serviceName>SNMP</serviceName>
+						<servicePort>162</servicePort>
+						<portState>CLOSED</portState>
+					</service>
+                </UDP>
+            </nodePort>
+            <nodeDirectorys> <!--디렉터리 구조 서술--> <!-- 기본 디렉토리 구조가 있다는 가정-->
+                <dirPath>/home/node02</dirPath>
+            </nodeDirectorys>
+            <nodeProgram> <!--노드에 설치된 프로그램--> <!-- nodePort의 serviceName과 연동-->
+                <programName>OpenSSL</programName>
+				<programName>SNMP</programName>
+            </nodeProgram>
+            <nodeFile>
+                <File_name>/home/node02/nodeText.txt</File_name>  <!--node01 디렉터리 밑에 생성하려면, /home/node01/textname.txt 형식으로 파일명을 작성해주세요-->
+		        <File_content>
+                    <![CDATA[
+                     Hello Netrunner22!
+                    ]]>
+                </File_content>
+            </nodeFile>
+        </node>
+        <reward>
+            <point>1000</point> <!--숫자 기입-->
+            <toolFile>"sdsd fsdda"</toolFile> <!--얘는 문자열널어 주시고, 복수의 툴이 리워드로 주어지는경우 split할수 있도록 띄어쓰기하셔서 한줄에 넣어주세요-->
         </reward>
     </mission>
 </missions>

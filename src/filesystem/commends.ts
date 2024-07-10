@@ -262,6 +262,10 @@ export class commends {
                 result += username + ip + ports;
             }
         }
+        if (payload[2] && payload[2] == '>') {
+            const temp = `write ${payload[3]}`.split(' ');
+            this.write(temp, result);
+        }
         return result;
     }
     ssh(payload) {
@@ -303,10 +307,9 @@ export class commends {
             return "Unkown commends";
         }
     }
+    apt() {
 
-
-
-
+    }
 
     calcSubnet(cidraddress: string, ipaddress: string) {
         const [cidrAddress, cidrPrefix] = cidraddress.split('/');
