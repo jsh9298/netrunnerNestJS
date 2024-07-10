@@ -3,8 +3,8 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ## 소개
-**NETRUNNER**는 다양한 해킹 활동을 통제되고 교육적인 환경에서 시뮬레이션하는 자바스크립트 해킹 시뮬레이터 게임입니다.
-이 프로젝트는 [NETRUNNER](https://github.com/Jaemnie/NETRUNNER)의 벡엔드 프로젝트입니다.
+- **NETRUNNER**는 다양한 해킹 활동을 통제되고 교육적인 환경에서 시뮬레이션하는 자바스크립트 해킹 시뮬레이터 게임입니다.
+- 이 프로젝트는 [NETRUNNER](https://github.com/Jaemnie/NETRUNNER)의 벡엔드 프로젝트입니다.
 
 ## 기능
 - 해킹 시뮬레이션
