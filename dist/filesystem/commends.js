@@ -153,15 +153,67 @@ class commends {
         if (payload[1] == "*") {
             this.fs.deleteDirectory(this.currentpath);
             this.fs.createDirectory(this.currentpath);
+            if (this.isUserNode) {
+                for (let index = 0; index < this.missionsDTO.userNode.userDirectorys[0].userDirPath.length; index++) {
+                    if (this.missionsDTO.userNode.userDirectorys[0].userDirPath[index].includes(this.currentpath)) {
+                        this.missionsDTO.userNode.userDirectorys[0].userDirPath.splice(index, 1);
+                    }
+                }
+                for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {
+                    if (this.missionsDTO.userNode.userFile[index].includes(this.currentpath)) {
+                        this.missionsDTO.userNode.userFile.splice(index, 1);
+                    }
+                }
+            }
+            else {
+                for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath.length; index++) {
+                    if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath[index].includes(this.currentpath)) {
+                        this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath.splice(index, 1);
+                    }
+                }
+                for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile.length; index++) {
+                    if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile[index].includes(this.currentpath)) {
+                        this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile.splice(index, 1);
+                    }
+                }
+            }
         }
         if (this.fs.isOverlap(payload[1], this.currentpath) == false) {
             for (const key in this.fs.getPathInfo(this.currentpath).files) {
                 if (this.fs.getPathInfo(this.currentpath).files[key] == payload[1]) {
                     if (this.fs.getPathInfo(this.currentpath).filestype[key] == "file") {
                         this.fs.deleteFile(temp += ("/" + payload[1]));
+                        if (this.isUserNode) {
+                            for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {
+                                if (this.missionsDTO.userNode.userFile[index] == (temp += ("/" + payload[1]))) {
+                                    this.missionsDTO.userNode.userFile.splice(index, 1);
+                                }
+                            }
+                        }
+                        else {
+                            for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile.length; index++) {
+                                if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile[index] == (temp += ("/" + payload[1]))) {
+                                    this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile.splice(index, 1);
+                                }
+                            }
+                        }
+                    }
+                }
+                else {
+                    this.fs.deleteDirectory(temp += ("/" + payload[1]));
+                    if (this.isUserNode) {
+                        for (let index = 0; index < this.missionsDTO.userNode.userDirectorys[0].userDirPath.length; index++) {
+                            if (this.missionsDTO.userNode.userDirectorys[0].userDirPath[index] == temp) {
+                                this.missionsDTO.userNode.userDirectorys[0].userDirPath.splice(index, 1);
+                            }
+                        }
                     }
                     else {
-                        this.fs.deleteDirectory(temp += ("/" + payload[1]));
+                        for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath.length; index++) {
+                            if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath[index] == temp) {
+                                this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath.splice(index, 1);
+                            }
+                        }
                     }
                 }
             }
@@ -173,6 +225,15 @@ class commends {
         let temp = this.currentpath;
         temp += ("/" + payload[1]);
         this.fs.createDirectory(temp);
+        console.log(this.missionsDTO.userNode.userDirectorys[0].userDirPath);
+        console.log(this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath);
+        const context = " ";
+        if (this.isUserNode) {
+            this.missionsDTO.userNode.userDirectorys[0].userDirPath.push(temp);
+        }
+        else {
+            this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath.push(temp);
+        }
         this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
@@ -180,11 +241,25 @@ class commends {
         let temp = this.currentpath;
         temp += ("/" + payload[1]);
         this.fs.deleteDirectory(temp);
+        if (this.isUserNode) {
+            for (let index = 0; index < this.missionsDTO.userNode.userDirectorys[0].userDirPath.length; index++) {
+                if (this.missionsDTO.userNode.userDirectorys[0].userDirPath[index] == temp) {
+                    this.missionsDTO.userNode.userDirectorys[0].userDirPath.splice(index, 1);
+                }
+            }
+        }
+        else {
+            for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath.length; index++) {
+                if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath[index] == temp) {
+                    this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath.splice(index, 1);
+                }
+            }
+        }
         this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
     cat(payload) {
-        let printFile = "can't find file";
+        let printFile = " ";
         if (this.isUserNode) {
             for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {
                 if (this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1] == this.missionsDTO.userNode.userFile[index].userFile_name) {
@@ -205,6 +280,21 @@ class commends {
         let temp = this.currentpath;
         temp += ("/" + payload[1]);
         this.fs.createFile(temp);
+        const context = " ";
+        if (this.isUserNode) {
+            const file = {
+                userFile_name: this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1],
+                userFile_content: context
+            };
+            this.missionsDTO.userNode.userFile.push(file);
+        }
+        else {
+            const file = {
+                File_name: this.fs.getPathInfo(this.currentpath).absolutePath + "" + payload[1],
+                File_content: context
+            };
+            this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile.push(file);
+        }
         this.xmlService.updateXml(this.userId, this.missionsDTO);
         return " ";
     }
@@ -258,7 +348,7 @@ class commends {
         let result = "";
         for (let index = 0; index < this.nodelist.size; index++) {
             console.log(this.getKeyByValue(this.nodelist, index));
-            if (this.calcSubnet(payload[1].toString(), this.getKeyByValue(this.nodelist, index))) {
+            if (this.calcSubnet(payload[1], this.getKeyByValue(this.nodelist, index)) === true) {
                 const username = "username { node" + (index + 1).toString().padStart(2, '0') + " }\n\r";
                 const ip = `IP{ ${this.getKeyByValue(this.nodelist, index)} }\n\r`;
                 let ports = "Port[ ";
@@ -271,6 +361,13 @@ class commends {
                 ports += " ]\n\r";
                 result += username + ip + ports;
             }
+            else {
+                result = "can't find nodes";
+            }
+        }
+        if (payload[2] && payload[2] == '>') {
+            const temp = `write ${payload[3]}`.split(' ');
+            this.write(temp, result);
         }
         return result;
     }
@@ -313,6 +410,85 @@ class commends {
         else {
             return "Unkown commends";
         }
+    }
+    iptables(payload) {
+        if (this.isUserNode == false) {
+            for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service.length; index++) {
+                if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index].portState === "CLOSE") {
+                    this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index].portState = "OPEN";
+                }
+            }
+            for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service.length; index++) {
+                if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index].portState === "CLOSE") {
+                    this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index].portState = "OPEN";
+                }
+            }
+        }
+        else {
+            for (let index = 0; index < this.missionsDTO.userNode.userPort[0].userTCP[0].userService.length; index++) {
+                if (this.missionsDTO.userNode.userPort[0].userTCP[0].userService[index].portState === "CLOSE") {
+                    this.missionsDTO.userNode.userPort[0].userTCP[0].userService[index].portState = "OPEN";
+                }
+            }
+            for (let index = 0; index < this.missionsDTO.userNode.userPort[0].userUDP[0].userService.length; index++) {
+                if (this.missionsDTO.userNode.userPort[0].userUDP[0].userService[index].portState === "CLOSE") {
+                    this.missionsDTO.userNode.userPort[0].userUDP[0].userService[index].portState = "OPEN";
+                }
+            }
+        }
+        return " ";
+    }
+    FTPbounce(payload) {
+        let fin = false;
+        if (payload[1] === '21' || '69') {
+            if (this.isUserNode == false) {
+                if (payload[1] === '21') {
+                    for (let index = 0; index < this.nodelist.size; index++) {
+                        for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service.length; index2++) {
+                            if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].serviceName === "FTP") {
+                                this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].portState = "OPEN";
+                                fin = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if (payload[1] === '69') {
+                    for (let index = 0; index < this.nodelist.size; index++) {
+                        for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service.length; index2++) {
+                            if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index2].serviceName === "TFTP") {
+                                this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index2].portState = "OPEN";
+                                fin = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (fin) {
+                return "complete.";
+            }
+            else {
+                return "failed.";
+            }
+        }
+        else {
+            return "Wrong port number";
+        }
+    }
+    scp(payload) {
+        let temp1 = payload[2].split('@');
+        let temp2 = temp1[1].split(':');
+        const destID = temp1[0];
+        const destIP = temp2[0];
+        const destLocate = temp2[1];
+        if (this.isUserNode == false) {
+        }
+        else {
+        }
+        return "아직 미구현";
+    }
+    fdisk() {
     }
     calcSubnet(cidraddress, ipaddress) {
         const [cidrAddress, cidrPrefix] = cidraddress.split('/');

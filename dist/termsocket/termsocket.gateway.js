@@ -90,6 +90,15 @@ let TermsocketGateway = class TermsocketGateway {
             case 'scan':
                 data.payload = com.scan(response);
                 break;
+            case 'iptables':
+                data.payload = com.iptables(response);
+                break;
+            case 'FTPBounce':
+                data.payload = com.FTPbounce(response);
+                break;
+            case 'scp':
+                data.payload = com.scp(response);
+                break;
             case 'exit':
                 data.payload = com.exit();
                 break;

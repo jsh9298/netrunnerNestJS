@@ -34,6 +34,10 @@ export declare class commends {
     scan(payload: any): string;
     ssh(payload: any): string;
     exit(): string;
+    iptables(payload: any): string;
+    FTPbounce(payload: any): "complete." | "failed." | "Wrong port number";
+    scp(payload: any): string;
+    fdisk(): void;
     calcSubnet(cidraddress: string, ipaddress: string): boolean;
     getKeyByValue(map: Map<string, number>, value: number): string | undefined;
     updateSave(save: number): void;

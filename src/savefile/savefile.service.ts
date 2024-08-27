@@ -37,17 +37,19 @@ export class SaveFileService {
       const missions: MissionsDTO = new MissionsDTO();
       const usernode: UserNodeDTO = new UserNodeDTO();
       const mission: MissionDTO[] = [];
+
       for (const missionItem of missionData.missions.mission) {
         const mission2 = new MissionDTO();
         Object.assign(mission2, missionItem);
         mission.push(mission2);
       }
       Object.assign(usernode, missionData.missions.userNode[0]);
+      // Object.assign(usernode, missionData.missions.userNode);
       missions.mission = mission;
       missions.userNode = usernode;
       return missions;
     } catch (err) {
-      console.error(err);
+      console.error("TLqkf error roTLqkf", err);
       return;
     }
   }
@@ -62,7 +64,10 @@ export class SaveFileService {
         fullTagEmptyElement: true,
         ignoreAttributes: true
       });
-      await fs.promises.writeFile(xmlFilePath, xmlData);
+      const xmlDeclaration = '<?xml version="1.0" encoding="UTF-8"?>\n';
+      const finalXmlData = xmlDeclaration + xmlData;
+
+      await fs.promises.writeFile(xmlFilePath, finalXmlData, { encoding: 'utf-8' });
       this.missionsCache[userId] = missions;
     } catch (err) {
       await this.saveErrorLog(err);

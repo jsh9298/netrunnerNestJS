@@ -8,6 +8,7 @@ declare class TreeNode {
 }
 declare class FileSystem {
     root: TreeNode;
+    result: string[];
     constructor();
     createFile(path: any): void;
     createDirectory(path: any): void;
@@ -15,7 +16,6 @@ declare class FileSystem {
     deleteDirectory(path: any): void;
     printFileSystem(): void;
     _traverseFileSystem(node: any, indent: any): void;
-    result: string[];
     stringFileSystem(): string[];
     _traverseFileSystem_s(node: any, path: any): void;
     getPathInfo(path: any): {

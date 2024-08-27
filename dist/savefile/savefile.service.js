@@ -48,7 +48,7 @@ let SaveFileService = class SaveFileService {
             return missions;
         }
         catch (err) {
-            console.error(err);
+            console.error("TLqkf error roTLqkf", err);
             return;
         }
     }
@@ -62,7 +62,9 @@ let SaveFileService = class SaveFileService {
                 fullTagEmptyElement: true,
                 ignoreAttributes: true
             });
-            await fs.promises.writeFile(xmlFilePath, xmlData);
+            const xmlDeclaration = '<?xml version="1.0" encoding="UTF-8"?>\n';
+            const finalXmlData = xmlDeclaration + xmlData;
+            await fs.promises.writeFile(xmlFilePath, finalXmlData, { encoding: 'utf-8' });
             this.missionsCache[userId] = missions;
         }
         catch (err) {

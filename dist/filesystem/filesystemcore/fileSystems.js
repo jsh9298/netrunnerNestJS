@@ -16,6 +16,7 @@ class TreeNode {
 }
 class FileSystem {
     constructor() {
+        this.result = [];
         this.root = new TreeNode("/", "directory");
     }
     createFile(path) {
@@ -114,7 +115,7 @@ class FileSystem {
     }
     _traverseFileSystem_s(node, path) {
         if (path != "") {
-            this.result.push(path);
+            this.result.push(`${path} [${node.type}]`);
         }
         for (let child of node.children) {
             let newPath = `${path}/${child.name}`;

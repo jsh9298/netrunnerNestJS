@@ -150,6 +150,7 @@ class FileSystem {
         }
     }
 
+
     // 절대 경로, 상대 경로, 하위 디렉토리의 파일 및 디렉토리 목록을 반환하는 메서드
     getPathInfo(path) {
         const segments = path.split('/');

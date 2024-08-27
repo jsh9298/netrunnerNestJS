@@ -23,6 +23,9 @@ export class FilesystemService {
         for (let index = 0; index < sf.userNode.userDirectorys[0].userDirPath.length; index++) {
             dsl.push(sf.userNode.userDirectorys[0].userDirPath[index]);
         }
+        // for (let index = 0; index < sf.userNode.userDirectorys.userDirPath.length; index++) {
+        //     dsl.push(sf.userNode.userDirectorys.userDirPath[index]);
+        // }
         this.dirlist = dsl;
         // this.dirlist = sf.userNode[0].userDirectorys;
         let fsl: string[] = [];
