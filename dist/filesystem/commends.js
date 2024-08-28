@@ -353,6 +353,7 @@ class commends {
                 const ip = `IP{ ${this.getKeyByValue(this.nodelist, index)} }\n\r`;
                 let ports = "Port[ ";
                 for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(this.getKeyByValue(this.nodelist, index))].nodePort[0].TCP[0].service.length; index2++) {
+                    console.log("checkValue", this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2]);
                     ports += `{${this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(this.getKeyByValue(this.nodelist, index))].nodePort[0].TCP[0].service[index2].servicePort} : ${this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(this.getKeyByValue(this.nodelist, index))].nodePort[0].TCP[0].service[index2].portState}} \n\r`;
                 }
                 for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(this.getKeyByValue(this.nodelist, index))].nodePort[0].UDP[0].service.length; index2++) {
@@ -385,6 +386,7 @@ class commends {
             for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile.length; index++) {
                 filelist.push(this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile[index].File_name);
             }
+            console.log(this.currentNode, this.savepoint, dirlist, filelist);
             this.setFs(dirlist, filelist, this.currentUser, this.currentIP);
         }
         else {
@@ -414,24 +416,24 @@ class commends {
     iptables(payload) {
         if (this.isUserNode == false) {
             for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service.length; index++) {
-                if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index].portState === "CLOSE") {
+                if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index].portState == "CLOSED") {
                     this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index].portState = "OPEN";
                 }
             }
             for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service.length; index++) {
-                if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index].portState === "CLOSE") {
+                if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index].portState == "CLOSED") {
                     this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index].portState = "OPEN";
                 }
             }
         }
         else {
             for (let index = 0; index < this.missionsDTO.userNode.userPort[0].userTCP[0].userService.length; index++) {
-                if (this.missionsDTO.userNode.userPort[0].userTCP[0].userService[index].portState === "CLOSE") {
+                if (this.missionsDTO.userNode.userPort[0].userTCP[0].userService[index].portState == "CLOSED") {
                     this.missionsDTO.userNode.userPort[0].userTCP[0].userService[index].portState = "OPEN";
                 }
             }
             for (let index = 0; index < this.missionsDTO.userNode.userPort[0].userUDP[0].userService.length; index++) {
-                if (this.missionsDTO.userNode.userPort[0].userUDP[0].userService[index].portState === "CLOSE") {
+                if (this.missionsDTO.userNode.userPort[0].userUDP[0].userService[index].portState == "CLOSED") {
                     this.missionsDTO.userNode.userPort[0].userUDP[0].userService[index].portState = "OPEN";
                 }
             }
@@ -440,27 +442,23 @@ class commends {
     }
     FTPbounce(payload) {
         let fin = false;
-        if (payload[1] === '21' || '69') {
+        if (payload[1] === '21' || payload[1] === '69') {
             if (this.isUserNode == false) {
-                if (payload[1] === '21') {
-                    for (let index = 0; index < this.nodelist.size; index++) {
-                        for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service.length; index2++) {
-                            if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].serviceName === "FTP") {
-                                this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].portState = "OPEN";
-                                fin = true;
-                                break;
-                            }
+                if (payload[1] == '21') {
+                    for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service.length; index2++) {
+                        if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].serviceName == "FTP") {
+                            this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].portState = "OPEN";
+                            fin = true;
+                            break;
                         }
                     }
                 }
-                else if (payload[1] === '69') {
-                    for (let index = 0; index < this.nodelist.size; index++) {
-                        for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service.length; index2++) {
-                            if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index2].serviceName === "TFTP") {
-                                this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index2].portState = "OPEN";
-                                fin = true;
-                                break;
-                            }
+                else if (payload[1] == '69') {
+                    for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service.length; index2++) {
+                        if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index2].serviceName == "TFTP") {
+                            this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index2].portState = "OPEN";
+                            fin = true;
+                            break;
                         }
                     }
                 }
@@ -477,18 +475,25 @@ class commends {
         }
     }
     scp(payload) {
-        let temp1 = payload[2].split('@');
-        let temp2 = temp1[1].split(':');
-        const destID = temp1[0];
-        const destIP = temp2[0];
-        const destLocate = temp2[1];
-        if (this.isUserNode == false) {
+        try {
+            let temp1 = payload[2].split('@');
+            let temp2 = temp1[1].split(':');
+            const destID = temp1[0];
+            const destIP = temp2[0];
+            const destLocate = temp2[1];
+            if (this.isUserNode == false) {
+            }
+            else {
+            }
+            return "아직 미구현";
         }
-        else {
+        catch (error) {
+            return "잘못입력함";
         }
-        return "아직 미구현";
     }
     fdisk() {
+    }
+    porthack() {
     }
     calcSubnet(cidraddress, ipaddress) {
         const [cidrAddress, cidrPrefix] = cidraddress.split('/');

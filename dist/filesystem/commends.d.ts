@@ -36,8 +36,9 @@ export declare class commends {
     exit(): string;
     iptables(payload: any): string;
     FTPbounce(payload: any): "complete." | "failed." | "Wrong port number";
-    scp(payload: any): string;
+    scp(payload: any): "아직 미구현" | "잘못입력함";
     fdisk(): void;
+    porthack(): void;
     calcSubnet(cidraddress: string, ipaddress: string): boolean;
     getKeyByValue(map: Map<string, number>, value: number): string | undefined;
     updateSave(save: number): void;
