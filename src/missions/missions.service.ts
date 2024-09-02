@@ -42,7 +42,7 @@ export class MissionsService {
     }
     async setTool(): Promise<void> {
         const defaultTools: Partial<Tool>[] = [
-            { name: 'notice', cost: 1 },
+            { name: 'porthack', cost: 1 },
             { name: 'suggestion', cost: 1 },
             { name: 'free', cost: 1 },
             { name: 'knowledge', cost: 1 },
@@ -70,6 +70,7 @@ export class MissionsService {
             if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_name.toString().trim() == userfile.userNode.userFile[index].userFile_name.toString().trim()) {
                 if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_content.toString().replace(/\n|\r|\t|\s*/g, '').trim() == userfile.userNode.userFile[index].userFile_content.toString().replace(/\n|\r|\t|\s*/g, '').trim()) {
                     success = true;
+                    this.commend.loggging_lock();
                     break;
                 } else {
                     success = false;

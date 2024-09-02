@@ -100,6 +100,9 @@ export class GuisocketGateway implements OnGatewayConnection {
       case 'touch':
         data.payload = com.touch(response);
         break;
+      case 'porthack':
+        data.payload = com.porthack(response);
+        break;
       default:
         data.payload = "Unkown commends";
         break;
