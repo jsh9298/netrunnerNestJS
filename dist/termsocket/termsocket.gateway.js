@@ -28,7 +28,7 @@ let TermsocketGateway = class TermsocketGateway {
             client.user = payload;
             const userId = client.user.userId;
             const user = await user_entity_1.User.findOne({ where: { userId } });
-            this.fileSystemService.initFs(userId, user.savepoint, `/game/${userId}`);
+            this.fileSystemService.initFs(userId, user.savepoint, `/game/${userId}`, user.username);
             this.commandMap.set(client.id, await this.fileSystemService.setC(client.user.userId));
         }
         catch (error) {
@@ -103,9 +103,10 @@ let TermsocketGateway = class TermsocketGateway {
                 data.payload = com.exit();
                 break;
             default:
-                data.payload = "Unkown commends";
+                data.payload = "Unkown command";
                 break;
         }
+        com.savepoint = parseInt(data.savepoint, 10);
         this.server.to(data.roomId).emit('message', data.payload);
     }
     handleLeave(client, data) {

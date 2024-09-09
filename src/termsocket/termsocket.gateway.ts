@@ -27,7 +27,7 @@ export class TermsocketGateway implements OnGatewayConnection {
       client.user = payload;
       const userId = client.user.userId;
       const user = await User.findOne({ where: { userId } });
-      this.fileSystemService.initFs(userId, user.savepoint, `/game/${userId}`);
+      this.fileSystemService.initFs(userId, user.savepoint, `/game/${userId}`, user.username);
       this.commandMap.set(client.id, await this.fileSystemService.setC(client.user.userId));
 
     } catch (error) {
@@ -43,7 +43,7 @@ export class TermsocketGateway implements OnGatewayConnection {
   }
 
   @SubscribeMessage('message')
-  handleMessage(client: any, data: { roomId: string, payload: string }): string {
+  handleMessage(client: any, data: { roomId: string, payload: string, savepoint: string }): string {
     // payload = "return of server";
     if (!client.user) {
       return;
@@ -106,9 +106,10 @@ export class TermsocketGateway implements OnGatewayConnection {
         data.payload = com.exit();
         break;
       default:
-        data.payload = "Unkown commends";
+        data.payload = "Unkown command";
         break;
     }
+    com.savepoint = parseInt(data.savepoint, 10);
     this.server.to(data.roomId).emit('message', data.payload);
   }
   @SubscribeMessage('leave')

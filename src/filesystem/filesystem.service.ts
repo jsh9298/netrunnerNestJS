@@ -17,8 +17,8 @@ export class FilesystemService {
     constructor(
         private saveFileService: SaveFileService,
     ) { }
-    async initFs(userId: string, savepoint: number, location: string) {
-        const sf = await this.saveFileService.getXml(userId, location);
+    async initFs(userId: string, savepoint: number, location: string, username: string) {
+        const sf = await this.saveFileService.getXml(userId, location, username);
         let dsl: string[] = [];
         for (let index = 0; index < sf.userNode.userDirectorys[0].userDirPath.length; index++) {
             dsl.push(sf.userNode.userDirectorys[0].userDirPath[index]);
@@ -53,7 +53,7 @@ export class FilesystemService {
     async setC(userId: string): Promise<commends> {
         if (!this.filesystemMap.has(userId)) {
             const c = new commends(this.saveFileService, userId, this.sf, this.savepoint);
-            await c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
+            c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
             this.filesystemMap.set(userId, c);
         }
         return this.filesystemMap.get(userId);
@@ -65,7 +65,7 @@ export class FilesystemService {
         }
     }
     async getSys(user: User, id: number) {
-        await this.initFs(user.userId, id, `/game/${user.userId}`);
+        await this.initFs(user.userId, id, `/game/${user.userId}`, user.username);
         let c = await this.setC(user.userId);
         const files = c.ls('ls').trim().split(' ');
         const typelist = c.ls(['ls', '-al']);

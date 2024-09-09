@@ -26,7 +26,7 @@ let MissionsService = class MissionsService {
         this.commend = commend;
     }
     async getMissons(user) {
-        const mission = await this.xmlService.getXml(user.userId, user.location);
+        const mission = await this.xmlService.getXml(user.userId, user.location, user.username);
         return mission.mission;
     }
     async getTools(user) {
@@ -48,19 +48,12 @@ let MissionsService = class MissionsService {
     }
     async setTool() {
         const defaultTools = [
-            { name: 'porthack', cost: 1 },
-            { name: 'suggestion', cost: 1 },
-            { name: 'free', cost: 1 },
-            { name: 'knowledge', cost: 1 },
-            { name: 'tips', cost: 1 },
-            { name: 'review', cost: 1 },
-            { name: 'qna', cost: 1 },
-            { name: 'tech', cost: 1 },
-            { name: 'career', cost: 1 },
-            { name: 'recruitment', cost: 1 },
-            { name: 'project', cost: 1 },
-            { name: 'study', cost: 1 },
-            { name: 'company', cost: 1 },
+            { name: 'porthack', cost: 25 },
+            { name: 'SSHcrack', cost: 25 },
+            { name: 'SMTPoverflow', cost: 25 },
+            { name: 'WebServerWorm', cost: 25 },
+            { name: 'Decypher', cost: 25 },
+            { name: 'DECHead', cost: 25 },
         ];
         for (let index = 0; index < defaultTools.length; index++) {
             const element = defaultTools[index];
@@ -69,14 +62,15 @@ let MissionsService = class MissionsService {
         }
     }
     async checkClear(user, id) {
-        const userfile = await this.xmlService.getXml(user.userId, user.location);
+        const userfile = await this.xmlService.getXml(user.userId, user.location, user.username);
         let success = false;
         let nextMissionId = user.savepoint;
         for (let index = 0; index < userfile.userNode.userFile.length; index++) {
             if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_name.toString().trim() == userfile.userNode.userFile[index].userFile_name.toString().trim()) {
+                console.log("userfile1", index, userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_content.toString().replace(/\n|\r|\t|\s*/g, '').trim());
+                console.log("userfile2", index, userfile.userNode.userFile[index].userFile_content.toString().replace(/\n|\r|\t|\s*/g, '').trim());
                 if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_content.toString().replace(/\n|\r|\t|\s*/g, '').trim() == userfile.userNode.userFile[index].userFile_content.toString().replace(/\n|\r|\t|\s*/g, '').trim()) {
                     success = true;
-                    this.commend.loggging_lock();
                     break;
                 }
                 else {
@@ -100,7 +94,6 @@ let MissionsService = class MissionsService {
                 console.log("savecheck");
             }
             nextMissionId++;
-            this.commend.updateSave(nextMissionId);
         }
         return { success, nextMissionId };
     }

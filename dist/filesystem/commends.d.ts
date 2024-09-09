@@ -32,16 +32,15 @@ export declare class commends {
     vi(payload: any): string;
     write(payload: any, context: any): Promise<string>;
     scan(payload: any): string;
-    ssh(payload: any): string;
+    ssh(payload: any): "Port access denied" | "can't find host";
     exit(): string;
     iptables(payload: any): string;
     FTPbounce(payload: any): "complete." | "failed." | "Wrong port number";
-    scp(payload: any): "can't find host" | "테스트중" | "wrong input";
-    fdisk(): void;
+    scp(payload: any): "Port access denied" | "can't find host" | "complete" | "wrong input";
     porthack(payload: any): string;
+    SSHcrack(): void;
     loggging(cmd: any, addr: any, name: any, data: any): void;
-    loggging_lock(): void;
+    checkPortOpen(destIP: any, portNumber: any): boolean;
     calcSubnet(cidraddress: string, ipaddress: string): boolean;
     getKeyByValue(map: Map<string, number>, value: number): string | undefined;
-    updateSave(save: number): void;
 }

@@ -11,7 +11,7 @@ export declare class FilesystemService {
     private sf;
     private savepoint;
     constructor(saveFileService: SaveFileService);
-    initFs(userId: string, savepoint: number, location: string): Promise<void>;
+    initFs(userId: string, savepoint: number, location: string, username: string): Promise<void>;
     rmC(userId: string): boolean;
     setC(userId: string): Promise<commends>;
     getC(userId: string): commends;

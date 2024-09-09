@@ -49,13 +49,14 @@ class commends {
         this.fs.createDirectory("/tmp");
         this.fs.createDirectory("/usr");
         this.fs.createDirectory("/var");
+        this.fs.createDirectory("/var/log/syslog");
         for (let index = 0; index < dirlist.length; index++) {
             this.fs.createDirectory(dirlist[index].toString());
         }
         for (let index = 0; index < filelist.length; index++) {
             this.fs.createFile(filelist[index].toString());
         }
-        if (this.currentUser == 'root') {
+        if (this.currentUser === 'root') {
             this.currentpath = '/root';
         }
         else if (this.currentUser === '/') {
@@ -67,7 +68,6 @@ class commends {
         const userId = this.userId;
         const user = await user_entity_1.User.findOne({ where: { userId } });
         this.savepoint = user.savepoint;
-        console.log("setFS SavePoint : ", this.savepoint);
     }
     mkNodeList() {
         for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node.length; index++) {
@@ -382,20 +382,25 @@ class commends {
     }
     ssh(payload) {
         if (this.nodelist.has(payload[1])) {
-            this.currentIP = payload[1];
-            this.isUserNode = false;
-            this.currentNode = this.nodelist.get(payload[1].toString());
-            this.currentUser = "node" + (this.currentNode + 1).toString().padStart(2, '0');
-            let dirlist = [];
-            for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath.length; index++) {
-                dirlist.push(this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath[index]);
+            if (this.checkPortOpen(payload[1], "22")) {
+                this.currentIP = payload[1];
+                this.isUserNode = false;
+                this.currentNode = this.nodelist.get(payload[1].toString());
+                this.currentUser = "node" + (this.currentNode + 1).toString().padStart(2, '0');
+                let dirlist = [];
+                for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath.length; index++) {
+                    dirlist.push(this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeDirectorys[0].dirPath[index]);
+                }
+                let filelist = [];
+                for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile.length; index++) {
+                    filelist.push(this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile[index].File_name);
+                }
+                console.log(this.currentNode, this.savepoint, dirlist, filelist);
+                this.setFs(dirlist, filelist, this.currentUser, this.currentIP);
             }
-            let filelist = [];
-            for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile.length; index++) {
-                filelist.push(this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile[index].File_name);
+            else {
+                return "Port access denied";
             }
-            console.log(this.currentNode, this.savepoint, dirlist, filelist);
-            this.setFs(dirlist, filelist, this.currentUser, this.currentIP);
         }
         else {
             return "can't find host";
@@ -446,14 +451,24 @@ class commends {
             if (isTCP) {
                 for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service.length; index++) {
                     if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index].servicePort == portnum) {
-                        this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index].portState = "OPEN";
+                        if (isOpen) {
+                            this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index].portState = "OPEN";
+                        }
+                        else {
+                            this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index].portState = "CLOSED";
+                        }
                     }
                 }
             }
             else {
                 for (let index = 0; index < this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service.length; index++) {
                     if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index].servicePort == portnum) {
-                        this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index].portState = "OPEN";
+                        if (isOpen) {
+                            this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index].portState = "OPEN";
+                        }
+                        else {
+                            this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index].portState = "CLOSED";
+                        }
                     }
                 }
             }
@@ -462,21 +477,32 @@ class commends {
             if (isTCP) {
                 for (let index = 0; index < this.missionsDTO.userNode.userPort[0].userTCP[0].userService.length; index++) {
                     if (this.missionsDTO.userNode.userPort[0].userTCP[0].userService[index].userServicePort == portnum) {
-                        this.missionsDTO.userNode.userPort[0].userTCP[0].userService[index].userPortState = "OPEN";
+                        if (isOpen) {
+                            this.missionsDTO.userNode.userPort[0].userTCP[0].userService[index].userPortState = "OPEN";
+                        }
+                        else {
+                            this.missionsDTO.userNode.userPort[0].userTCP[0].userService[index].userPortState = "CLOSED";
+                        }
                     }
                 }
             }
             else {
                 for (let index = 0; index < this.missionsDTO.userNode.userPort[0].userUDP[0].userService.length; index++) {
                     if (this.missionsDTO.userNode.userPort[0].userUDP[0].userService[index].userServicePort == portnum) {
-                        this.missionsDTO.userNode.userPort[0].userUDP[0].userService[index].userPortState = "OPEN";
+                        if (isOpen) {
+                            this.missionsDTO.userNode.userPort[0].userUDP[0].userService[index].userPortState = "OPEN";
+                        }
+                        else {
+                            this.missionsDTO.userNode.userPort[0].userTCP[0].userService[index].userPortState = "CLOSED";
+                        }
                     }
                 }
             }
         }
+        console.log("test:", payload, this.isUserNode, isTCP, isOpen, portnum);
         this.xmlService.updateXml(this.userId, this.missionsDTO);
-        this.loggging("iptables", this.currentIP, this.currentUser, `${portnum}:OPEN`);
-        return " ";
+        this.loggging("iptables", this.currentIP, this.currentUser, `${portnum}:${isOpen ? 'OPEN' : 'CLOSED'}`);
+        return "complete";
     }
     FTPbounce(payload) {
         let fin = false;
@@ -547,14 +573,30 @@ class commends {
             console.log(this.nodelist.values());
             const temp = `cat ${payload[1]}`.split(' ');
             const context = this.cat(temp);
-            if (this.isUserNode == false) {
-                if (destIP == '192.168.25.2') {
-                    if (this.fs.isOverlap(payload[1], this.currentpath) == false) {
-                        const file = {
-                            userFile_name: destLocate + "/" + payload[1],
-                            userFile_content: context
-                        };
-                        this.missionsDTO.userNode.userFile.push(file);
+            if (this.checkPortOpen(destIP, "22")) {
+                if (this.isUserNode == false) {
+                    if (destIP == '192.168.25.2') {
+                        if (this.fs.isOverlap(payload[1], this.currentpath) == false) {
+                            const file = {
+                                userFile_name: destLocate + "/" + payload[1],
+                                userFile_content: context
+                            };
+                            this.missionsDTO.userNode.userFile.push(file);
+                        }
+                    }
+                    else {
+                        if (this.nodelist.has(destIP)) {
+                            if (this.fs.isOverlap(payload[1], this.currentpath) == false) {
+                                const file = {
+                                    File_name: destLocate + "/" + payload[1],
+                                    File_content: context
+                                };
+                                this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(destIP)].nodeFile.push(file);
+                            }
+                        }
+                        else {
+                            return "can't find host";
+                        }
                     }
                 }
                 else {
@@ -571,29 +613,16 @@ class commends {
                         return "can't find host";
                     }
                 }
+                this.xmlService.updateXml(this.userId, this.missionsDTO);
+                return "complete";
             }
             else {
-                if (this.nodelist.has(destIP)) {
-                    if (this.fs.isOverlap(payload[1], this.currentpath) == false) {
-                        const file = {
-                            File_name: destLocate + "/" + payload[1],
-                            File_content: context
-                        };
-                        this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(destIP)].nodeFile.push(file);
-                    }
-                }
-                else {
-                    return "can't find host";
-                }
+                return "Port access denied";
             }
-            this.xmlService.updateXml(this.userId, this.missionsDTO);
-            return "테스트중";
         }
         catch (error) {
             return "wrong input";
         }
-    }
-    fdisk() {
     }
     porthack(payload) {
         console.log(payload);
@@ -612,6 +641,8 @@ class commends {
         }
         this.xmlService.updateXml(this.userId, this.missionsDTO);
         return 'true';
+    }
+    SSHcrack() {
     }
     loggging(cmd, addr, name, data) {
         this.fs.createDirectory("/var/log/syslog");
@@ -632,14 +663,41 @@ class commends {
         }
         this.xmlService.updateXml(this.userId, this.missionsDTO);
     }
-    loggging_lock() {
-        for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {
-            if (this.missionsDTO.userNode.userFile[index].userFile_name.includes("/var/log/syslog/")) {
-                this.missionsDTO.userNode.userFile[index].userFile_content = '';
-                break;
+    checkPortOpen(destIP, portNumber) {
+        console.log(destIP);
+        console.log(destIP.toString());
+        console.log(portNumber);
+        const destNode = this.nodelist.get(destIP.toString());
+        let isPortOpen = false;
+        if (destIP.toString() != '192.168.25.2') {
+            for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[destNode].nodePort[0].TCP[0].service.length; index2++) {
+                if (this.missionsDTO.mission[this.savepoint].node[destNode].nodePort[0].TCP[0].service[index2].servicePort == portNumber) {
+                    this.missionsDTO.mission[this.savepoint].node[destNode].nodePort[0].TCP[0].service[index2].portState == "OPEN" ? isPortOpen = true : isPortOpen = false;
+                    break;
+                }
+            }
+            for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[destNode].nodePort[0].UDP[0].service.length; index2++) {
+                if (this.missionsDTO.mission[this.savepoint].node[destNode].nodePort[0].UDP[0].service[index2].servicePort == portNumber) {
+                    this.missionsDTO.mission[this.savepoint].node[destNode].nodePort[0].UDP[0].service[index2].portState == "OPEN" ? isPortOpen = true : isPortOpen = false;
+                    break;
+                }
             }
         }
-        this.xmlService.updateXml(this.userId, this.missionsDTO);
+        else {
+            for (let index = 0; index < this.missionsDTO.userNode.userPort[0].userTCP[0].userService.length; index++) {
+                if (this.missionsDTO.userNode.userPort[0].userTCP[0].userService[index].userServicePort == portNumber) {
+                    this.missionsDTO.userNode.userPort[0].userTCP[0].userService[index].userPortState == "OPEN" ? isPortOpen = true : isPortOpen = false;
+                    break;
+                }
+            }
+            for (let index = 0; index < this.missionsDTO.userNode.userPort[0].userUDP[0].userService.length; index++) {
+                if (this.missionsDTO.userNode.userPort[0].userUDP[0].userService[index].userServicePort == portNumber) {
+                    this.missionsDTO.userNode.userPort[0].userUDP[0].userService[index].userPortState == "OPEN" ? isPortOpen = true : isPortOpen = false;
+                    break;
+                }
+            }
+        }
+        return isPortOpen;
     }
     calcSubnet(cidraddress, ipaddress) {
         const [cidrAddress, cidrPrefix] = cidraddress.split('/');
@@ -670,10 +728,6 @@ class commends {
         const entries = Object.entries(Object.fromEntries(map));
         const found = entries.find(([key, val]) => val === value);
         return found ? found[0] : undefined;
-    }
-    updateSave(save) {
-        this.savepoint = save;
-        console.log("Now SavePoint : ", this.savepoint);
     }
 }
 exports.commends = commends;

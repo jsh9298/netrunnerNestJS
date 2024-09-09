@@ -33,12 +33,12 @@ export class AuthService {
             const payload = { userId };
             const accessToken = await this.jwtService.sign(payload);
 
-            const mission = await this.xmlservice.readXml(userId, user.location);
+            const mission = await this.xmlservice.readXml(userId, user.location, user.username);
             if (mission) {
                 this.xmlservice.updateXml(userId, mission);
             }
 
-            await this.filesystemService.initFs(userId, user.savepoint, user.location);
+            await this.filesystemService.initFs(userId, user.savepoint, user.location, user.username);
             const missionId = user.savepoint;
             return { accessToken, missionId };
         } else {
@@ -81,7 +81,7 @@ export class AuthService {
         return user_list;
     }
     async signOut(user: User) {
-        const mission = await this.xmlservice.readXml(user.userId, user.location);
+        const mission = await this.xmlservice.readXml(user.userId, user.location, user.username);
         this.xmlservice.saveXml(user.userId, user.location, mission);
         this.filesystemService.rmC(user.userId);
     }

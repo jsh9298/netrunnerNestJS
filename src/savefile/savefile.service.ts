@@ -18,17 +18,17 @@ export class SaveFileService {
     this._missionsCache = missions;
   }
 
-  async getXml(userId: string, location: string): Promise<MissionsDTO> {
+  async getXml(userId: string, location: string, username: string): Promise<MissionsDTO> {
     // if (this.missionsCache[userId]) {
     //   return this.missionsCache[userId];
     // } else {
-    const missions = await this.readXml(userId, location);
+    const missions = await this.readXml(userId, location, username);
     this.missionsCache[userId] = missions;
     return missions;
     // }
   }
 
-  async readXml(userId: string, location: string): Promise<MissionsDTO> {
+  async readXml(userId: string, location: string, username: string): Promise<MissionsDTO> {
     try {
       const xmlFilePath = path.join(location, `${userId}sinario.xml`);
       const xmlData = await fs.promises.readFile(xmlFilePath, 'utf-8');
@@ -37,9 +37,16 @@ export class SaveFileService {
       const missions: MissionsDTO = new MissionsDTO();
       const usernode: UserNodeDTO = new UserNodeDTO();
       const mission: MissionDTO[] = [];
+      const name: string = username;
 
       for (const missionItem of missionData.missions.mission) {
         const mission2 = new MissionDTO();
+        if (missionItem.scenario) {
+          // console.log('start');
+          const scenario: string = missionItem.scenario.toString().replace(/(‘주인공’)|('주인공')/gm, name);
+          missionItem.scenario[0] = scenario;
+          // console.log("ss", missionItem.scenario, typeof missionItem.scenario);
+        }
         Object.assign(mission2, missionItem);
         mission.push(mission2);
       }

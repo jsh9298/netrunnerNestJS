@@ -19,6 +19,7 @@ export declare class GuisocketGateway implements OnGatewayConnection {
     handleMessage(client: any, data: {
         roomId: string;
         payload: string;
+        savepoint: string;
     }): string;
     handleLeave(client: any, data: {
         roomId: string;

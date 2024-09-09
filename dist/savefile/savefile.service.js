@@ -23,12 +23,12 @@ let SaveFileService = class SaveFileService {
     set missionsCache(missions) {
         this._missionsCache = missions;
     }
-    async getXml(userId, location) {
-        const missions = await this.readXml(userId, location);
+    async getXml(userId, location, username) {
+        const missions = await this.readXml(userId, location, username);
         this.missionsCache[userId] = missions;
         return missions;
     }
-    async readXml(userId, location) {
+    async readXml(userId, location, username) {
         try {
             const xmlFilePath = path.join(location, `${userId}sinario.xml`);
             const xmlData = await fs.promises.readFile(xmlFilePath, 'utf-8');
@@ -37,8 +37,13 @@ let SaveFileService = class SaveFileService {
             const missions = new savefile_Dto_1.MissionsDTO();
             const usernode = new savefile_Dto_1.UserNodeDTO();
             const mission = [];
+            const name = username;
             for (const missionItem of missionData.missions.mission) {
                 const mission2 = new savefile_Dto_1.MissionDTO();
+                if (missionItem.scenario) {
+                    const scenario = missionItem.scenario.toString().replace(/(‘주인공’)|('주인공')/gm, name);
+                    missionItem.scenario[0] = scenario;
+                }
                 Object.assign(mission2, missionItem);
                 mission.push(mission2);
             }

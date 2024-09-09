@@ -14,6 +14,7 @@ export declare class TermsocketGateway implements OnGatewayConnection {
     handleMessage(client: any, data: {
         roomId: string;
         payload: string;
+        savepoint: string;
     }): string;
     handleLeave(client: any, data: {
         roomId: string;
