@@ -50,6 +50,7 @@ class commends {
         this.fs.createDirectory("/usr");
         this.fs.createDirectory("/var");
         this.fs.createDirectory("/var/log/syslog");
+        console.log("dirlist:", dirlist);
         for (let index = 0; index < dirlist.length; index++) {
             this.fs.createDirectory(dirlist[index].toString());
         }
@@ -259,6 +260,7 @@ class commends {
         return " ";
     }
     cat(payload) {
+        console.log("userNode check Cat:", this.missionsDTO);
         let printFile = " ";
         if (this.isUserNode) {
             for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {

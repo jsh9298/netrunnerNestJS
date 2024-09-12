@@ -105,7 +105,8 @@ let GuisocketGateway = class GuisocketGateway {
                 break;
         }
         com.savepoint = parseInt(data.savepoint, 10);
-        this.server.to(data.roomId).emit('message', data.payload);
+        const payload = data.payload;
+        this.server.to(data.roomId).emit('message', payload);
     }
     handleLeave(client, data) {
         console.log("leave gui:", data);

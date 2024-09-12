@@ -42,10 +42,11 @@ export class SaveFileService {
       for (const missionItem of missionData.missions.mission) {
         const mission2 = new MissionDTO();
         if (missionItem.scenario) {
-          // console.log('start');
-          const scenario: string = missionItem.scenario.toString().replace(/(‘주인공’)|('주인공')/gm, name);
-          missionItem.scenario[0] = scenario;
-          // console.log("ss", missionItem.scenario, typeof missionItem.scenario);
+          const scenario: string = missionItem.scenario.toString();
+          if (scenario.match(/(‘주인공’) | ('주인공')/gm)) {
+            console.log("match true start");
+            missionItem.scenario[0] = scenario.replace(/(‘주인공’)|('주인공')/gm, name);
+          }
         }
         Object.assign(mission2, missionItem);
         mission.push(mission2);

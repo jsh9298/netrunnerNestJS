@@ -107,7 +107,11 @@ let TermsocketGateway = class TermsocketGateway {
                 break;
         }
         com.savepoint = parseInt(data.savepoint, 10);
-        this.server.to(data.roomId).emit('message', data.payload);
+        console.log("socket savepoint", com.savepoint);
+        console.log("before", data.savepoint, typeof data.savepoint);
+        console.log("after", parseInt(data.savepoint, 10), typeof parseInt(data.savepoint, 10));
+        const payload = data.payload;
+        this.server.to(data.roomId).emit('message', payload);
     }
     handleLeave(client, data) {
         console.log("leave:", data);

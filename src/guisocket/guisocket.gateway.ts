@@ -108,7 +108,8 @@ export class GuisocketGateway implements OnGatewayConnection {
         break;
     }
     com.savepoint = parseInt(data.savepoint, 10);
-    this.server.to(data.roomId).emit('message', data.payload);
+    const payload = data.payload;
+    this.server.to(data.roomId).emit('message', payload);
   }
   @SubscribeMessage('leave')
   handleLeave(client: any, data: { roomId: string }) {

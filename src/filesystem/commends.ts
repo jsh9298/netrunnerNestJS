@@ -52,6 +52,7 @@ export class commends {
         this.fs.createDirectory("/usr");
         this.fs.createDirectory("/var");
         this.fs.createDirectory("/var/log/syslog");
+        console.log("dirlist:", dirlist);
         for (let index = 0; index < dirlist.length; index++) {
             this.fs.createDirectory(dirlist[index].toString());
         }
@@ -65,6 +66,7 @@ export class commends {
         } else {
             this.currentpath = `/home/${this.currentUser}`;
         }
+        // this.fs.createDirectory(this.currentpath);
         const userId = this.userId;
         const user = await User.findOne({ where: { userId } });
         this.savepoint = user.savepoint;
@@ -253,6 +255,7 @@ export class commends {
     }
 
     cat(payload) {
+        console.log("userNode check Cat:", this.missionsDTO);
         let printFile = " ";
         if (this.isUserNode) {
             for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {
@@ -628,10 +631,84 @@ export class commends {
         return 'true';
     }
 
-    SSHcrack() {
-
+    SSHcrack(payload) {
+        //sshcrack 192.168.25.3 22 open
+        console.log(payload);
+        console.log(this.nodelist.get(payload[1].toString()));
+        for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(payload[1].toString())].nodePort[0].TCP[0].service.length; index2++) {
+            if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].servicePort == payload[2]) {
+                this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].portState = "OPEN";
+                break;
+            }
+        }
+        for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(payload[1].toString())].nodePort[0].UDP[0].service.length; index2++) {
+            if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index2].servicePort == payload[2]) {
+                this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index2].portState = "OPEN";
+                break;
+            }
+        }
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
+        return 'true';
     }
+    SMTPoverflow(payload) {
+        //smtpoverflow 192.168.25.3 25 open
+        console.log(payload);
+        console.log(this.nodelist.get(payload[1].toString()));
+        for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(payload[1].toString())].nodePort[0].TCP[0].service.length; index2++) {
+            if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].servicePort == payload[2]) {
+                this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].portState = "OPEN";
+                break;
+            }
+        }
+        for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(payload[1].toString())].nodePort[0].UDP[0].service.length; index2++) {
+            if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index2].servicePort == payload[2]) {
+                this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index2].portState = "OPEN";
+                break;
+            }
+        }
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
+        return 'true';
+    }
+    WebServerWorm(payload) {
+        //webserverworm 192.168.25.3 80 open
+        console.log(payload);
+        console.log(this.nodelist.get(payload[1].toString()));
+        for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(payload[1].toString())].nodePort[0].TCP[0].service.length; index2++) {
+            if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].servicePort == payload[2]) {
+                this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].portState = "OPEN";
+                break;
+            }
+        }
+        for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(payload[1].toString())].nodePort[0].UDP[0].service.length; index2++) {
+            if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index2].servicePort == payload[2]) {
+                this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].UDP[0].service[index2].portState = "OPEN";
+                break;
+            }
+        }
+        this.xmlService.updateXml(this.userId, this.missionsDTO);
+        return 'true';
+    }
+    Decypher(payload) {
+        // dechead [filename] [decoded type] [null|key]
+        if (payload[1].includes(".encoded")) {
 
+        } else {
+            return 'false';
+        }
+    }
+    DECHead(payload) {
+        // dechead filename.encoded
+        //파일명 별로 다른 암호화방식으로 채택할까?
+        //des aes rsa 
+        if (payload[1].includes(".encoded")) {
+            //생성된 nodeID,NodeIP 읽어들인후 반환
+            const madeID = "";
+            const madeNode = "";
+            return madeID + "@" + madeNode;
+        } else {
+            return 'false';
+        }
+    }
     loggging(cmd, addr, name, data) {
         this.fs.createDirectory("/var/log/syslog");
         const textData: any = cmd + '\n' + addr + '\n' + name + '\n' + data;
