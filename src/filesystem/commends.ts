@@ -710,12 +710,10 @@ export class commends {
 
     DECHead(payload) {
         // dechead filename.encoded
-        //파일명 별로 다른 암호화방식으로 채택할까?
-        //des
-        if (payload[1].includes(".encoded")) {
-            const madeID = "";
-            const madeNode = "";
-            return madeID + "@" + madeNode;
+        const context = this.Decypher(`Decypher ${payload[1]}`.split(" "));
+        if (context) {
+            const result = context.match(/(node[0-9]{0,2}@[0-9]{0,3}.[0-9]{0,3}.[0-9]{0,3}.[0-9]{0,3})/m).toString();
+            return result;
         } else {
             return 'false';
         }
