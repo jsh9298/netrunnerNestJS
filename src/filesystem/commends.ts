@@ -2,7 +2,7 @@ import { FileContentDTO, MissionsDTO, NodeFileDTO, UserFileDTO } from "src/savef
 import { SaveFileService } from "src/savefile/savefile.service";
 import { FileSystem } from "./filesystemcore/fileSystems";
 import { User } from "src/auth/users/user.entity";
-
+import crypto from "crypto";
 
 export class commends {
     fs: FileSystem = null;
@@ -615,6 +615,7 @@ export class commends {
         //porthack 192.168.25.3 21 open
         console.log(payload);
         console.log(this.nodelist.get(payload[1].toString()));
+
         for (let index2 = 0; index2 < this.missionsDTO.mission[this.savepoint].node[this.nodelist.get(payload[1].toString())].nodePort[0].TCP[0].service.length; index2++) {
             if (this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].servicePort == payload[2]) {
                 this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodePort[0].TCP[0].service[index2].portState = "OPEN";
@@ -689,19 +690,29 @@ export class commends {
         return 'true';
     }
     Decypher(payload) {
-        // dechead [filename] [decoded type] [null|key]
-        if (payload[1].includes(".encoded")) {
+        // dechead [filename]
+        const context = this.cat(`cat ${payload[1]}`.split(" "));
+        if (payload[1].includes(".encoded") && context) {
+            const key = 'abcdefghijklmnopqrstuvwxyz123456';
+            const iv = "1234567890123456";
+            // 복호화 메서드
+            const decipher = (context, key) => {
+                const decode = crypto.createDecipheriv('des', key, iv);
+                const decodeResult = decode.update(context, 'base64', 'utf8') // 암호화된 문자열, 암호화 했던 인코딩 종류, 복호화 할 인코딩 종류 설정
+                    + decode.final('utf8') // 복호화 결과의 인코딩
 
+                return decodeResult;
+            }
         } else {
             return 'false';
         }
     }
+
     DECHead(payload) {
         // dechead filename.encoded
         //파일명 별로 다른 암호화방식으로 채택할까?
-        //des aes rsa 
+        //des
         if (payload[1].includes(".encoded")) {
-            //생성된 nodeID,NodeIP 읽어들인후 반환
             const madeID = "";
             const madeNode = "";
             return madeID + "@" + madeNode;
@@ -820,4 +831,5 @@ export class commends {
     // sleep(ms) {
     //     return new Promise((r) => setTimeout(r, ms));
     // }
+
 }
