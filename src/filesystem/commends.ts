@@ -2,7 +2,7 @@ import { FileContentDTO, MissionsDTO, NodeFileDTO, UserFileDTO } from "src/savef
 import { SaveFileService } from "src/savefile/savefile.service";
 import { FileSystem } from "./filesystemcore/fileSystems";
 import { User } from "src/auth/users/user.entity";
-import crypto from "crypto";
+import * as crypto from 'crypto';
 
 export class commends {
     fs: FileSystem = null;
@@ -714,12 +714,27 @@ export class commends {
 
     DECHead(payload) {
         // dechead filename.encoded
-        const context = this.Decypher(`Decypher ${payload[1]}`.split(" "));
-        if (context) {
-            const result = context.match(/(node[0-9]{0,2}@[0-9]{0,3}.[0-9]{0,3}.[0-9]{0,3}.[0-9]{0,3})/m).toString();
-            return result;
-        } else {
-            return 'false';
+        if (payload[1].includes(".encoded")) {
+            const filecontext = this.cat(`cat ${payload[1]}`.split(" "));
+            const algorithm = 'aes-256-cbc';
+            const key = 'abcdefghijklmnopqrstuvwxyz123456';
+            const iv = "1234567890123456";
+            // 복호화 메서드
+            const decipher = (context, key) => {
+                const decode = crypto.createDecipheriv(algorithm, key, iv);
+                const decodeResult = decode.update(context, 'base64', 'utf8') // 암호화된 문자열, 암호화 했던 인코딩 종류, 복호화 할 인코딩 종류 설정
+                    + decode.final('utf8') // 복호화 결과의 인코딩
+
+                return decodeResult;
+            }
+            const context = decipher(filecontext, key);
+
+            if (context) {
+                const result = context.match(/(node[0-9]{0,2}@[0-9]{0,3}.[0-9]{0,3}.[0-9]{0,3}.[0-9]{0,3})/m).toString();
+                return result;
+            } else {
+                return 'false';
+            }
         }
     }
     loggging(cmd, addr, name, data) {
