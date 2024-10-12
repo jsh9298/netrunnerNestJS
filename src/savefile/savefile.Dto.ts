@@ -129,9 +129,16 @@ export class CorrectAnswerDTO {
   myNode: MyNodeDTO;
 }
 
+export class ScenarioDTO {
+  @IsString()
+  story: string;
+  @IsString()
+  target: string;
+}
+
 export class MissionDTO {
   @IsString()
-  scenario: string;
+  scenario: ScenarioDTO;
 
   @IsObject()
   correctAnswer: CorrectAnswerDTO;

@@ -17,6 +17,12 @@ let FilesystemService = class FilesystemService {
     constructor(saveFileService) {
         this.saveFileService = saveFileService;
         this.filesystemMap = new Map();
+        this.dirlist = [];
+        this.filelist = [];
+        this.currentUser = "";
+        this.currentip = "";
+        this.sf = null;
+        this.savepoint = 0;
     }
     async initFs(userId, savepoint, location, username) {
         const sf = await this.saveFileService.getXml(userId, location, username);
@@ -45,7 +51,7 @@ let FilesystemService = class FilesystemService {
         return true;
     }
     async setC(userId) {
-        if (!this.filesystemMap.has(userId)) {
+        if (!this.filesystemMap.has(userId) && this.dirlist.length != 0) {
             const c = new commends_1.commends(this.saveFileService, userId, this.sf, this.savepoint);
             c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
             this.filesystemMap.set(userId, c);

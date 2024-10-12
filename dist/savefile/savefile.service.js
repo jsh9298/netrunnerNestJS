@@ -41,10 +41,10 @@ let SaveFileService = class SaveFileService {
             for (const missionItem of missionData.missions.mission) {
                 const mission2 = new savefile_Dto_1.MissionDTO();
                 if (missionItem.scenario) {
-                    const scenario = missionItem.scenario.toString();
-                    if (scenario.match(/(‘주인공’) | ('주인공')/gm)) {
-                        console.log("match true start");
-                        missionItem.scenario[0] = scenario.replace(/(‘주인공’)|('주인공')/gm, name);
+                    console.log("Now Username : ", name);
+                    const scenario = missionItem.scenario[0].story[0];
+                    if (scenario.match(/(‘주인공’)|('주인공')/gm)) {
+                        missionItem.scenario[0].story[0] = scenario.replace(/(‘주인공’)|('주인공')/gm, name);
                     }
                 }
                 Object.assign(mission2, missionItem);

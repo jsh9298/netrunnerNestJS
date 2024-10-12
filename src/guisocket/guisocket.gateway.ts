@@ -103,12 +103,21 @@ export class GuisocketGateway implements OnGatewayConnection {
       case 'porthack':
         data.payload = com.porthack(response);
         break;
+      case 'SSHcrack':
+        data.payload = com.SSHcrack(response);
+        break;
+      case 'SMTPoverflow':
+        data.payload = com.SMTPoverflow(response);
+        break;
+      case 'WebServerWorm':
+        data.payload = com.WebServerWorm(response);
+        break;
       case 'DECHead':
-          data.payload = com.DECHead(response);
-          break;
+        data.payload = com.DECHead(response);
+        break;
       case 'Decypher':
-          data.payload = com.Decypher(response);
-          break;
+        data.payload = com.Decypher(response);
+        break;
       default:
         data.payload = "Unkown command";
         break;

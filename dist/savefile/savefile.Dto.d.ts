@@ -64,8 +64,12 @@ export declare class MyNodeDTO {
 export declare class CorrectAnswerDTO {
     myNode: MyNodeDTO;
 }
+export declare class ScenarioDTO {
+    story: string;
+    target: string;
+}
 export declare class MissionDTO {
-    scenario: string;
+    scenario: ScenarioDTO;
     correctAnswer: CorrectAnswerDTO;
     node: NodeDTO[];
     reward: RewardDTO;

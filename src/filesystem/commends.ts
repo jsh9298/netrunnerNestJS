@@ -2,6 +2,8 @@ import { FileContentDTO, MissionsDTO, NodeFileDTO, UserFileDTO } from "src/savef
 import { SaveFileService } from "src/savefile/savefile.service";
 import { FileSystem } from "./filesystemcore/fileSystems";
 import { User } from "src/auth/users/user.entity";
+import { Stack } from "./stack";
+import { StackItem } from "./stackItem.interface";
 import * as crypto from 'crypto';
 
 export class commends {
@@ -17,6 +19,7 @@ export class commends {
     nodelist: Map<string, number> = new Map();
     currentNode: number = 0;
     savepoint: number;
+    sshhistory: Stack<StackItem>;
     constructor(private xmlService: SaveFileService, userId: string, missionsDTO: MissionsDTO, savepoint: number) {
         this.userId = userId;
         this.userLocation = `/game/${userId}`
@@ -26,6 +29,7 @@ export class commends {
             this.mkNodeList();
             this.userIP = this.missionsDTO.userNode.userIP;
         }
+        this.sshhistory = new Stack<StackItem>();
         console.log("init SavePoint : ", this.savepoint);
     }
     async setFs(dirlist: string[], filelist: string[], uSer: string, Ip: string) {
@@ -390,7 +394,15 @@ export class commends {
                     filelist.push(this.missionsDTO.mission[this.savepoint].node[this.currentNode].nodeFile[index].File_name);
                 }
                 console.log(this.currentNode, this.savepoint, dirlist, filelist);
+                const item: StackItem = {
+                    dirlist: dirlist,
+                    filelist: filelist,
+                    currentUser: this.currentUser,
+                    currentIP: this.currentIP
+                }
+                this.sshhistory.push(item);
                 this.setFs(dirlist, filelist, this.currentUser, this.currentIP);
+                return " ";
             } else {
                 return "Port access denied";
             }
@@ -399,22 +411,31 @@ export class commends {
         }
     }
     exit() {
-        if (this.isUserNode == false) {
-            this.currentIP = this.userIP;
-            this.isUserNode = true;
-            this.currentNode = 0;
-            this.currentUser = "myNode";
-            let dirlist: string[] = [];
-            for (let index = 0; index < this.missionsDTO.userNode.userDirectorys[0].userDirPath.length; index++) {
-                dirlist.push(this.missionsDTO.userNode.userDirectorys[0].userDirPath[index]);
-            }
-            let filelist: string[] = [];
-            for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {
-                filelist.push(this.missionsDTO.userNode.userFile[index].userFile_name);
-            }
-            this.setFs(dirlist, filelist, this.currentUser, this.currentIP);
+        if (this.sshhistory.size() !== 0) {
+            const preNode = this.sshhistory.pop();
+            this.currentNode = this.nodelist.get(preNode.currentIP);
+            this.isUserNode = false;
+            this.setFs(preNode.dirlist, preNode.filelist, preNode.currentUser, preNode.currentIP);
+            return " ";
         } else {
-            return "Unkown commends";
+            if (this.isUserNode === false) {
+                this.currentIP = this.userIP;
+                this.isUserNode = true;
+                this.currentNode = 0;
+                this.currentUser = "myNode";
+                let dirlist: string[] = [];
+                for (let index = 0; index < this.missionsDTO.userNode.userDirectorys[0].userDirPath.length; index++) {
+                    dirlist.push(this.missionsDTO.userNode.userDirectorys[0].userDirPath[index]);
+                }
+                let filelist: string[] = [];
+                for (let index = 0; index < this.missionsDTO.userNode.userFile.length; index++) {
+                    filelist.push(this.missionsDTO.userNode.userFile[index].userFile_name);
+                }
+                this.setFs(dirlist, filelist, this.currentUser, this.currentIP);
+                return " ";
+            } else {
+                return "Unkown commends";
+            }
         }
     }
 
@@ -697,15 +718,15 @@ export class commends {
             const key = 'abcdefghijklmnopqrstuvwxyz123456';
             const iv = "1234567890123456";
             // 복호화 메서드
-            const decipher = (context, key) => {
+            const decipher = (content, key) => {
                 const decode = crypto.createDecipheriv(algorithm, key, iv);
-                const decodeResult = decode.update(context, 'base64', 'utf8') // 암호화된 문자열, 암호화 했던 인코딩 종류, 복호화 할 인코딩 종류 설정
+                const decodeResult = decode.update(content, 'base64', 'utf8') // 암호화된 문자열, 암호화 했던 인코딩 종류, 복호화 할 인코딩 종류 설정
                     + decode.final('utf8') // 복호화 결과의 인코딩
 
                 return decodeResult;
             }
-            this.vi(`vi ${payload[1].slice(0, -8)}.txt`.split(" "));
-            this.write(`${payload[1].slice(0, -8)}.txt`, decipher(context, key));
+            this.vi(`vi ${payload[1].replace('.encoded', '.txt')}`.split(" "));
+            this.write(`write ${payload[1].replace('.encoded', '.txt')}`.split(" "), decipher(context, key));
             return 'true';
         } else {
             return 'false';

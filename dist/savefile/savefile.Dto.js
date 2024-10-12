@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MissionsDTO = exports.UserNodeDTO = exports.MissionDTO = exports.CorrectAnswerDTO = exports.MyNodeDTO = exports.UserPortDTO = exports.UserDTO = exports.NodeDTO = exports.UserFileDTO = exports.NodeFileDTO = exports.RewardDTO = exports.NodeProgramDTO = exports.UserDirectorysDTO = exports.NodePortDTO = exports.TCPDTO = exports.ServiceDTO = exports.NodeDirectorysDTO = exports.UserProgramDTO = exports.UserServiceDTO = exports.FileContentDTO = void 0;
+exports.MissionsDTO = exports.UserNodeDTO = exports.MissionDTO = exports.ScenarioDTO = exports.CorrectAnswerDTO = exports.MyNodeDTO = exports.UserPortDTO = exports.UserDTO = exports.NodeDTO = exports.UserFileDTO = exports.NodeFileDTO = exports.RewardDTO = exports.NodeProgramDTO = exports.UserDirectorysDTO = exports.NodePortDTO = exports.TCPDTO = exports.ServiceDTO = exports.NodeDirectorysDTO = exports.UserProgramDTO = exports.UserServiceDTO = exports.FileContentDTO = void 0;
 const class_validator_1 = require("class-validator");
 class FileContentDTO {
 }
@@ -190,12 +190,23 @@ __decorate([
     (0, class_validator_1.IsObject)(),
     __metadata("design:type", MyNodeDTO)
 ], CorrectAnswerDTO.prototype, "myNode", void 0);
+class ScenarioDTO {
+}
+exports.ScenarioDTO = ScenarioDTO;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ScenarioDTO.prototype, "story", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ScenarioDTO.prototype, "target", void 0);
 class MissionDTO {
 }
 exports.MissionDTO = MissionDTO;
 __decorate([
     (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
+    __metadata("design:type", ScenarioDTO)
 ], MissionDTO.prototype, "scenario", void 0);
 __decorate([
     (0, class_validator_1.IsObject)(),

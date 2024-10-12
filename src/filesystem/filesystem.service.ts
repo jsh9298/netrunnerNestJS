@@ -8,12 +8,12 @@ import { MissionsDTO } from 'src/savefile/savefile.Dto';
 @Injectable()
 export class FilesystemService {
     private filesystemMap: Map<string, commends> = new Map();
-    private dirlist: string[];
-    private filelist: string[];
-    private currentUser: string;
-    private currentip: string;
-    private sf: MissionsDTO;
-    private savepoint: number;
+    private dirlist: string[] = [];
+    private filelist: string[] = [];
+    private currentUser: string = "";
+    private currentip: string = "";
+    private sf: MissionsDTO = null;
+    private savepoint: number = 0;
     constructor(
         private saveFileService: SaveFileService,
     ) { }
@@ -48,7 +48,7 @@ export class FilesystemService {
     }
 
     async setC(userId: string): Promise<commends> {
-        if (!this.filesystemMap.has(userId)) {
+        if (!this.filesystemMap.has(userId) && this.dirlist.length != 0) {
             const c = new commends(this.saveFileService, userId, this.sf, this.savepoint);
             c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
             this.filesystemMap.set(userId, c);
