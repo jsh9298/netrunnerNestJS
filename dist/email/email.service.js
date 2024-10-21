@@ -45,7 +45,7 @@ let EmailService = class EmailService {
                 },
                 Body: {
                     Html: {
-                        Data: `<h1>인증코드 테스트<h1><h3>인증번호 : ${verificationCode}</h3>`,
+                        Data: `<h1>Netrunner 인증코드 입니다. <h1><h3>인증번호 : ${verificationCode}</h3>`,
                     },
                 },
             },

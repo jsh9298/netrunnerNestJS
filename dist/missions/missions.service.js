@@ -18,12 +18,11 @@ const savefile_service_1 = require("../savefile/savefile.service");
 const tool_repository_1 = require("./tools/tool.repository");
 const tool_entity_1 = require("./tools/tool.entity");
 const typeorm_1 = require("@nestjs/typeorm");
-const commends_1 = require("../filesystem/commends");
 let MissionsService = class MissionsService {
-    constructor(xmlService, toolsRepository, commend) {
+    constructor(xmlService, toolsRepository) {
         this.xmlService = xmlService;
         this.toolsRepository = toolsRepository;
-        this.commend = commend;
+        this.attemptsCountMap = new Map();
     }
     async getMissons(user) {
         const mission = await this.xmlService.getXml(user.userId, user.location, user.username);
@@ -53,7 +52,7 @@ let MissionsService = class MissionsService {
             { name: 'SMTPoverflow', cost: 25 },
             { name: 'WebServerWorm', cost: 25 },
             { name: 'Decypher', cost: 25 },
-            { name: 'DECHead', cost: 25 },
+            { name: 'DECHead', cost: 25 }
         ];
         for (let index = 0; index < defaultTools.length; index++) {
             const element = defaultTools[index];
@@ -65,6 +64,8 @@ let MissionsService = class MissionsService {
         const userfile = await this.xmlService.getXml(user.userId, user.location, user.username);
         let success = false;
         let nextMissionId = user.savepoint;
+        const userId = user.userId;
+        let attemptsCount = this.attemptsCountMap.get(userId) || 0;
         for (let index = 0; index < userfile.userNode.userFile.length; index++) {
             if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_name.toString().trim() == userfile.userNode.userFile[index].userFile_name.toString().trim()) {
                 console.log("userfile1", index, userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_content.toString().replace(/\n|\r|\t|\s*/g, '').trim());
@@ -75,16 +76,22 @@ let MissionsService = class MissionsService {
                 }
                 else {
                     success = false;
+                    attemptsCount++;
                     break;
                 }
             }
         }
+        this.attemptsCountMap.set(userId, attemptsCount);
         if (success) {
+            const minusCount = this.attemptsCountMap.get(userId) || 0;
             const rewardPoint = parseInt(userfile.mission[id].reward[0].point[0]);
             const resultPoint = user.point + rewardPoint;
+            const resultScore = Math.abs(resultPoint * (user.savepoint + 1) - minusCount);
             this.xmlService.saveXml(user.userId, user.location, userfile);
             user.save({ data: user.savepoint++ });
+            user.save({ data: user.level++ });
             user.save({ data: user.point = resultPoint });
+            user.save({ data: user.score += resultScore });
             if (userfile.mission[id].reward[0].toolFile[0] != '') {
                 const rewardTool = userfile.mission[id].reward[0].toolFile[0].split(" ");
                 console.log("reward:", rewardTool);
@@ -93,6 +100,7 @@ let MissionsService = class MissionsService {
                 console.log("save", tools);
                 console.log("savecheck");
             }
+            this.attemptsCountMap.delete(userId);
             nextMissionId++;
         }
         return { success, nextMissionId };
@@ -115,7 +123,6 @@ exports.MissionsService = MissionsService = __decorate([
     (0, common_1.Injectable)(),
     __param(1, (0, typeorm_1.InjectRepository)(tool_entity_1.Tool)),
     __metadata("design:paramtypes", [savefile_service_1.SaveFileService,
-        tool_repository_1.ToolsRepository,
-        commends_1.commends])
+        tool_repository_1.ToolsRepository])
 ], MissionsService);
 //# sourceMappingURL=missions.service.js.map

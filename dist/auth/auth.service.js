@@ -76,9 +76,12 @@ let AuthService = class AuthService {
             select: {
                 userId: true,
                 point: true,
+                score: true,
                 level: true
             }, order: {
+                score: "DESC",
                 level: "DESC",
+                point: "DESC",
                 userId: "ASC"
             }
         });

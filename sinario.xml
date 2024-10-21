@@ -1,182 +1,384 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+10월 11일 패치
+***스토리 작성시 반드시 지켜줘야함***
+캐릭터명᛭ -> 해당캐릭터의 대사
+player᛭ -> 플레이어 대사
+solo᛭ -> 독백이나 상황설명등 대사가 아닌거
+
+᛭ 를 구분자로 사용, 프론트엔드에서 재가공하기 때문
+문장이 길어질 경우 \n을 넣으면, 프론트에서 재가공하여 버블을 나눠서 출력해줌.
+
+신규 태그
+<story /> <target />
+시나리오 태그안의 스토리용 텍스트와 목표 텍스트를 분리시킴.
+
+encoded파일 작성 시 사용
+https://tool.hiofd.com/ko/aes-encrypt-online/
+key : abcdefghijklmnopqrstuvwxyz123456
+iv : 1234567890123456
+패딩 : PKCS#7
+인코딩 : Base64
+
+현재 iptables랑 FTPbounce 명령어만 ㅣog파일 생성함
+다른 명령어들도 log가 필요할시 명령어, 실행한 노드 ip, 노드id, 내용(되도록이면 명령어와 함께 넘어가는 옵션이나 값들을 조합해서 규칙적이게) 형식으로 남겨주세요
+예시) /var/log/syslog/FTPBounce.log
+FTPBounce  -> 명령어이름	
+192.168.25.3 -> 명령을 실행할 시점의 노드, 즉 현재 노드의 ip(사용자의 노드라면 192.168.25.2)
+node01 -> 마찮가지로 현재 위치한 노드의 이름(사용자 노드에서 라면 myNode)
+21:OPEN -> 명령의 내용. 이 명령어의 경우 사용시 같이 넘어오는 포트 번호를 아용해 작성이 됩니다. 다른 명령어들도 이런 식으로 남겨주면 됩니다.
+ -->
 <missions>
-    <userNode> <!--플레이어의 기본 노드 이거는 최상단에 하나만 해두면됨-->
-        <userMAC>FF:FF:FF:FF:FF:01</userMAC> <!--MAC 주소-->
-        <userIP>192.168.25.2</userIP> <!--IP 주소-->
-        <userPort>
-            <userTCP>
+	<mission>
+		<scenario>
+			<story>
+				"player᛭여긴 어디지..?"
+				,"solo᛭예전에 창고로 쓰였을 법한 어두운 밀실이다."
+
+				,"player᛭…내가 누구였는지 기억이 안나"
+				,"solo᛭머리에 굳은 피가 느껴지는 걸 보니 누군가에게 머리를 맞은 것 같다."
+
+				,"solo᛭심호흡을 하고 정신을 차린 뒤 간신히 스위치를 찾아서 작동시켰더니 불이 들어온다."
+				,"player᛭전기는 들어 오는군"
+
+				,"player᛭저건 뭐지?"
+				,"solo᛭구석에 먼지가 쌓인 컴퓨터가 보인다."
+				,"solo᛭자연스럽게 나는 컴퓨터 전원을 눌렀다."
+
+				,"player᛭…크윽!!"
+				,"solo᛭컴퓨터에 로딩화면을 보자마자 어딘가 익숙한 영어들이 스치듯 머릿속을 지나갔다."
+				,"player᛭직접 사용해보면 뭔가 떠오를 것 같다."
+				,"solo᛭ls 는 파일 목록을 확인하는 명령어입니다."
+				,"solo᛭cd 는 위치를 바꾸는 명령어 입니다."
+				,"solo᛭cat은 고양이"
+				,"solo᛭su 는 계정을 바꾸는 명령어입니다."
+				,"solo᛭rm 은 파일을 지우는 명령어입니다."
+				,"solo᛭touch는 파일을 생성하는 명령어입니다."
+				,"solo᛭mv 파일을 옮기는 명령어입니다."
+				,"solo᛭scan 은 주변 노드를 검색하는 명령어입니다."
+			</story>
+			<target>
+				"ssh 192.168.25.3로 접속한 후 FTPbounce 21로 포트를 여십시오"
+			</target>
+		</scenario>
+		<correctAnswer>
+			<myNode>
+				<dirPath>/var/log/syslog</dirPath>
+				<nodeFile>
+					<File_name>/var/log/syslog/FTPBounce.log</File_name>
+					<File_content>	
+						FTPBounce
+						192.168.25.3
+						node01
+						21:OPEN
+					</File_content>
+				</nodeFile>
+			</myNode>
+		</correctAnswer>
+		<node>
+			<nodeId>01</nodeId>
+			<nodeMAC>FF:FF:FF:FF:FF:02</nodeMAC>
+			<nodeIP>192.168.25.3</nodeIP>
+			<nodePort>
+				<TCP>
+					<service>
+						<serviceName>OpenSSL</serviceName>
+						<servicePort>22</servicePort>
+						<portState>OPEN</portState>
+					</service>
+					<service>
+						<serviceName>FTP</serviceName>
+						<servicePort>21</servicePort>
+						<portState>CLOSED</portState>
+					</service>
+					<service>
+						<serviceName>SMTP</serviceName>
+						<servicePort>25</servicePort>
+						<portState>OPEN</portState>
+					</service>
+				</TCP>
+				<UDP>
+					<service>
+						<serviceName></serviceName>
+						<servicePort></servicePort>
+						<portState></portState>
+					</service>
+				</UDP>
+			</nodePort>
+			<nodeDirectorys>
+				<dirPath>/home/node01</dirPath>
+			</nodeDirectorys>
+			<nodeProgram>
+				<programName>OpenSSL</programName>
+				<programName>FTP</programName>
+				<programName>SNMP</programName>
+			</nodeProgram>
+			<nodeFile>
+				<File_name>/home/node01</File_name>
+				<File_content>
+					
+						Hello Netrunner!
+						
+				</File_content>
+			</nodeFile>
+		</node>
+		<reward>
+			<point>1000</point>
+			<toolFile></toolFile>
+		</reward>
+	</mission>
+	<mission>
+		<scenario>
+		<story>
+            "???᛭살아있었구나 ‘주인공’!!!!! ‘주인공’맞지???"
+			,"player᛭나를 알아..? 당신은 누구지?"
+			,"???᛭뭐야 나를 잊은거야? 리사잖아!! 내가 너랑 몇 년을 함께했는데 나를 잊을 수가 있어?!"
+			,"player᛭나와 동료였다고? 사실 머리를 다쳐서 기억이 안나는 상태야."
+
+			,"리사᛭…뭐? 머리를 다쳤다고? 난 너가 조용히 살고싶다길래 우리만 두고\n
+				도망간 줄 알았는데…그게 아니었구나 오해 할 뻔 했어.\n
+				도망간게 아니라서 다행이야.\n
+				사실 지구 끝가지 쫓아가려 했는데 안보였던 이유가 습격을 당한거였다니…\n
+				아참 너무 내 얘기만 해버렸네.\n 
+				난 리사야 너는 우리와 같은 해커 그룹의 대장이자 영진 컴퍼니의 영광의 멤버중 최고였다고.\n
+				이름은 ‘주인공’. 본명인지는 모르겠지만 우린 널 그렇게 불렀어."
+			,"solo᛭리사의 얘기를 들으니 기억이 조금씩 나는 것 같다.\n
+				그런데 나는 왜 습격을 받은거지?\n
+				누가 날 이렇게 만든건지 알아봐야겠다."
+			,"player᛭우선 날 이렇게 만든 사람들이 누군지 알아봐야 할 것 같은데 도와줄 수 있을까?"
+
+			,"리사᛭물론이지.\n
+				하지만 너를 직접적으로 도와줬다간 널 그렇게 만들도록 \n
+				지시한 배후가 눈치 챌 수도있으니 지속적으로 연락하지는 못 할 것같아.\n 
+				우선 내가 정보 수집에 도움이 될 만한 ip를 알려줄테니 실력 한 번 뽐내봐."
+			,"solo᛭192.168.25.3"	
+			,"리사᛭사내 메신저를 서비스하는 서버야.\n 
+				그럼 다음에 또 연락할게.\n
+				그때까지 무사하길 바래."
+			</story>
+			<target>
+			"scp recording.txt myNode@192.168.25.2:/home/myNode 으로 파일을 옮기십시오"
+			</target>
+        </scenario>
+		<correctAnswer>
+			<myNode>
+				<dirPath>/home/myNode</dirPath>
+				<nodeFile>
+					<File_name>/home/myNode/recording.txt</File_name>
+					<File_content>
+                        
+						사원A : 야 요즘 회사 분위기 조금 어수선해지지 않았냐?
+						사원B : 잘 모르겠는데,  그냥 일 하기 싫어서 괜히 헛소리 하는 거 아니야?
+						사원A : 날 뭘로 보고 있는 거야..그런데 일 하기 싫은 건 너도 마찬가지 잖아 ㅋㅋ
+						사원B : 그건 그렇지.
+						사원A : 내가 인사팀 동료한데 들은 게 있는데 요즘 보안팀에서 인사조정 하느라 분열이 생겼네 마네 난리 라니까.
+						사원B : 보안팀은 원래 자기들끼리 사이좋아서 그 동안 새로운 신입 없이 회사 초기부터 쭉 유지되어 오던 거 아니야? 갑자기 인사조정이라고??
+						사원A : 내 말이 그 말이야. 갑자기 무슨 바람이 들었는지…보안팀장라인을 제외하고 나머진 다 지방 발령났대. 우리 팀은 별 일 없겠지..?
+						사원B : 우리랑 걔네랑 같냐 ㅋㅋㅋ ………….. 없길 빌어야지.
+                        
+                    </File_content>
+				</nodeFile>
+			</myNode>
+		</correctAnswer>
+		<node>
+			<nodeId>01</nodeId>
+			<nodeMAC>FF:FF:FF:FF:FF:02</nodeMAC>
+			<nodeIP>192.168.25.3</nodeIP>
+			<nodePort>
+				<TCP>
+					<service>
+						<serviceName>OpenSSL</serviceName>
+						<servicePort>22</servicePort>
+						<portState>OPEN</portState>
+					</service>
+					<service>
+						<serviceName>FTP</serviceName>
+						<servicePort>21</servicePort>
+						<portState>OPEN</portState>
+					</service>
+					<service>
+						<serviceName>SMTP</serviceName>
+						<servicePort>25</servicePort>
+						<portState>OPEN</portState>
+					</service>
+				</TCP>
+				<UDP>
+					<service>
+						<serviceName></serviceName>
+						<servicePort></servicePort>
+						<portState></portState>
+					</service>
+				</UDP>
+			</nodePort>
+			<nodeDirectorys>
+				<dirPath>/home/node01</dirPath>
+				<dirPath>/home/recording</dirPath>
+			</nodeDirectorys>
+			<nodeProgram>
+				<programName>OpenSSL</programName>
+				<programName>FTP</programName>
+				<programName>SNMP</programName>
+			</nodeProgram>
+			<nodeFile>
+				<File_name>/home/recording/recording.txt</File_name>
+				<File_content>
+                    
+                    사원A : 야 요즘 회사 분위기 조금 어수선해지지 않았냐?
+					사원B : 잘 모르겠는데,  그냥 일 하기 싫어서 괜히 헛소리 하는 거 아니야?
+					사원A : 날 뭘로 보고 있는 거야..그런데 일 하기 싫은 건 너도 마찬가지 잖아 ㅋㅋ
+					사원B : 그건 그렇지.
+					사원A : 내가 인사팀 동료한데 들은 게 있는데 요즘 보안팀에서 인사조정 하느라 분열이 생겼네 마네 난리 라니까.
+					사원B : 보안팀은 원래 자기들끼리 사이좋아서 그 동안 새로운 신입 없이 회사 초기부터 쭉 유지되어 오던 거 아니야? 갑자기 인사조정이라고??
+					사원A : 내 말이 그 말이야. 갑자기 무슨 바람이 들었는지…보안팀장라인을 제외하고 나머진 다 지방 발령났대. 우리 팀은 별 일 없겠지..?
+					사원B : 우리랑 걔네랑 같냐 ㅋㅋㅋ ………….. 없길 빌어야지.
+                    
+                </File_content>
+			</nodeFile>
+		</node>
+		<reward>
+			<point>1000</point>
+			<toolFile></toolFile>
+		</reward>
+	</mission>
+	<mission>
+		<scenario>
+		<story>
+			"solo᛭백업한 정보들이 점점 늘어나고 있다."
+			,"solo᛭만약 움직임이 보안팀에게 적발되면 내가 죽지 않고 활동하고 있다는 걸 들키게 될지도 모른다."
+			,"player᛭방화벽을 어떻게 구축했더라…"
+			,"solo᛭아직 기억이 온전히 돌아오지 않아 기억이 나지 않는다."
+			,"player᛭슬슬 리사에게 연락이 올 때가 됐는데. "
+
+			,"리사᛭‘주인공’, 아직 살아있어?"
+
+			,"player᛭호랑이도 제 말 하면 온다더니, 너도 양반은 못되는구나"
+
+			,"리사᛭뭐야, 내 생각 중 이었어?\n
+				미안하지만 난 아직 마음의 준비가 안됐다구."
+
+			,"player᛭김칫국 들이키지 말고, 너가 좀 도와줬으면 하는 일이 있는데. "
+
+			,"리사᛭그럼 그렇지. 나도 기대 안했다고."
+			
+			,"player᛭너가 알려준 사내 메신저 서버를 해킹하면서 백업해둔 데이터가 있는데 방화벽을 구축해서 보안을 해 둬야 할 것 같아. "
+			
+			,"리사᛭아직도 기억이 다 돌아오지 않은거야?\n
+				방화벽은 ??? 명령어로 구축할 수 있어.\n
+				천하에 test331에게 이런 걸 다 알려주게 될 줄이야..영광인걸?"
+
+			,"player᛭농담 따먹기 할 상황은 아닌 것 같은데."
+			
+			,"리사᛭됐네요, 하던 거나 마저 해."
+			</story>
+			<target>
+				"원래 노드로 복귀하여 FTP 포트의 iptables를 설정하세요."
+				,"iptables -A INPUT -p tcp --dport 21 -j DROP 으로 설정 할 수 있습니다."
+			</target>
+        </scenario>
+		<correctAnswer>
+			<myNode>
+				<dirPath>/var/log/syslog</dirPath>
+				<nodeFile>
+					<File_name>/var/log/syslog/iptables.log</File_name>
+					<File_content>
+						iptables
+						192.168.25.2
+						myNode
+						21:CLOSED
+                    </File_content>
+				</nodeFile>
+			</myNode>
+		</correctAnswer>
+		<node>
+			<nodeId>01</nodeId>
+			<nodeMAC>FF:FF:FF:FF:FF:02</nodeMAC>
+			<nodeIP>192.168.25.3</nodeIP>
+			<nodePort>
+				<TCP>
+					<service>
+						<serviceName>OpenSSL</serviceName>
+						<servicePort>22</servicePort>
+						<portState>OPEN</portState>
+					</service>
+					<service>
+						<serviceName>FTP</serviceName>
+						<servicePort>21</servicePort>
+						<portState>OPEN</portState>
+					</service>
+					<service>
+						<serviceName>SMTP</serviceName>
+						<servicePort>25</servicePort>
+						<portState>OPEN</portState>
+					</service>
+				</TCP>
+				<UDP>
+					<service>
+						<serviceName></serviceName>
+						<servicePort></servicePort>
+						<portState></portState>
+					</service>
+				</UDP>
+			</nodePort>
+			<nodeDirectorys>
+				<dirPath>/home/node01</dirPath>
+			</nodeDirectorys>
+			<nodeProgram>
+				<programName>OpenSSL</programName>
+				<programName>FTP</programName>
+				<programName>SNMP</programName>
+			</nodeProgram>
+			<nodeFile>
+				<File_name>/home/node01</File_name>
+				<File_content>
+                    
+                     Hello Netrunner!
+                    
+                </File_content>
+			</nodeFile>
+		</node>
+		<reward>
+			<point>1000</point>
+			<toolFile></toolFile>
+		</reward>
+	</mission>
+	<userNode>
+		<userMAC>FF:FF:FF:FF:FF:01</userMAC>
+		<userIP>192.168.25.2</userIP>
+		<userPort>
+			<userTCP>
 				<userService>
 					<userServiceName>OpenSSL</userServiceName>
 					<userServicePort>22</userServicePort>
 					<userPortState>OPEN</userPortState>
 				</userService>
-            </userTCP>
-            <userUDP>
+				<userService>
+					<userServiceName>FTP</userServiceName>
+					<userServicePort>21</userServicePort>
+					<userPortState>OPEN</userPortState>
+				</userService>
+			</userTCP>
+			<userUDP>
 				<userService>
 					<userServiceName></userServiceName>
 					<userServicePort></userServicePort>
 					<userPortState></userPortState>
 				</userService>
-            </userUDP>
-        </userPort>
-        <userDirectorys> <!--디렉터리 구조 서술-->
-            <userDirPath>/home/myNode</userDirPath>
-        </userDirectorys>
-        <userFile>
-            <userFile_name>/home/myNode/result.txt</userFile_name> 
-		    <userFile_content>
-                <![CDATA[Hello World!]]>
-            </userFile_content>
-        </userFile>
-        <userProgram> <!--노드에 설치된 프로그램--> <!-- nodePort의 serviceName과 연동-->
-            <userProgramName>OpenSSL</userProgramName>
+			</userUDP>
+		</userPort>
+		<userDirectorys>
+			<userDirPath>/home/myNode</userDirPath>
+		</userDirectorys>
+		<userFile>
+			<userFile_name>/home/myNode/result.txt</userFile_name>
+			<userFile_content>
+                    
+                    Hello World!
+                    
+                </userFile_content>
+		</userFile>
+		<userProgram>
+			<userProgramName>OpenSSL</userProgramName>
 			<userProgramName>SNMP</userProgramName>
-        </userProgram>
-    </userNode>
-    <mission>
-        <scenario>
-            "튜토리얼 입니다."
-			, "'scan 192.168.25.0/24 > result.txt' 명령어로 다른 컴퓨터의 IP와 Port 정보를 검색해 저장해 주세요  "
-        </scenario> <!--시나리오-->
-        <!--1: 명령어입력 , 2: 특정 파일 삭제, , 3: 특정 파일 가져오기, 4: 특정 디렉토리 삭제, 5: 특정 IP 탐지 -->
-		<!--6: 특정 서비스 탐지 -->
-		<!-- 다른유형이 생각나면 추가바람
-        유형 검사는 제외했습니다. 위에 기재된 문재 유형들은, 저 유형에 맞춰서 시나리오 퀘스트를 작성해주시면 될듯합니다.
-        -->
-        <correctAnswer>
-            <myNode> <!--2024-06-15 추가--> <!--정답을 파일 위주로 할건지, 터미널 입력 사항 위주로 할건지 고민-->
-                <dirPath>/home/myNode</dirPath>
-                <nodeFile>
-                    <File_name>/home/myNode/result.txt</File_name>
-		            <File_content><!--cdata로 해야 태그로 인식 안하고 내용으로 인식함-->
-                        <![CDATA[
-                        username{ node01 }
-						IP{ 192.168.25.3 }
-						Port[
-						  {22 : OPEN} ,
-						  {161 : CLOSED} ,
-						  {162 : CLOSED}
-						]
-                        ]]>
-                    </File_content>
-                </nodeFile>
-            </myNode>
-            <!--'192.168.25.15' host의 'mysql'의 서비스 상태를 'result.txt' 파일이 존재할 것 -->
-        </correctAnswer> <!--달성 조건-->
-        <node> <!--미션 수행 노드-->
-            <nodeMAC>FF:FF:FF:FF:FF:02</nodeMAC> <!--MAC 주소-->
-            <nodeIP>192.168.25.3</nodeIP> <!--IP 주소-->
-            <nodePort>
-                <TCP>
-					<service>	<!--24.06.27--> <!--포트랑 서비스 하는 프로그램이 있으면 프로그램이름이랑 연동-->
-						<serviceName>OpenSSL</serviceName>
-						<servicePort>22</servicePort>
-						<portState>OPEN</portState>
-					</service>
-                </TCP>
-                <UDP>
-					<service>
-						<serviceName>SNMP</serviceName>
-						<servicePort>161</servicePort>
-						<portState>CLOSED</portState>
-                        <serviceName>SNMP</serviceName>
-						<servicePort>162</servicePort>
-						<portState>CLOSED</portState>
-					</service>
-                </UDP>
-            </nodePort>
-            <nodeDirectorys> <!--디렉터리 구조 서술--> <!-- 기본 디렉토리 구조가 있다는 가정-->
-                <dirPath>/home/node01</dirPath>
-            </nodeDirectorys>
-            <nodeProgram> <!--노드에 설치된 프로그램--> <!-- nodePort의 serviceName과 연동-->
-                <programName>OpenSSL</programName>
-				<programName>SNMP</programName>
-            </nodeProgram>
-            <nodeFile>
-                <File_name>/home/node01</File_name>  <!--node01 디렉터리 밑에 생성하려면, /home/node01/textname.txt 형식으로 파일명을 작성해주세요-->
-		        <File_content>
-                    <![CDATA[
-                     Hello Netrunner!
-                    ]]>
-                </File_content>
-            </nodeFile>
-        </node>
-        <reward>
-            <point>1000</point> <!--숫자 기입-->
-            <toolFile></toolFile> <!--얘는 문자열널어 주시고, 복수의 툴이 리워드로 주어지는경우 split할수 있도록 띄어쓰기하셔서 한줄에 넣어주세요-->
-        </reward>
-    </mission>
-    <mission>
-        <scenario>
-            "2번째 튜토리얼 입니다."
-			, "'scan 192.168.25.0/24 > result.txt' 명령어로 다른 컴퓨터의 IP와 Port 정보를 검색해 저장해 주세요  "
-        </scenario> <!--시나리오-->
-        <!--1: 명령어입력 , 2: 특정 파일 삭제, , 3: 특정 파일 가져오기, 4: 특정 디렉토리 삭제, 5: 특정 IP 탐지 -->
-		<!--6: 특정 서비스 탐지 -->
-		<!-- 다른유형이 생각나면 추가바람
-        유형 검사는 제외했습니다. 위에 기재된 문재 유형들은, 저 유형에 맞춰서 시나리오 퀘스트를 작성해주시면 될듯합니다.
-        -->
-        <correctAnswer>
-            <myNode> <!--2024-06-15 추가--> <!--정답을 파일 위주로 할건지, 터미널 입력 사항 위주로 할건지 고민-->
-                <dirPath>/home/myNode</dirPath>
-                <nodeFile>
-                    <File_name>/home/myNode/result2.txt</File_name>
-		            <File_content><!--cdata로 해야 태그로 인식 안하고 내용으로 인식함-->
-                        <![CDATA[
-                        username{ node01 }
-						IP{ 192.168.25.3 }
-						Port[
-						  {22 : OPEN} ,
-						  {161 : CLOSED} ,
-						  {162 : CLOSED}
-						]
-                        ]]>
-                    </File_content>
-                </nodeFile>
-            </myNode>
-            <!--'192.168.25.15' host의 'mysql'의 서비스 상태를 'result.txt' 파일이 존재할 것 -->
-        </correctAnswer> <!--달성 조건-->
-        <node> <!--미션 수행 노드-->
-            <nodeMAC>FF:FF:FF:FF:FF:02</nodeMAC> <!--MAC 주소-->
-            <nodeIP>192.168.25.3</nodeIP> <!--IP 주소-->
-            <nodePort>
-                <TCP>
-					<service>	<!--24.06.27--> <!--포트랑 서비스 하는 프로그램이 있으면 프로그램이름이랑 연동-->
-						<serviceName>OpenSSL</serviceName>
-						<servicePort>22</servicePort>
-						<portState>OPEN</portState>
-					</service>
-                </TCP>
-                <UDP>
-					<service>
-						<serviceName>SNMP</serviceName>
-						<servicePort>161</servicePort>
-						<portState>CLOSED</portState>
-                        <serviceName>SNMP</serviceName>
-						<servicePort>162</servicePort>
-						<portState>CLOSED</portState>
-					</service>
-                </UDP>
-            </nodePort>
-            <nodeDirectorys> <!--디렉터리 구조 서술--> <!-- 기본 디렉토리 구조가 있다는 가정-->
-                <dirPath>/home/node02</dirPath>
-            </nodeDirectorys>
-            <nodeProgram> <!--노드에 설치된 프로그램--> <!-- nodePort의 serviceName과 연동-->
-                <programName>OpenSSL</programName>
-				<programName>SNMP</programName>
-            </nodeProgram>
-            <nodeFile>
-                <File_name>/home/node02/nodeText.txt</File_name>  <!--node01 디렉터리 밑에 생성하려면, /home/node01/textname.txt 형식으로 파일명을 작성해주세요-->
-		        <File_content>
-                    <![CDATA[
-                     Hello Netrunner22!
-                    ]]>
-                </File_content>
-            </nodeFile>
-        </node>
-        <reward>
-            <point>1000</point> <!--숫자 기입-->
-            <toolFile>"sdsd fsdda"</toolFile> <!--얘는 문자열널어 주시고, 복수의 툴이 리워드로 주어지는경우 split할수 있도록 띄어쓰기하셔서 한줄에 넣어주세요-->
-        </reward>
-    </mission>
+		</userProgram>
+	</userNode>
 </missions>

@@ -15,15 +15,15 @@ export class EmailService {
       },
     });
   }
-  private emaildata={
-    email:"",
-    code:""
+  private emaildata = {
+    email: "",
+    code: ""
   }
   generateVerificationCode(): string {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     return code;
   }
-  sourcemail:string = config.get('AWS.source');
+  sourcemail: string = config.get('AWS.source');
   async sendEmail(to: string, subject: string): Promise<void> {
     const verificationCode = this.generateVerificationCode();
     const params = {
@@ -37,7 +37,7 @@ export class EmailService {
         },
         Body: {
           Html: {
-            Data: `<h1>인증코드 테스트<h1><h3>인증번호 : ${verificationCode}</h3>`, // HTML 형식의 이메일 본문
+            Data: `<h1>Netrunner 인증코드 입니다. <h1><h3>인증번호 : ${verificationCode}</h3>`, // HTML 형식의 이메일 본문
           },
         },
       },
@@ -47,13 +47,13 @@ export class EmailService {
       const command = new SendEmailCommand(params);
       await this.sesClient.send(command);
       console.log('이메일 전송 성공');
-      this.emaildata = {email:to,code:verificationCode};
+      this.emaildata = { email: to, code: verificationCode };
     } catch (err) {
       console.error('이메일 전송 실패', err);
     }
   }
 
-  checkVerification(verificationCode: string,addr:string): boolean {
+  checkVerification(verificationCode: string, addr: string): boolean {
     return verificationCode === this.emaildata.code && addr === this.emaildata.email;
   }
 }

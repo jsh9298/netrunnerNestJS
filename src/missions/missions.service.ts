@@ -5,20 +5,16 @@ import { MissionDTO } from 'src/savefile/savefile.Dto';
 import { ToolsRepository } from './tools/tool.repository';
 import { Tool } from './tools/tool.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FilesystemService } from 'src/filesystem/filesystem.service';
-import { commends } from 'src/filesystem/commends';
 
 // import { UserRepository } from 'src/auth/users/user.repository';
 
 @Injectable()
 export class MissionsService {
-
+    private attemptsCountMap: Map<string, number> = new Map();
     constructor(
         private xmlService: SaveFileService,
         @InjectRepository(Tool)
         private toolsRepository: ToolsRepository,
-        // private userRepository:UserRepository
-        private commend: commends
     ) { }
     async getMissons(user: User): Promise<MissionDTO[]> {
         const mission = await this.xmlService.getXml(user.userId, user.location, user.username);
@@ -47,14 +43,7 @@ export class MissionsService {
             { name: 'SMTPoverflow', cost: 25 },
             { name: 'WebServerWorm', cost: 25 },
             { name: 'Decypher', cost: 25 },
-            { name: 'DECHead', cost: 25 },
-            // { name: 'qna', cost: 1 },
-            // { name: 'tech', cost: 1 },
-            // { name: 'career', cost: 1 },
-            // { name: 'recruitment', cost: 1 },
-            // { name: 'project', cost: 1 },
-            // { name: 'study', cost: 1 },
-            // { name: 'company', cost: 1 },
+            { name: 'DECHead', cost: 25 }
         ];
         for (let index = 0; index < defaultTools.length; index++) {
             const element = defaultTools[index];
@@ -66,27 +55,36 @@ export class MissionsService {
         const userfile = await this.xmlService.getXml(user.userId, user.location, user.username);
         let success: boolean = false;
         let nextMissionId: number = user.savepoint;
+
+        const userId = user.userId; // 또는 사용자 식별자
+        let attemptsCount = this.attemptsCountMap.get(userId) || 0; // 기본값 0 설정
+
         for (let index = 0; index < userfile.userNode.userFile.length; index++) {
             if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_name.toString().trim() == userfile.userNode.userFile[index].userFile_name.toString().trim()) {
                 console.log("userfile1", index, userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_content.toString().replace(/\n|\r|\t|\s*/g, '').trim());
                 console.log("userfile2", index, userfile.userNode.userFile[index].userFile_content.toString().replace(/\n|\r|\t|\s*/g, '').trim());
                 if (userfile.mission[id].correctAnswer[0].myNode[0].nodeFile[0].File_content.toString().replace(/\n|\r|\t|\s*/g, '').trim() == userfile.userNode.userFile[index].userFile_content.toString().replace(/\n|\r|\t|\s*/g, '').trim()) {
                     success = true;
-                    // this.commend.loggging_lock();
                     break;
                 } else {
                     success = false;
+                    attemptsCount++;
                     break;
                 }
-                // .toString().replace('/\\n|\\t|\\r/gm', '')
             }
         }
+
+        this.attemptsCountMap.set(userId, attemptsCount); // 업데이트
         if (success) {
+            const minusCount: number = this.attemptsCountMap.get(userId) || 0;
             const rewardPoint: number = parseInt(userfile.mission[id].reward[0].point[0]);
             const resultPoint: number = user.point + rewardPoint;
+            const resultScore: number = Math.abs(resultPoint * (user.savepoint + 1) - minusCount);
             this.xmlService.saveXml(user.userId, user.location, userfile);
             user.save({ data: user.savepoint++ });
+            user.save({ data: user.level++ });
             user.save({ data: user.point = resultPoint });
+            user.save({ data: user.score += resultScore });
             if (userfile.mission[id].reward[0].toolFile[0] != '') {
                 const rewardTool: string[] = userfile.mission[id].reward[0].toolFile[0].split(" ");
                 console.log("reward:", rewardTool);
@@ -95,6 +93,7 @@ export class MissionsService {
                 console.log("save", tools);
                 console.log("savecheck");
             }
+            this.attemptsCountMap.delete(userId);
             nextMissionId++;
         }
         return { success, nextMissionId };
