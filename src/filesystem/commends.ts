@@ -131,10 +131,10 @@ export class commends {
         return result;
     }
     help(payload) {
-        const help1 = "pwd: 현재위치를 출력합니다 \ncd: cd[절대경로 | 현재위치의 하위 경로 | .. ] 위치 이동 명령어입니다.\nls: 현재경로에 존재하는 파일, 디렉터리들을 표시합니다.\ncp: cp[파일명] 파일을 복제합니다.\n";
-        const help2 = "mv: mv[이동시킬 파일명][옮길 경로] 파일을 이동합니다.\nrm: rm[파일명 | * ] 현재경로의 파일을 삭제합니다. * 를 사용하면 전부 제거합니다.\nmkdir: mkdir[디렉터리명] 디렉터리를 생성합니다.\nrmdir: rmdir[디렉터리명] 디렉터리를 삭제합니다.\n";
-        const help3 = "cat: cat[파일명] 해당 위치에 존재하는 파일의 내용을 출력합니다.\ntouch: touch[파일명] 빈파일을 생성합니다.\nvi: vi[파일명] 파일을 생성하거나, 수정 및 저장을 합니다.\nscan: scan[CIDR] 현재 미션에서 접근해야할 노드들의 정보를 스캔합니다.\n";
-        const help4 = "ssh: ssh[ip주소] 해당주소가 노드중에 존재할경우, 그리고 해당 포트닥 열려있는 경우 이동합니다.exit로 나올수있습니다.\niptables: 엄..퀘스트를 확인하세요.\nFTPBounce: FTPBounce[21 | 69] ftp포트 해제 \nscp: scp[파일명][대상id@대상ip:경로] 파일을 대상ip의 경로로 복사합니다.\n";
+        const help1 = "pwd: 현재위치를 출력합니다 \r\ncd: cd[절대경로 | 현재위치의 하위 경로 | .. ] 위치 이동 명령어입니다.\r\nls: 현재경로에 존재하는 파일, 디렉터리들을 표시합니다.\r\ncp: cp[파일명] 파일을 복제합니다.\n";
+        const help2 = "mv: mv[이동시킬 파일명][옮길 경로] 파일을 이동합니다.\r\nrm: rm[파일명 | * ] 현재경로의 파일을 삭제합니다. * 를 사용하면 전부 제거합니다.\r\nmkdir: mkdir[디렉터리명] 디렉터리를 생성합니다.\r\nrmdir: rmdir[디렉터리명] 디렉터리를 삭제합니다.\n";
+        const help3 = "cat: cat[파일명] 해당 위치에 존재하는 파일의 내용을 출력합니다.\r\ntouch: touch[파일명] 빈파일을 생성합니다.\r\nvi: vi[파일명] 파일을 생성하거나, 수정 및 저장을 합니다.\r\nscan: scan[CIDR] 현재 미션에서 접근해야할 노드들의 정보를 스캔합니다.\n";
+        const help4 = "ssh: ssh[ip주소] 해당주소가 노드중에 존재할경우, 그리고 해당 포트닥 열려있는 경우 이동합니다.exit로 나올수있습니다.\r\niptables: 엄..퀘스트를 확인하세요.\r\nFTPBounce: FTPBounce[21 | 69] ftp포트 해제 \r\nscp: scp[파일명][대상id@대상ip:경로] 파일을 대상ip의 경로로 복사합니다.\n";
         if (payload.length < 2) {
             return "help [1~4]로 입력해주세요.";
         }
