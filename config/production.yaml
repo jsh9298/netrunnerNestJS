@@ -1,4 +1,13 @@
 db:
-  synchronize: false
+  host: 'localhost'
+  username: 'root'
+  password: 'root'
+  synchronize: true
 jwt:
   secret: 'AwSeDrFtG1@3$5'
+AWS:
+  access_key: 
+  secret_key: 
+  region: 'ap-northeast-2'
+  source: 'sender@netrunner.life'
+

@@ -53,7 +53,7 @@ let FilesystemService = class FilesystemService {
     async setC(userId) {
         if (!this.filesystemMap.has(userId) && this.dirlist.length != 0) {
             const c = new commends_1.commends(this.saveFileService, userId, this.sf, this.savepoint);
-            c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
+            await c.setFs(this.dirlist, this.filelist, this.currentUser, this.currentip);
             this.filesystemMap.set(userId, c);
         }
         return this.filesystemMap.get(userId);

@@ -32,45 +32,41 @@ node01 -> 마찮가지로 현재 위치한 노드의 이름(사용자 노드에�
 	<mission>
 		<scenario>
 			<story>
-				"player᛭여긴 어디지..?"
+				"player᛭여긴 어디지...?"
 				ᛃ
-				"solo᛭예전에 창고로 쓰였을 법한 어두운 밀실이다."
+				"solo᛭어둠 속에서 눈을 뜬 나는 머리가 지끈거렸다. 주변을 둘러보니 오래된 창고처럼 보이는 밀실이었다."
 				ᛃ
-				"player᛭…내가 누구였는지 기억이 안나"
+				"player᛭...내가 누구였지? 아무것도 기억나지 않아."
 				ᛃ
-				"solo᛭머리에 굳은 피가 느껴지는 걸 보니 누군가에게 머리를 맞은 것 같다."
+				"solo᛭머리에 손을 대보니 굳은 피가 묻어났다. 누군가에게 공격을 당한 것 같다."
 				ᛃ
-				"solo᛭심호흡을 하고 정신을 차린 뒤 간신히 스위치를 찾아서 작동시켰더니 불이 들어온다."
+				"solo᛭깊은 숨을 들이쉬며 정신을 가다듬었다. 손으로 벽을 더듬어 스위치를 찾아냈고, 작동시키자 희미한 불빛이 공간을 밝혔다."
 				ᛃ
-				"player᛭전기는 들어 오는군"
+				"player᛭전기는 통하는군."
 				ᛃ
-				"player᛭저건 뭐지?"
+				"player᛭저건... 컴퓨터?"
 				ᛃ
-				"solo᛭구석에 먼지가 쌓인 컴퓨터가 보인다."
+				"solo᛭구석에 먼지가 소복이 쌓인 오래된 컴퓨터가 있었다. 이끌리듯 다가가 전원 버튼을 눌렀다."
 				ᛃ
-				"solo᛭자연스럽게 나는 컴퓨터 전원을 눌렀다."
+				"player᛭(컴퓨터의 로딩 화면을 보자 갑자기 머릿속에 수많은 코드와 명령어들이 스쳐 지나갔다.)"
 				ᛃ
-				"player᛭…크윽!!"
+				"player᛭이건... 익숙해. 직접 사용해 보면 뭔가 떠오를지도 몰라."
 				ᛃ
-				"solo᛭컴퓨터에 로딩화면을 보자마자 어딘가 익숙한 영어들이 스치듯 머릿속을 지나갔다."
+				"solo᛭손가락이 자연스럽게 키보드를 타이핑하기 시작했다. 'ls'... 파일 목록을 확인하는 명령어였다."
 				ᛃ
-				"player᛭직접 사용해보면 뭔가 떠오를 것 같다."
+				"solo᛭'cd'... 디렉토리를 이동할 때 사용하지."
 				ᛃ
-				"solo᛭ls 는 파일 목록을 확인하는 명령어입니다."
+				"solo᛭'cat'... 파일의 내용을 출력하는데, 고양이라는 뜻도 있지."
 				ᛃ
-				"solo᛭cd 는 위치를 바꾸는 명령어 입니다."
+				"solo᛭'su'는 계정을 전환하는 명령어고..."
 				ᛃ
-				"solo᛭cat은 고양이"
+				"solo᛭'rm'은 파일을 삭제하고, 'touch'는 파일을 생성한다."
 				ᛃ
-				"solo᛭su 는 계정을 바꾸는 명령어입니다."
+				"solo᛭'mv'는 파일을 이동하거나 이름을 변경할 때 사용하고..."
 				ᛃ
-				"solo᛭rm 은 파일을 지우는 명령어입니다."
+				"solo᛭'scan'은 주변 노드를 스캔하는 명령어다."
 				ᛃ
-				"solo᛭touch는 파일을 생성하는 명령어입니다."
-				ᛃ
-				"solo᛭mv 파일을 옮기는 명령어입니다."
-				ᛃ
-				"solo᛭scan 은 주변 노드를 검색하는 명령어입니다."
+				"player᛭기억은 나지 않지만, 내 몸은 이 모든 것을 기억하고 있어."
 			</story>
 			<target>
 				"ssh 192.168.25.3로 접속한 후 FTPbounce 21로 포트를 여십시오"
@@ -145,60 +141,49 @@ node01 -> 마찮가지로 현재 위치한 노드의 이름(사용자 노드에�
 	<mission>
 		<scenario>
 		<story>
-            "???᛭살아있었구나 ‘주인공’!!!!! ‘주인공’맞지???"
+			"???᛭이게 누구야! 살아있었구나, '주인공'! 정말 너 맞지?"
 			ᛃ
-			"player᛭나를 알아..? 당신은 누구지?"
+			"player᛭당신은... 누구시죠? 저를 아세요?"
 			ᛃ
-			"???᛭뭐야 나를 잊은거야? 리사잖아!! 내가 너랑 몇 년을 함께했는데 나를 잊을 수가 있어?!"
+			"???᛭뭐라고? 나를 잊은 거야? 나, 리사야! 우리가 함께한 시간이 몇 년인데, 날 잊었다고?"
 			ᛃ
-			"player᛭나와 동료였다고? 사실 머리를 다쳐서 기억이 안나는 상태야."
+			"player᛭죄송해요. 사실 머리를 다쳐서 기억을 잃은 상태예요."
 			ᛃ
-			"리사᛭…뭐? 머리를 다쳤다고? 난 너가 조용히 살고싶다길래 우리만 두고\n
-				도망간 줄 알았는데…그게 아니었구나 오해 할 뻔 했어.\n
-				도망간게 아니라서 다행이야.\n
-				사실 지구 끝가지 쫓아가려 했는데 안보였던 이유가 습격을 당한거였다니…\n
-				아참 너무 내 얘기만 해버렸네.\n 
-				난 리사야 너는 우리와 같은 해커 그룹의 대장이자 영진 컴퍼니의 영광의 멤버중 최고였다고.\n
-				이름은 ‘주인공’. 본명인지는 모르겠지만 우린 널 그렇게 불렀어."
+			"리사᛭믿을 수가 없네... 그래서 그동안 연락이 없었던 거야? 난 네가 우리를 떠나 조용히 살고 싶어서 사라진 줄 알았어. 오해해서 미안해. 사실 너를 찾으려고 지구 끝까지도 갈 생각이었어."
 			ᛃ
-			"solo᛭리사의 얘기를 들으니 기억이 조금씩 나는 것 같다.\n
-				그런데 나는 왜 습격을 받은거지?\n
-				누가 날 이렇게 만든건지 알아봐야겠다."
+			"player᛭제가 그렇게까지 중요한 사람이었나요?"
 			ᛃ
-			"player᛭우선 날 이렇게 만든 사람들이 누군지 알아봐야 할 것 같은데 도와줄 수 있을까?"
+			"리사᛭당연하지! 넌 우리 해커 그룹의 리더였고, 영진 컴퍼니의 자랑이었어. 우리는 너를 '주인공'이라고 불렀어. 본명인지는 모르겠지만."
 			ᛃ
-			"리사᛭물론이지.\n
-				하지만 너를 직접적으로 도와줬다간 널 그렇게 만들도록 \n
-				지시한 배후가 눈치 챌 수도있으니 지속적으로 연락하지는 못 할 것같아.\n 
-				우선 내가 정보 수집에 도움이 될 만한 ip를 알려줄테니 실력 한 번 뽐내봐."
+			"solo᛭리사의 이야기를 들으니 희미하게 기억이 돌아오는 것 같다. 하지만 왜 내가 습격을 당한 걸까? 누가 나를 이렇게 만든 거지?"
 			ᛃ
-			"solo᛭192.168.25.3"	
+			"player᛭나를 이렇게 만든 사람들을 찾아야겠어. 도와줄 수 있어?"
 			ᛃ
-			"리사᛭사내 메신저를 서비스하는 서버야.\n 
-				그럼 다음에 또 연락할게.\n
-				그때까지 무사하길 바래."
-			</story>
-			<target>
-			"scp recording.txt myNode@192.168.25.2:/home/myNode 으로 파일을 옮기십시오"
-			</target>
-        </scenario>
+			"리사᛭물론이지. 하지만 내가 직접 도와주면 배후가 눈치챌 수 있어. 그래서 자주 연락하긴 어려울 거야. 대신 네가 조사하는 데 도움이 될 만한 IP를 알려줄게. 네 실력을 다시 한 번 보여줘."
+			ᛃ
+			"solo᛭192.168.25.3... 이게 단서인가?"
+			ᛃ
+			"리사᛭사내 메신저 서버야. 그럼 다음에 또 연락할게. 그때까지 조심해."
+		</story>
+		<target>
+		"scp recording.txt myNode@192.168.25.2:/home/myNode 으로 파일을 옮기십시오"
+		</target>
+		</scenario>
 		<correctAnswer>
 			<myNode>
 				<dirPath>/home/myNode</dirPath>
 				<nodeFile>
 					<File_name>/home/myNode/recording.txt</File_name>
 					<File_content>
-                        
-						사원A : 야 요즘 회사 분위기 조금 어수선해지지 않았냐?
-						사원B : 잘 모르겠는데,  그냥 일 하기 싫어서 괜히 헛소리 하는 거 아니야?
-						사원A : 날 뭘로 보고 있는 거야..그런데 일 하기 싫은 건 너도 마찬가지 잖아 ㅋㅋ
-						사원B : 그건 그렇지.
-						사원A : 내가 인사팀 동료한데 들은 게 있는데 요즘 보안팀에서 인사조정 하느라 분열이 생겼네 마네 난리 라니까.
-						사원B : 보안팀은 원래 자기들끼리 사이좋아서 그 동안 새로운 신입 없이 회사 초기부터 쭉 유지되어 오던 거 아니야? 갑자기 인사조정이라고??
-						사원A : 내 말이 그 말이야. 갑자기 무슨 바람이 들었는지…보안팀장라인을 제외하고 나머진 다 지방 발령났대. 우리 팀은 별 일 없겠지..?
-						사원B : 우리랑 걔네랑 같냐 ㅋㅋㅋ ………….. 없길 빌어야지.
-                        
-                    </File_content>
+						
+						사원A : 야, 요즘 회사 분위기 이상하지 않아?
+						사원B : 무슨 소리야? 그냥 일하기 싫어서 그러는 거 아니야?
+						사원A : 진짜라니까. 인사팀 친구한테 들었는데, 보안팀에서 인사 조정 때문에 분열이 일어나고 있대.
+						사원B : 보안팀은 원래 사이 좋기로 유명했잖아. 갑자기 인사 조정이라니?
+						사원A : 그러게 말이야. 팀장 라인 빼고 전부 지방으로 발령났대. 우리 팀은 괜찮겠지?
+						사원B : 우리랑 걔네랑은 다르지 않을까... 아무튼 없길 빌어야지.
+						
+					</File_content>
 				</nodeFile>
 			</myNode>
 		</correctAnswer>
@@ -242,19 +227,25 @@ node01 -> 마찮가지로 현재 위치한 노드의 이름(사용자 노드에�
 				<programName>SNMP</programName>
 			</nodeProgram>
 			<nodeFile>
+				<File_name>/home/node01</File_name>
+				<File_content>
+					
+						Hello Netrunner!
+						
+				</File_content>
+			</nodeFile>
+			<nodeFile>
 				<File_name>/home/recording/recording.txt</File_name>
 				<File_content>
-                    
-                    사원A : 야 요즘 회사 분위기 조금 어수선해지지 않았냐?
-					사원B : 잘 모르겠는데,  그냥 일 하기 싫어서 괜히 헛소리 하는 거 아니야?
-					사원A : 날 뭘로 보고 있는 거야..그런데 일 하기 싫은 건 너도 마찬가지 잖아 ㅋㅋ
-					사원B : 그건 그렇지.
-					사원A : 내가 인사팀 동료한데 들은 게 있는데 요즘 보안팀에서 인사조정 하느라 분열이 생겼네 마네 난리 라니까.
-					사원B : 보안팀은 원래 자기들끼리 사이좋아서 그 동안 새로운 신입 없이 회사 초기부터 쭉 유지되어 오던 거 아니야? 갑자기 인사조정이라고??
-					사원A : 내 말이 그 말이야. 갑자기 무슨 바람이 들었는지…보안팀장라인을 제외하고 나머진 다 지방 발령났대. 우리 팀은 별 일 없겠지..?
-					사원B : 우리랑 걔네랑 같냐 ㅋㅋㅋ ………….. 없길 빌어야지.
-                    
-                </File_content>
+					
+					사원A : 야, 요즘 회사 분위기 이상하지 않아?
+					사원B : 무슨 소리야? 그냥 일하기 싫어서 그러는 거 아니야?
+					사원A : 진짜라니까. 인사팀 친구한테 들었는데, 보안팀에서 인사 조정 때문에 분열이 일어나고 있대.
+					사원B : 보안팀은 원래 사이 좋기로 유명했잖아. 갑자기 인사 조정이라니?
+					사원A : 그러게 말이야. 팀장 라인 빼고 전부 지방으로 발령났대. 우리 팀은 괜찮겠지?
+					사원B : 우리랑 걔네랑은 다르지 않을까... 아무튼 없길 빌어야지.
+					
+				</File_content>
 			</nodeFile>
 		</node>
 		<reward>
@@ -265,42 +256,31 @@ node01 -> 마찮가지로 현재 위치한 노드의 이름(사용자 노드에�
 	<mission>
 		<scenario>
 		<story>
-			"solo᛭백업한 정보들이 점점 늘어나고 있다."
+			"solo᛭백업한 정보들이 점점 늘어나고 있다. 하지만 이렇게 움직이다간 보안팀에게 들킬지도 모른다."
 			ᛃ
-			"solo᛭만약 움직임이 보안팀에게 적발되면 내가 죽지 않고 활동하고 있다는 걸 들키게 될지도 모른다."
+			"player᛭방화벽을 어떻게 구축했었지...? 기억이 희미하네."
 			ᛃ
-			"player᛭방화벽을 어떻게 구축했더라…"
+			"solo᛭아직도 기억이 완전히 돌아오지 않았다. 하지만 안전을 위해선 보안이 필요하다."
 			ᛃ
-			"solo᛭아직 기억이 온전히 돌아오지 않아 기억이 나지 않는다."
+			"player᛭리사에게 연락해볼까. 도움이 될지도 몰라."
 			ᛃ
-			"player᛭슬슬 리사에게 연락이 올 때가 됐는데. "
+			"리사᛭'주인공', 아직 무사한 거지?"
 			ᛃ
-			"리사᛭‘주인공’, 아직 살아있어?"
+			"player᛭그래, 너에게 물어볼 게 있어. 방화벽을 구축하려는데 기억이 잘 안 나."
 			ᛃ
-			"player᛭호랑이도 제 말 하면 온다더니, 너도 양반은 못되는구나"
+			"리사᛭아직도 기억이 완전히 돌아오지 않은 거야? 방화벽은 'iptables' 명령어로 설정할 수 있어. 너답지 않게 왜 이래?"
 			ᛃ
-			"리사᛭뭐야 내 생각 중 이었어?\n
-				미안하지만 난 아직 마음의 준비가 안됐다구."
+			"player᛭머리를 다친 이후로 아직 복구 중이야. 도와줘서 고마워."
 			ᛃ
-			"player᛭김칫국 들이키지 말고, 너가 좀 도와줬으면 하는 일이 있는데. "
+			"리사᛭알겠어. 하지만 너무 무리하지 마. 하던 일 마저 해봐."
 			ᛃ
-			"리사᛭그럼 그렇지. 나도 기대 안했다고."
-			ᛃ
-			"player᛭너가 알려준 사내 메신저 서버를 해킹하면서 백업해둔 데이터가 있는데 방화벽을 구축해서 보안을 해 둬야 할 것 같아. "
-			ᛃ
-			"리사᛭아직도 기억이 다 돌아오지 않은거야?\n
-				방화벽은 ??? 명령어로 구축할 수 있어.\n
-				천하에 test331에게 이런 걸 다 알려주게 될 줄이야..영광인걸?"
-			ᛃ
-			"player᛭농담 따먹기 할 상황은 아닌 것 같은데."
-			ᛃ
-			"리사᛭됐네요, 하던 거나 마저 해."
-			</story>
-			<target>
-				"원래 노드로 복귀하여 FTP 포트의 iptables를 설정하세요."
-				,"iptables -A INPUT -p tcp --dport 21 -j DROP 으로 설정 할 수 있습니다."
-			</target>
-        </scenario>
+			"solo᛭리사의 도움으로 방화벽을 설정할 수 있게 되었다. 이제 안전하게 작업을 진행할 수 있을 것이다."
+		</story>
+		<target>
+			"원래 노드로 복귀하여 FTP 포트의 iptables를 설정하세요."
+			,"iptables -A INPUT -p tcp --dport 21 -j DROP 으로 설정 할 수 있습니다."
+		</target>
+		</scenario>
 		<correctAnswer>
 			<myNode>
 				<dirPath>/var/log/syslog</dirPath>
@@ -311,7 +291,7 @@ node01 -> 마찮가지로 현재 위치한 노드의 이름(사용자 노드에�
 						192.168.25.2
 						myNode
 						21:CLOSED
-                    </File_content>
+					</File_content>
 				</nodeFile>
 			</myNode>
 		</correctAnswer>
@@ -353,17 +333,376 @@ node01 -> 마찮가지로 현재 위치한 노드의 이름(사용자 노드에�
 				<programName>FTP</programName>
 				<programName>SNMP</programName>
 			</nodeProgram>
-			<nodeFile>
+				<nodeFile>
 				<File_name>/home/node01</File_name>
 				<File_content>
-                    
-                     Hello Netrunner!
-                    
-                </File_content>
+					
+						Hello Netrunner!
+						
+				</File_content>
+			</nodeFile>
+			<nodeFile>
+				<File_name>/home/recording/recording.txt</File_name>
+				<File_content>
+					
+					사원A : 야, 요즘 회사 분위기 이상하지 않아?
+					사원B : 무슨 소리야? 그냥 일하기 싫어서 그러는 거 아니야?
+					사원A : 진짜라니까. 인사팀 친구한테 들었는데, 보안팀에서 인사 조정 때문에 분열이 일어나고 있대.
+					사원B : 보안팀은 원래 사이 좋기로 유명했잖아. 갑자기 인사 조정이라니?
+					사원A : 그러게 말이야. 팀장 라인 빼고 전부 지방으로 발령났대. 우리 팀은 괜찮겠지?
+					사원B : 우리랑 걔네랑은 다르지 않을까... 아무튼 없길 빌어야지.
+					
+				</File_content>
 			</nodeFile>
 		</node>
 		<reward>
 			<point>1000</point>
+			<toolFile></toolFile>
+		</reward>
+	</mission>
+	<mission>
+		<scenario>
+			<story>
+				"리사᛭'주인공', 중요한 소식이 있어. 우리가 찾는 정보의 단서를 발견했어."
+				ᛃ
+				"player᛭무슨 정보지?"
+				ᛃ
+				"리사᛭보안팀 내부에서 이상한 움직임이 포착됐어. 그들의 통신 기록을 조사하면 뭔가 알아낼 수 있을 거야."
+				ᛃ
+				"player᛭보안팀이라... 그들이 배후일 가능성이 높겠군."
+				ᛃ
+				"리사᛭맞아. 하지만 그들의 노드는 보안이 강화되어 있어서 포트가 모두 닫혀 있어. 하지만 내가 새로운 툴을 준비했어. 'sshcrack'이라는 툴인데, 이걸 사용하면 SSH 포트를 열 수 있어."
+				ᛃ
+				"player᛭좋아, 그 툴을 사용해볼게."
+				ᛃ
+				"solo᛭리사가 준 'sshcrack'을 사용해 보안팀의 노드를 해킹해야 한다. 그 안에 중요한 정보가 있을 것이다."
+				ᛃ
+				"player᛭이제 진실에 한 걸음 더 다가갈 수 있겠어."
+			</story>
+			<target>
+				"SSHCRACK 으로 22 SSH 포트를 열고 scp secure_info.txt myNode@192.168.25.2:/home/myNode 로 파일을 갈취하십시오."
+			</target>
+		</scenario>
+		<correctAnswer>
+			<myNode>
+				<dirPath>/home/myNode</dirPath>
+				<nodeFile>
+					<File_name>/home/myNode/secure_info.txt</File_name>
+					<File_content>
+						보안팀장의 회의 기록:
+						- 최근 내부 인사 조정 논의
+						- 특정 해커 그룹 활동 보고
+						- 감시 대상자 리스트 업데이트
+					</File_content>
+				</nodeFile>
+			</myNode>
+		</correctAnswer>
+		<node>
+			<nodeId>01</nodeId>
+			<nodeMAC>FF:FF:FF:FF:FF:02</nodeMAC>
+			<nodeIP>192.168.25.3</nodeIP>
+			<nodePort>
+				<TCP>
+					<service>
+						<serviceName>OpenSSL</serviceName>
+						<servicePort>22</servicePort>
+						<portState>OPEN</portState>
+					</service>
+					<service>
+						<serviceName>FTP</serviceName>
+						<servicePort>21</servicePort>
+						<portState>OPEN</portState>
+					</service>
+					<service>
+						<serviceName>SMTP</serviceName>
+						<servicePort>25</servicePort>
+						<portState>OPEN</portState>
+					</service>
+				</TCP>
+				<UDP>
+					<service>
+						<serviceName></serviceName>
+						<servicePort></servicePort>
+						<portState></portState>
+					</service>
+				</UDP>
+			</nodePort>
+			<nodeDirectorys>
+				<dirPath>/home/node01</dirPath>
+			</nodeDirectorys>
+			<nodeProgram>
+				<programName>OpenSSL</programName>
+				<programName>FTP</programName>
+				<programName>SNMP</programName>
+			</nodeProgram>
+				<nodeFile>
+				<File_name>/home/node01</File_name>
+				<File_content>
+					
+						Hello Netrunner!
+						
+				</File_content>
+			</nodeFile>
+			<nodeFile>
+				<File_name>/home/recording/recording.txt</File_name>
+				<File_content>
+					
+					사원A : 야, 요즘 회사 분위기 이상하지 않아?
+					사원B : 무슨 소리야? 그냥 일하기 싫어서 그러는 거 아니야?
+					사원A : 진짜라니까. 인사팀 친구한테 들었는데, 보안팀에서 인사 조정 때문에 분열이 일어나고 있대.
+					사원B : 보안팀은 원래 사이 좋기로 유명했잖아. 갑자기 인사 조정이라니?
+					사원A : 그러게 말이야. 팀장 라인 빼고 전부 지방으로 발령났대. 우리 팀은 괜찮겠지?
+					사원B : 우리랑 걔네랑은 다르지 않을까... 아무튼 없길 빌어야지.
+					
+				</File_content>
+			</nodeFile>
+		</node>
+		<node>
+			<nodeId>02</nodeId>
+			<nodeMAC>FF:FF:FF:FF:FF:03</nodeMAC>
+			<nodeIP>192.168.25.4</nodeIP>
+			<nodePort>
+				<TCP>
+					<service>
+						<serviceName>OpenSSL</serviceName>
+						<servicePort>22</servicePort>
+						<portState>CLOSED</portState>
+					</service>
+					<service>
+						<serviceName>FTP</serviceName>
+						<servicePort>21</servicePort>
+						<portState>CLOSED</portState>
+					</service>
+					<service>
+						<serviceName>SMTP</serviceName>
+						<servicePort>25</servicePort>
+						<portState>CLOSED</portState>
+					</service>
+				</TCP>
+				<UDP>
+					<service>
+						<serviceName></serviceName>
+						<servicePort></servicePort>
+						<portState></portState>
+					</service>
+				</UDP>
+			</nodePort>
+			<nodeDirectorys>
+				<dirPath>/home/node02</dirPath>
+			</nodeDirectorys>
+			<nodeProgram>
+				<programName>OpenSSL</programName>
+				<programName>FTP</programName>
+				<programName>SNMP</programName>
+			</nodeProgram>
+			<nodeFile>
+				<File_name>/home/node02/secure_info.txt</File_name>
+				<File_content>
+					보안팀장의 회의 기록:
+					- 최근 내부 인사 조정 논의
+					- 특정 해커 그룹 활동 보고
+					- 감시 대상자 리스트 업데이트
+				</File_content>
+			</nodeFile>
+		</node>
+		<reward>
+			<point>1200</point>
+			<toolFile></toolFile>
+		</reward>
+	</mission>
+	<mission>
+		<scenario>
+			<story>
+				"리사᛭주인공, 마지막 단계야. 이번엔 웹 서버를 뚫어야 해."
+				ᛃ
+				"player᛭웹 서버라... 쉽지 않겠군."
+				ᛃ
+				"리사᛭그래서 'WebServerWorm'이라는 툴을 준비했어. 이걸로 HTTP 포트 80번을 열 수 있어. 그 안에 암호화된 파일이 있어."
+				ᛃ
+				"player᛭파일을 가져와서 복호화하면 되는 거지?"
+				ᛃ
+				"리사᛭맞아. 하지만 그 파일은 강력한 암호화로 보호되어 있어. 복호화하려면 'DECHead'라는 해킹 도구가 필요해. 이걸 사용하면 암호를 풀 수 있을 거야. 그리고 헤더 정보도 확인해서 분석해야 해. 이 안에 모든 진실이 담겨 있을 거야."
+				ᛃ
+				"solo᛭마지막 도전이다. 모든 것을 걸어야 한다."
+				ᛃ
+				"player᛭알았어. 이제 끝을 보자."
+			</story>
+			<target>
+				"WebServerWorm을 사용하여 HTTP 포트를 열고 scp /var/www/secure_data/secret_file.encoded myNode@192.168.25.2:/home/myNode 로 파일을 가져온 후, 'DECHead' 해킹 도구를 사용하여 복호화하여 내용을 확인하십시오. 헤더 정보는 file1header.txt 형식으로 node01@192.168.25.3에 생성됩니다."
+			</target>
+		</scenario>
+		<correctAnswer>
+			<myNode>
+				<dirPath>/home/myNode</dirPath>
+				<nodeFile>
+					<File_name>/home/myNode/secret_file.txt</File_name>
+					<File_content>
+						비밀 프로젝트 요약:
+						- 웹 서버 내부 보안 시스템의 약점을 확인.
+						- 다음 목표는 보안팀의 중앙 데이터베이스.
+						- 해커 그룹의 내부 구성원에 대한 추가 정보 수집.
+					</File_content>
+				</nodeFile>
+				<nodeFile>
+					<File_name>/home/myNode/file1header.txt</File_name>
+					<File_content>
+						node01@192.168.25.3
+						- HTTP 응답 코드: 200 OK
+						- 서버 정보: Apache/2.4.41 (Ubuntu)
+						- 콘텐츠 유형: application/encoded
+					</File_content>
+				</nodeFile>
+			</myNode>
+		</correctAnswer>
+		<node>
+			<nodeId>01</nodeId>
+			<nodeMAC>FF:FF:FF:FF:FF:02</nodeMAC>
+			<nodeIP>192.168.25.3</nodeIP>
+			<nodePort>
+				<TCP>
+					<service>
+						<serviceName>OpenSSL</serviceName>
+						<servicePort>22</servicePort>
+						<portState>OPEN</portState>
+					</service>
+					<service>
+						<serviceName>FTP</serviceName>
+						<servicePort>21</servicePort>
+						<portState>OPEN</portState>
+					</service>
+					<service>
+						<serviceName>SMTP</serviceName>
+						<servicePort>25</servicePort>
+						<portState>OPEN</portState>
+					</service>
+				</TCP>
+				<UDP>
+					<service>
+						<serviceName></serviceName>
+						<servicePort></servicePort>
+						<portState></portState>
+					</service>
+				</UDP>
+			</nodePort>
+			<nodeDirectorys>
+				<dirPath>/home/node01</dirPath>
+			</nodeDirectorys>
+			<nodeProgram>
+				<programName>OpenSSL</programName>
+				<programName>FTP</programName>
+				<programName>SNMP</programName>
+			</nodeProgram>
+				<nodeFile>
+				<File_name>/home/node01</File_name>
+				<File_content>
+					
+						Hello Netrunner!
+						
+				</File_content>
+			</nodeFile>
+			<nodeFile>
+				<File_name>/home/recording/recording.txt</File_name>
+				<File_content>
+					
+					사원A : 야, 요즘 회사 분위기 이상하지 않아?
+					사원B : 무슨 소리야? 그냥 일하기 싫어서 그러는 거 아니야?
+					사원A : 진짜라니까. 인사팀 친구한테 들었는데, 보안팀에서 인사 조정 때문에 분열이 일어나고 있대.
+					사원B : 보안팀은 원래 사이 좋기로 유명했잖아. 갑자기 인사 조정이라니?
+					사원A : 그러게 말이야. 팀장 라인 빼고 전부 지방으로 발령났대. 우리 팀은 괜찮겠지?
+					사원B : 우리랑 걔네랑은 다르지 않을까... 아무튼 없길 빌어야지.
+					
+				</File_content>
+			</nodeFile>
+		</node>
+		<node>
+			<nodeId>02</nodeId>
+			<nodeMAC>FF:FF:FF:FF:FF:03</nodeMAC>
+			<nodeIP>192.168.25.4</nodeIP>
+			<nodePort>
+				<TCP>
+					<service>
+						<serviceName>OpenSSL</serviceName>
+						<servicePort>22</servicePort>
+						<portState>CLOSED</portState>
+					</service>
+					<service>
+						<serviceName>FTP</serviceName>
+						<servicePort>21</servicePort>
+						<portState>CLOSED</portState>
+					</service>
+					<service>
+						<serviceName>SMTP</serviceName>
+						<servicePort>25</servicePort>
+						<portState>CLOSED</portState>
+					</service>
+				</TCP>
+				<UDP>
+					<service>
+						<serviceName></serviceName>
+						<servicePort></servicePort>
+						<portState></portState>
+					</service>
+				</UDP>
+			</nodePort>
+			<nodeDirectorys>
+				<dirPath>/home/node02</dirPath>
+			</nodeDirectorys>
+			<nodeProgram>
+				<programName>OpenSSL</programName>
+				<programName>FTP</programName>
+				<programName>SNMP</programName>
+			</nodeProgram>
+			<nodeFile>
+				<File_name>/home/node02/secure_info.txt</File_name>
+				<File_content>
+					보안팀장의 회의 기록:
+					- 최근 내부 인사 조정 논의
+					- 특정 해커 그룹 활동 보고
+					- 감시 대상자 리스트 업데이트
+				</File_content>
+			</nodeFile>
+		</node>
+		<node>
+			<nodeId>03</nodeId>
+			<nodeMAC>FF:FF:FF:FF:FF:05</nodeMAC>
+			<nodeIP>192.168.25.6</nodeIP>
+			<nodePort>
+				<TCP>
+					<service>
+						<serviceName>HTTP</serviceName>
+						<servicePort>80</servicePort>
+						<portState>CLOSED</portState>
+					</service>
+<service>
+						<serviceName>OpenSSL</serviceName>
+						<servicePort>22</servicePort>
+						<portState>CLOSED</portState>
+					</service>
+				</TCP>
+				<UDP>
+					<service>
+						<serviceName></serviceName>
+						<servicePort></servicePort>
+						<portState></portState>
+					</service>
+				</UDP>
+			</nodePort>
+			<nodeDirectorys>
+				<dirPath>/home/node03</dirPath>
+				<dirPath>/var/www/secure_data</dirPath>
+			</nodeDirectorys>
+			<nodeProgram>
+				<programName>Apache</programName>
+			</nodeProgram>
+			<nodeFile>
+				<File_name>/var/www/secure_data/secret_file.encoded</File_name>
+				<File_content>
+					1aqxFnGhri8zYZtm3mhG9dKNOCr2guG3KPS+dFBFzh6gFSCm8aHVtpIGS1YIlAuvA4qF5lq02UC2DgMPPLwiK+qIVEhC14duPbLsq855VswA2q3PhVVyvHGnBdJqe2aFAKobkRnTbpen6e68kvaq8XE5b8lHxpcsG28QEDBUIPBjmof82novztDpevXHUScw
+				</File_content>
+			</nodeFile>
+		</node>
+		<reward>
+			<point>2000</point>
 			<toolFile></toolFile>
 		</reward>
 	</mission>
@@ -397,10 +736,10 @@ node01 -> 마찮가지로 현재 위치한 노드의 이름(사용자 노드에�
 		<userFile>
 			<userFile_name>/home/myNode/result.txt</userFile_name>
 			<userFile_content>
-                    
-                    Hello World!
-                    
-                </userFile_content>
+					
+					Hello World!
+					
+				</userFile_content>
 		</userFile>
 		<userProgram>
 			<userProgramName>OpenSSL</userProgramName>

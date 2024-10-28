@@ -6,7 +6,7 @@ db:
 jwt:
   secret: 'Secret1234'
 AWS:
-  access_key: ''
-  secret_key: ''
-  region: 'us-east-1'
-  source: 'sender@example.com'
+  access_key: 
+  secret_key: 
+  region: 'ap-northeast-2'
+  source: 'sender@netrunner.life'

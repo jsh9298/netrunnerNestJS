@@ -363,6 +363,7 @@ export class commends {
     }
     scan(payload) {  //nmap?
         let result = "";
+        this.mkNodeList();
         if (/^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$/gm.test(payload[1])) {
             for (let index = 0; index < this.nodelist.size; index++) {
                 console.log(this.getKeyByValue(this.nodelist, index));
@@ -432,10 +433,9 @@ export class commends {
         let filelist: string[] = [];
         let dirlist: string[] = [];
         if (this.sshhistory.size() > 0) {
-            console.log("before pop", this.sshhistory);
+
             const preNode = this.sshhistory.pop();
-            console.log("pop data", preNode);
-            console.log("after pop", this.sshhistory);
+
             this.currentNode = this.nodelist.get(preNode.currentIP);
             this.isUserNode = false;
             this.currentUser = preNode.currentUser;
@@ -771,7 +771,7 @@ export class commends {
             if (context) {
                 const result = context.match(/(node[0-9]{0,2}@[0-9]{0,3}.[0-9]{0,3}.[0-9]{0,3}.[0-9]{0,3})/m).toString();
                 this.vi(`vi ${payload[1].replace('.encoded', 'header.txt')}`.split(" "));
-                this.write(`write ${payload[1].replace('.encoded', 'header.txt')}`.split(" "), decipher(context, key));
+                this.write(`write ${payload[1].replace('.encoded', 'header.txt')}`.split(" "), result);
                 return 'true';
             } else {
                 return 'false';
